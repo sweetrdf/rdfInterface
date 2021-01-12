@@ -30,6 +30,6 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface DefaultGraph extends NamedNode {
+interface DefaultGraph extends BlankNode {
     
 }

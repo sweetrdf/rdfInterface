@@ -32,19 +32,23 @@ namespace rdfInterface;
  */
 interface DataFactory {
 
-    public function namedNode(string $iri): NamedNode;
+    public function namedNode(string|Stringable $iri): NamedNode;
 
-    public function blankNode(?string $iri = null): BlankNode;
+    public function blankNode(string|Stringable|null $iri = null): BlankNode;
 
-    public function literal(string $value, string $langOrDatatype): Literal;
+    public function literal(string|Stringable $value, string|Stringable $lang, string|Stringable $datatype): Literal;
 
-    public function variable(string $name): Variable;
+    public function variable(string|Stringable $name): Variable;
 
-    public function defaultGraph(): NamedNode;
+    public function defaultGraph(string|Stringable|null $iri): DefaultGraph;
 
-    public function quad(Term $subject, Term $predicate, Term $object,
-                         ?Term $graph = null): Quad;
+    public function quad(NamedNode|BlankNode|Quad $subject,
+                         NamedNode $predicate,
+                         NamedNode|BlankNode|Literal|Quad $object,
+                         NamedNode|BlankNode|null $graph = null): Quad;
 
-    public function quadTemplate(?Term $subject = null, ?Term $predicate = null,
-                                 ?Term $object = null, ?Term $graph = null): QuadTemplate;
+    public function quadTemplate(NamedNode|BlankNode|Quad|null $subject = null,
+                                 NamedNode|null $predicate = null,
+                                 NamedNode|BlankNode|Literal|Quad|null $object = null,
+                                 NamedNode|BlankNode|null $graph = null): QuadTemplate;
 }
