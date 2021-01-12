@@ -48,7 +48,7 @@ interface Quad extends Term {
     public function __construct(NamedNode|BlankNode|Quad $subject,
                                 NamedNode $predicate,
                                 NamedNode|BlankNode|Literal|Quad $object,
-                                NamedNode|null $graphIri = null);
+                                NamedNode|BlankNode|null $graphIri = null);
 
     public function getSubject(): NamedNode|BlankNode|Quad|null;
 
@@ -56,7 +56,7 @@ interface Quad extends Term {
 
     public function getObject(): NamedNode|BlankNode|Literal|Quad|null;
 
-    public function getGraphIri(): NamedNode;
+    public function getGraphIri(): NamedNode|BlankNode;
 
     public function withSubject(NamedNode|BlankNode|Quad $subject): Quad;
 
@@ -64,5 +64,5 @@ interface Quad extends Term {
 
     public function withObject(NamedNode|BlankNode|Literal|Quad $object): Quad;
 
-    public function withGraphIri(NamedNode|null $graphIri): Quad;
+    public function withGraphIri(NamedNode|BlankNode|null $graphIri): Quad;
 }

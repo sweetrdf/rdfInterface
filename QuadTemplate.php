@@ -32,20 +32,17 @@ namespace rdfInterface;
  */
 interface QuadTemplate extends Quad {
 
-    public function __construct(NamedNode|BlankNode|Quad|null $subject,
-                                NamedNode|null $predicate,
-                                NamedNode|BlankNode|Literal|Quad|null $object,
-                                NamedNode|null $graphIri = null);
+    public function __construct(NamedNode|BlankNode|Quad|null $subject = null,
+                                NamedNode|null $predicate = null,
+                                NamedNode|BlankNode|Literal|Quad|null $object = null,
+                                NamedNode|BlankNode|null $graphIri = null);
 
-    public function getSubject(): NamedNode|BlankNode|Quad|null;
+    
+    public function withSubject(NamedNode|BlankNode|Quad $subject): QuadTemplate;
 
-    public function getPredicate(): NamedNode|null;
+    public function withPredicate(NamedNode $predicate): QuadTemplate;
 
-    public function getObject(): NamedNode|BlankNode|Literal|Quad|null;
+    public function withObject(NamedNode|BlankNode|Literal|Quad $object): QuadTemplate;
 
-    public function withSubject(NamedNode|BlankNode|Quad|null $subject): Quad;
-
-    public function withPredicate(NamedNode|null $predicate): Quad;
-
-    public function withObject(NamedNode|BlankNode|Literal|Quad|null $object): Quad;
+    public function withGraphIri(NamedNode|BlankNode|null $graphIri): QuadTemplate;
 }
