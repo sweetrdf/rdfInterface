@@ -50,32 +50,30 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      */
     public function add(QuadIterator $quads): void;
 
-    public function delete(Quad|QuadIterator|callable $filter): Dataset; // callable(Quad, Dataset)
-
-    public function filter(Quad|QuadIterator|callable $filter): Dataset; // like delete, just remove everything which doesn't match
+    public function delete(Quad|QuadIterator|callable $filter, bool $match = true): Dataset; // callable(Quad, Dataset)
 
     public function forEach(callable $fn, Quad|callable|null $filter = null): void; // callback(Quad, Dataset): Quad run on each quad
 
-    public function copy(Quad|callable|null $filter = null): Dataset;
+    public function copy(Quad|callable|null $filter = null, bool $match = true): Dataset;
     
     // ArrayAccess with typing
     /**
      * 
-     * @param int|Quad|callable $offset
+     * @param int|Quad|QuadIterator|callable $offset
      * @return bool
      */
     public function offsetExists($offset): bool;
 
     /**
      * 
-     * @param int|QuadTemplate|callable $offset
+     * @param int|Quad|QuadIterator|callable $offset
      * @return Quad|QuadIterator
      */
     public function offsetGet($offset): Quad|QuadIterator;
 
     /**
      * 
-     * @param int|Quad $offset
+     * @param int|Quad|QuadIterator|callable $offset
      * @param Quad $value
      * @return int
      */
@@ -83,7 +81,7 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
 
     /**
      * 
-     * @param int|Quad $offset
+     * @param int|Quad|QuadIterator|callable $offset
      * @return void
      */
     public function offsetUnset($offset): void;    
