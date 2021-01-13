@@ -39,8 +39,8 @@ interface DataFactory {
     static public function blankNode(string|Stringable|null $iri = null): BlankNode;
 
     static public function literal(string|Stringable $value,
-                                   string|Stringable $lang,
-                                   string|Stringable $datatype): Literal;
+                                   string|Stringable $lang = null,
+                                   string|Stringable $datatype = null): Literal;
 
     static public function variable(string|Stringable $name): Variable;
 
