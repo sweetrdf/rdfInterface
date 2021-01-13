@@ -28,41 +28,44 @@ namespace rdfInterface;
 
 /**
  * Extends Term because of RDF*
- * 
+ *
  * Remarks:
  * - getValue() should throw an error
  * - null return types in getSubject(), getPredicate() and getObject() make it
  *   possible for QuadTemplate to extend this interface
- * 
+ *
  * @author zozlak
  */
-interface Quad extends Term {
+interface Quad extends Term
+{
 
     /**
-     * 
+     *
      * @param NamedNode|BlankNode|Quad $subject
      * @param NamedNode $predicate
      * @param NamedNode|BlankNode|Literal|Quad $object
      * @param NamedNode $graphIri
      */
-    public function __construct(NamedNode|BlankNode|Quad $subject,
-                                NamedNode $predicate,
-                                NamedNode|BlankNode|Literal|Quad $object,
-                                NamedNode|BlankNode|null $graphIri = null);
+    public function __construct(
+        NamedNode | BlankNode | Quad $subject,
+        NamedNode $predicate,
+        NamedNode | BlankNode | Literal | Quad $object,
+        NamedNode | BlankNode | null $graphIri = null
+    );
 
-    public function getSubject(): NamedNode|BlankNode|Quad|null;
+    public function getSubject(): NamedNode | BlankNode | Quad | null;
 
-    public function getPredicate(): NamedNode|null;
+    public function getPredicate(): NamedNode | null;
 
-    public function getObject(): NamedNode|BlankNode|Literal|Quad|null;
+    public function getObject(): NamedNode | BlankNode | Literal | Quad | null;
 
-    public function getGraphIri(): NamedNode|BlankNode|null;
+    public function getGraphIri(): NamedNode | BlankNode | null;
 
-    public function withSubject(NamedNode|BlankNode|Quad $subject): Quad;
+    public function withSubject(NamedNode | BlankNode | Quad $subject): Quad;
 
     public function withPredicate(NamedNode $predicate): Quad;
 
-    public function withObject(NamedNode|BlankNode|Literal|Quad $object): Quad;
+    public function withObject(NamedNode | BlankNode | Literal | Quad $object): Quad;
 
-    public function withGraphIri(NamedNode|BlankNode|null $graphIri): Quad;
+    public function withGraphIri(NamedNode | BlankNode | null $graphIri): Quad;
 }

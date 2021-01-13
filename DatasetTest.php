@@ -30,11 +30,12 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface DatasetTest extends Dataset {
+interface DatasetTest extends Dataset
+{
 
     public function contains(Dataset $other): bool;
 
-    public function every(callable $fn, Quad|callable|null $filter = null): bool;
+    public function every(callable $fn, Quad | callable | null $filter = null): bool;
 
-    public function some(callable $fn, Quad|callable|null $filter = null): bool; // in fact any()
+    public function some(callable $fn, Quad | callable | null $filter = null): bool; // in fact any()
 }

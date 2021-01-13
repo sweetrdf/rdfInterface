@@ -28,14 +28,15 @@ namespace rdfInterface;
 
 /**
  * Set-algebra methods for a Dataset
- * 
+ *
  * @author zozlak
  */
-interface DatasetAlgebra extends Dataset {
+interface DatasetAlgebra extends Dataset
+{
 
     /**
      * In-place removes quads not present in the $other dataset.
-     * 
+     *
      * @param Dataset $other
      * @return Dataset removed quads
      */

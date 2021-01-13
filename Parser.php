@@ -30,14 +30,15 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface Parser {
+interface Parser
+{
 
     public function __construct();
 
     public function parse(string $input): QuadIterator;
 
     /**
-     * 
+     *
      * @param resource $input
      * @return \rdfInterface\QuadIterator
      */

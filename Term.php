@@ -26,19 +26,18 @@
 
 namespace rdfInterface;
 
-require_once __DIR__ . '/constants.php'; // types are defined there
-
 /**
  * Description of RdfTerm
  *
  * @author zozlak
  */
-interface Term {
+interface Term
+{
 
     public function __toString(): string;
 
     public function getType(): string;
-    
+
     public function getValue(): string;
 
     public function equals(Term $term): bool;

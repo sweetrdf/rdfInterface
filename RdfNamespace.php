@@ -30,7 +30,8 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface RdfNamespace {
+interface RdfNamespace
+{
 
     public function add(string $uri, ?string $prefix = null): string;
 

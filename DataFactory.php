@@ -32,27 +32,34 @@ use Stringable;
  *
  * @author zozlak
  */
-interface DataFactory {
+interface DataFactory
+{
 
-    static public function namedNode(string|Stringable $iri): NamedNode;
+    public static function namedNode(string | Stringable $iri): NamedNode;
 
-    static public function blankNode(string|Stringable|null $iri = null): BlankNode;
+    public static function blankNode(string | Stringable | null $iri = null): BlankNode;
 
-    static public function literal(string|Stringable $value,
-                                   string|Stringable $lang = null,
-                                   string|Stringable $datatype = null): Literal;
+    public static function literal(
+        string | Stringable $value,
+        string | Stringable $lang = null,
+        string | Stringable $datatype = null
+    ): Literal;
 
-    static public function variable(string|Stringable $name): Variable;
+    public static function variable(string | Stringable $name): Variable;
 
-    static public function defaultGraph(string|Stringable|null $iri): DefaultGraph;
+    public static function defaultGraph(string | Stringable | null $iri): DefaultGraph;
 
-    static public function quad(NamedNode|BlankNode|Quad $subject,
-                                NamedNode $predicate,
-                                NamedNode|BlankNode|Literal|Quad $object,
-                                NamedNode|BlankNode|null $graph = null): Quad;
+    public static function quad(
+        NamedNode | BlankNode | Quad $subject,
+        NamedNode $predicate,
+        NamedNode | BlankNode | Literal | Quad $object,
+        NamedNode | BlankNode | null $graph = null
+    ): Quad;
 
-    static public function quadTemplate(NamedNode|BlankNode|Quad|null $subject = null,
-                                        NamedNode|null $predicate = null,
-                                        NamedNode|BlankNode|Literal|Quad|null $object = null,
-                                        NamedNode|BlankNode|null $graph = null): QuadTemplate;
+    public static function quadTemplate(
+        NamedNode | BlankNode | Quad | null $subject = null,
+        NamedNode | null $predicate = null,
+        NamedNode | BlankNode | Literal | Quad | null $object = null,
+        NamedNode | BlankNode | null $graph = null
+    ): QuadTemplate;
 }
