@@ -72,21 +72,21 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable
 
     /**
      *
-     * @param int|Quad|QuadTemplate|QuadIterator|callable $offset
+     * @param int|Quad|QuadTemplate|callable $offset
      * @return bool
      */
     public function offsetExists($offset): bool;
 
     /**
      *
-     * @param int|Quad|QuadTemplate|QuadIterator|callable $offset
+     * @param int|Quad|QuadTemplate|callable $offset
      * @return Quad|QuadIterator
      */
     public function offsetGet($offset): Quad | QuadIterator;
 
     /**
      *
-     * @param int|Quad|QuadTemplate|QuadIterator|callable $offset
+     * @param int|Quad|QuadTemplate|callable $offset
      * @param Quad $value
      * @return void
      */
@@ -94,7 +94,7 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable
 
     /**
      *
-     * @param int|Quad|QuadTemplate|QuadIterator|callable $offset
+     * @param int|Quad|QuadTemplate|callable $offset
      * @return void
      */
     public function offsetUnset($offset): void;
