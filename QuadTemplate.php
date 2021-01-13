@@ -32,6 +32,14 @@ namespace rdfInterface;
  */
 interface QuadTemplate extends Quad {
 
+    /**
+     * But at least one parameter has to be not null.
+     * 
+     * @param NamedNode|BlankNode|Quad|null $subject
+     * @param NamedNode|null $predicate
+     * @param NamedNode|BlankNode|Literal|Quad|null $object
+     * @param NamedNode|BlankNode|null $graphIri
+     */
     public function __construct(NamedNode|BlankNode|Quad|null $subject = null,
                                 NamedNode|null $predicate = null,
                                 NamedNode|BlankNode|Literal|Quad|null $object = null,
