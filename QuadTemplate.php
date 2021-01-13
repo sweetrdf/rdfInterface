@@ -30,29 +30,37 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface QuadTemplate extends Quad
+interface QuadTemplate extends Term
 {
 
     /**
-     * But at least one parameter has to be not null.
+     * At least one parameter has to be not null.
      *
-     * @param NamedNode|BlankNode|Quad|null $subject
+     * @param Term|null $subject
      * @param NamedNode|null $predicate
-     * @param NamedNode|BlankNode|Literal|Quad|null $object
+     * @param Term|null $object
      * @param NamedNode|BlankNode|null $graphIri
      */
     public function __construct(
-        NamedNode | BlankNode | Quad | null $subject = null,
+        Term | null $subject = null,
         NamedNode | null $predicate = null,
-        NamedNode | BlankNode | Literal | Quad | null $object = null,
+        Term | null $object = null,
         NamedNode | BlankNode | null $graphIri = null
     );
 
-    public function withSubject(NamedNode | BlankNode | Quad $subject): QuadTemplate;
+    public function getSubject(): Term | null;
 
-    public function withPredicate(NamedNode $predicate): QuadTemplate;
+    public function getPredicate(): NamedNode | null;
 
-    public function withObject(NamedNode | BlankNode | Literal | Quad $object): QuadTemplate;
+    public function getObject(): Term | null;
+
+    public function getGraphIri(): NamedNode | BlankNode | null;
+
+    public function withSubject(Term | null $subject): QuadTemplate;
+
+    public function withPredicate(NamedNode | null $predicate): QuadTemplate;
+
+    public function withObject(Term | null $object): QuadTemplate;
 
     public function withGraphIri(NamedNode | BlankNode | null $graphIri): QuadTemplate;
 }

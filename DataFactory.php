@@ -50,16 +50,16 @@ interface DataFactory
     public static function defaultGraph(string | Stringable | null $iri): DefaultGraph;
 
     public static function quad(
-        NamedNode | BlankNode | Quad $subject,
+        Term $subject,
         NamedNode $predicate,
-        NamedNode | BlankNode | Literal | Quad $object,
+        Term $object,
         NamedNode | BlankNode | null $graph = null
     ): Quad;
 
     public static function quadTemplate(
-        NamedNode | BlankNode | Quad | null $subject = null,
+        Term | null $subject = null,
         NamedNode | null $predicate = null,
-        NamedNode | BlankNode | Literal | Quad | null $object = null,
+        Term | null $object = null,
         NamedNode | BlankNode | null $graph = null
     ): QuadTemplate;
 }
