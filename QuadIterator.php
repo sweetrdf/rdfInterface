@@ -29,6 +29,7 @@ namespace rdfInterface;
 /**
  *
  * @author zozlak
+ * @extends \Iterator<int, Quad>
  */
 interface QuadIterator extends \Iterator
 {

@@ -39,6 +39,10 @@ interface RdfNamespace
 
     public function get(string $prefix): string;
 
+    /**
+     *
+     * @return string[]
+     */
     public function getAll(): array;
 
     public function expand(string $shortIri): NamedNode;

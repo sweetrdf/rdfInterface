@@ -36,9 +36,16 @@ interface DatasetMapReduce
 
     public function map(callable $fn, Quad | callable | null $filter = null): Dataset; // like forEach, just immutable
 
+    /**
+     * @param callable $fn aggregate function with signature `fn(accumulator, quad, dataset)`
+     *   applied on each quad and returns last callback result
+     * @param mixed $initialValue
+     * @param Quad|callable|null $filter
+     * @return mixed
+     */
     public function reduce(
         callable $fn,
         $initialValue = null,
         Quad | callable | null $filter = null
-    ); // callback(accumulator, quad, dataset) applied on each quad and returns last callback result
+    ): mixed;
 }

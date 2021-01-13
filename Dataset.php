@@ -30,6 +30,7 @@ namespace rdfInterface;
  * Main, edge(quad) and Dataset-oriented Dataset API
  *
  * @author zozlak
+ * @extends \ArrayAccess<int|Quad|QuadIterator|callable, Quad>
  */
 interface Dataset extends QuadIterator, \ArrayAccess, \Countable
 {
@@ -47,10 +48,10 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable
      *
      * Use array append syntax to append a single quad.
      *
-     * @param QuadIterator $quad
+     * @param Quad|QuadIterator $quads
      * @return void
      */
-    public function add(QuadIterator $quads): void;
+    public function add(Quad | QuadIterator $quads): void;
 
     public function delete(
         Quad | QuadIterator | callable $filter,
@@ -71,29 +72,29 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable
 
     /**
      *
-     * @param int|Quad|QuadIterator|callable $offset
+     * @param int|Quad|QuadTemplate|QuadIterator|callable $offset
      * @return bool
      */
     public function offsetExists($offset): bool;
 
     /**
      *
-     * @param int|Quad|QuadIterator|callable $offset
+     * @param int|Quad|QuadTemplate|QuadIterator|callable $offset
      * @return Quad|QuadIterator
      */
     public function offsetGet($offset): Quad | QuadIterator;
 
     /**
      *
-     * @param int|Quad|QuadIterator|callable $offset
+     * @param int|Quad|QuadTemplate|QuadIterator|callable $offset
      * @param Quad $value
-     * @return int
+     * @return void
      */
     public function offsetSet($offset, $value): void;
 
     /**
      *
-     * @param int|Quad|QuadIterator|callable $offset
+     * @param int|Quad|QuadTemplate|QuadIterator|callable $offset
      * @return void
      */
     public function offsetUnset($offset): void;

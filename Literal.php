@@ -45,7 +45,7 @@ interface Literal extends Term
 
     public function getLang(): ?string;
 
-    public function getDatatype(): NamedNode;
+    public function getDatatype(): string;
 
     public function withValue(string $value): Literal;
 
