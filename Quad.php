@@ -56,7 +56,7 @@ interface Quad extends Term {
 
     public function getObject(): NamedNode|BlankNode|Literal|Quad|null;
 
-    public function getGraphIri(): NamedNode|BlankNode;
+    public function getGraphIri(): NamedNode|BlankNode|null;
 
     public function withSubject(NamedNode|BlankNode|Quad $subject): Quad;
 
