@@ -14,11 +14,11 @@
     ],
     "require": {
         "php": ">=8.0",
-        "zozlak/rdf-constants": "^1.1",
+        "zozlak/rdf-constants": "^1.1"
     },
     "autoload": {
         "psr-4": {
-            "rdfInterface\\": "src/rdfInterface",
+            "rdfInterface\\": "src/rdfInterface"
         },
         "files": [
             "src/rdfInterface/constants.php"
