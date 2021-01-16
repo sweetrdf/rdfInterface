@@ -30,12 +30,12 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface DatasetTest extends Dataset
+interface DatasetCompare extends Dataset
 {
 
-    public function every(Quad | QuadTemplate | QuadIterator | callable | null $filter = null): bool;
+    public function every(Quad | QuadTemplate | QuadIterator | callable $filter): bool;
 
-    public function none(Quad | QuadTemplate | QuadIterator | callable | null $filter = null): bool;
+    public function none(Quad | QuadTemplate | QuadIterator | callable $filter): bool;
 
-    public function any(Quad | QuadTemplate | QuadIterator | callable | null $filter = null): bool;
+    public function any(Quad | QuadTemplate | QuadIterator | callable $filter): bool;
 }
