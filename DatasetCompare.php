@@ -33,9 +33,9 @@ namespace rdfInterface;
 interface DatasetTest extends Dataset
 {
 
-    public function contains(Dataset $other): bool;
+    public function every(Quad | QuadTemplate | QuadIterator | callable | null $filter = null): bool;
 
-    public function every(callable $fn, Quad | callable | null $filter = null): bool;
+    public function none(Quad | QuadTemplate | QuadIterator | callable | null $filter = null): bool;
 
-    public function some(callable $fn, Quad | callable | null $filter = null): bool; // in fact any()
+    public function any(Quad | QuadTemplate | QuadIterator | callable | null $filter = null): bool;
 }
