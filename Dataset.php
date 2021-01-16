@@ -87,9 +87,9 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
     /**
      *
      * @param Quad|QuadTemplate|callable $offset
-     * @return Quad|QuadIterator
+     * @return Quad
      */
-    public function offsetGet($offset): Quad | QuadIterator;
+    public function offsetGet($offset): Quad;
 
     /**
      *

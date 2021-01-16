@@ -26,6 +26,7 @@
 
 namespace rdfInterface;
 
+use Stringable;
 use zozlak\RdfConstants as RDF;
 
 /**
@@ -36,18 +37,18 @@ interface Literal extends Term
 {
 
     public function __construct(
-        string $value,
+        int | float | string | bool | Stringable $value,
         ?string $lang = null,
         string $datatype = RDF::XSD_STRING
     );
 
-    public function getValue(): string;
+    public function getValue(): int | float | string | bool | Stringable;
 
     public function getLang(): ?string;
 
     public function getDatatype(): string;
 
-    public function withValue(string $value): Literal;
+    public function withValue(int | float | string | bool | Stringable $value): Literal;
 
     public function withLang(?string $lang): Literal;
 
