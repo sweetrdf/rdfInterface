@@ -47,7 +47,7 @@ interface Quad extends Term
      * @param NamedNode|BlankNode|null $graphIri
      */
     public function __construct(
-        Term $subject,
+        NamedNode | BlankNode $subject,
         NamedNode $predicate,
         Term $object,
         NamedNode | BlankNode | null $graphIri = null
