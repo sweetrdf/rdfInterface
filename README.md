@@ -23,7 +23,7 @@ as well as [EasyRdf](https://github.com/easyrdf/easyrdf) and [ARC2](https://gith
 ## Reference implementation
 
 * The reference implementation of various `Term` classes and the `Dataset` class is provided by the [quickRdf](https://github.com/zozlak/quickRdf) library.
-* A quick and dirty implementation of a few parsers and serialisers is provided by the [quickRdfIO](https://github.com/zozlak/quickRdfIO) library.
+* A quick and dirty implementation of a few parsers and serialisers is provided by the [quickRdfIo](https://github.com/zozlak/quickRdfIo) library.
 * Some generic helpers which can be reuesed when developing your own implementations or plugging foreign code can be found in the [rdfHelpers](https://github.com/zozlak/rdfHelpers) library.
 
 ## Design decisions
