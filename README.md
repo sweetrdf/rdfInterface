@@ -1,24 +1,22 @@
-# Set of RDF interfaces for PHP
+# RDF interfaces for PHP
 
-## Why do we need a common interfaces
+## Why do we need common interfaces?
 
 The PHP RDF ecosystem suffers from big monolythic libraries trying to provide a full RDF stack 
-from parsers, trough triplestores, serializers and sometimes even SPARQL engines in a one library.
+from parsers to triplestores, serializers and sometimes even SPARQL engines in one library.
 
 It makes them quite difficult to maintain and extend.
 It also makes it impossible to couple parts of different libraries with each other, 
-e.g. combine a faster parser from one library with a nicer triplestore from the other.
+e.g. combine a faster parser from one library with a nicer triplestore from another.
 
 The solution for these troubles is to agree on
 
 * A set of separate RDF stack layers: parser, serializer, dataset, SPARQL client, etc.
-* Common interfaces each layer should use to communicate with the other
-  (think of it as a PSR-7 for RDF).
+* Common interfaces each layer should use to communicate with the other (think of it as a PSR-7 for RDF).
 
 ## Reference solutions
 
-[RDF/JS](http://rdf.js.org/), [RDFLib](https://rdflib.readthedocs.io/en/stable/) as examples of good APIs from other programming languages
-as well as [EasyRdf](https://github.com/easyrdf/easyrdf) and [ARC2](https://github.com/semsol/arc2) as a reference of existing PHP solutions.
+[RDF/JS](http://rdf.js.org/), [RDFLib](https://rdflib.readthedocs.io/en/stable/) are examples of good APIs from other programming languages as well as [EasyRdf](https://github.com/easyrdf/easyrdf) and [ARC2](https://github.com/semsol/arc2) as a reference of existing PHP solutions.
 
 ## Reference implementation
 
@@ -30,36 +28,39 @@ as well as [EasyRdf](https://github.com/easyrdf/easyrdf) and [ARC2](https://gith
 
 ### Strong typing
 
-I wanted the API to use classes (instead e.g. arrays with a well known internal structure). 
-
-Using classes provides unambiguity and allowes to leverage static code analysis. And when it comes to errors, it generates errors which are easier to understand.
+Using classes instead of arrays comes with the following advantages. Classes provide unambiguity and allow to leverage static code analysis. When it comes to errors, it also generates errors which are easier to understand.
 
 ### Immutability
 
-Following the first design decision brings an important issue. Let's compare two code variants:
+Using strong typing brings an important issue, so let's compare two code variants:
 
 ```php
 class GraphObject {
     (...)
     public function getRandomQuad(): Quad { (...) }
 }
+
 class GraphArray {
     (...)
     public function getRandomQuad(): array { (...) }
 }
+
 $g1 = new GraphObject();
 $g2 = new GraphArray();
-(... fill in $g1 and $g2 with some data ...)
+
+// (... fill in $g1 and $g2 with some data ...)
+
 $q1 = $g1->getRandomQuad();
-$q2 = $g2->getRandomQuad();
 $q1['object']['value'] = 'foo';
+
+$q2 = $g2->getRandomQuad();
 $q2->object->value = 'foo';
 ```
 
 In the array implementation we expect the change not to be propagated back to the graph (as arrays in PHP are passed by value by default).
 In the object implementation our intuition tells us the change is propagated back to the graph (as objects in PHP >=5 are passed by reference).
 
-In my opinion the lack of propagation behaviour is more intuitive and desired in typical use cases.
+In our opinion the lack of propagation behaviour is more intuitive and desired in typical use cases.
 
 There are two ways of achieving it while using classes:
 
@@ -72,35 +73,33 @@ There are two ways of achieving it while using classes:
   $q2->getObject()->withValue('foo');
   ```
 
-The second approach has three benefits.
+The second approach has three benefits:
 
-* It's much easier to implement without flaws. Deep cloning brings performance penalty so we'll try to guess where we can safely avoid it and we're likely to make wrong guesses.
-* Modern PHP programmers are already familiar with the idea.
-* It allows to easily implement a global objects cache which can save quite some memory in dense graphs
+1. It's much easier to implement without flaws. Deep cloning brings performance penalty so we'll try to guess where we can safely avoid it and we're likely to make wrong guesses.
+2. Modern PHP programmers are already familiar with the idea.
+3. It allows to easily implement a global objects cache, which can save quite some memory in dense graphs
   (if an object is immutable we can just use references to its single copy, no matter in how many copies we use it).
 
-### Use streams for data import/export
+### Use streams for data import and export
 
 Streams are far more flexible than strings.
-Allow asynchronous operation, lower memory footprint, coupling with modern PHP HTTP interface, etc.
+It allows asynchronous operation, lower memory footprint, coupling with modern PHP HTTP interface and much more.
 
 And a string can be easilly packed as an in memory stream.
 
-Let's just use streams.
-
 ### Reuse native PHP interfaces
 
-PHP provides quite some native interfaces which can be useful as parts of the RDF API, e.g.
+PHP itself provides useful native interfaces which we promote to a part of the RDF API, e.g.
 
 * [iterable](https://www.php.net/manual/en/language.types.iterable.php) over edges/nodes of a graph or edges of a graph node.
 * [ArrayAccess](https://www.php.net/manual/en/class.arrayaccess.php) for adding/removing/accessing edges/nodes of a graph or a graph node.
 * [Countable](https://www.php.net/manual/en/class.countable.php) for e.g. counting quads in a graph.
 
-Using native interfaces makes the library easier to learn and feel better integrated.
+Using native interfaces makes the library easier to learn and it feels better integrated.
 
 ### Extensibility
 
-There API should be ready for extensions.
+Our API must be easy to extend.
 
 RDF is changing with new ideas being introduced (like RDF*) and the API should be able to accomodate such developments.
 
