@@ -1,27 +1,14 @@
 <?php
 
 /*
- * The MIT License
+ * This file is part of the quickrdf/rdfInterfaces package and licensed under
+ * the terms of the MIT license.
  *
- * Copyright 2021 zozlak.
+ * (c) Mateusz Żółtak <zozlak@zozlak.org>
+ * (c) Konrad Abicht <hi@inspirito.de>
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace rdfInterface;
@@ -29,11 +16,11 @@ namespace rdfInterface;
 /**
  * Main, edge(quad) and Dataset-oriented Dataset API
  *
- * @author zozlak
+ * @author  zozlak
  * @extends \ArrayAccess<int|Quad|QuadIterator|callable, Quad>
  */
-interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
-
+interface Dataset extends QuadIterator, \ArrayAccess, \Countable
+{
     public function __construct();
 
     public function __toString(): string;
@@ -57,52 +44,49 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      *
      * Use array append syntax to append a single quad.
      *
-     * @param Quad|QuadIterator $quads
-     * @return void
+     * @param  Quad|QuadIterator $quads
      */
     public function add(Quad | QuadIterator $quads): void;
 
-    public function delete(Quad | QuadTemplate | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
+    /**
+     * callable(Quad, Dataset)
+     */
+    public function delete(Quad | QuadTemplate | QuadIterator | callable $filter): Dataset;
 
-    public function deleteExcept(Quad | QuadTemplate | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
+    /**
+     * callable(Quad, Dataset)
+     */
+    public function deleteExcept(Quad | QuadTemplate | QuadIterator | callable $filter): Dataset;
+
     // In-place modification
 
     /**
-     * Iterates trough all quads replacing them with a callback result.
-     * 
-     * @param callable $fn with signature `fn(Quad, Dataset): Quad` runs on each quad
-     * @return void
+     * Iterates through all quads replacing them with a callback result.
+     *
+     * @param  callable $fn with signature `fn(Quad, Dataset): Quad` runs on each quad
      */
     public function forEach(callable $fn): void;
 
     // ArrayAccess (with narrower types)
 
     /**
-     *
-     * @param Quad|QuadTemplate|callable $offset
-     * @return bool
+     * @param  Quad|QuadTemplate|callable $offset
      */
     public function offsetExists($offset): bool;
 
     /**
-     *
-     * @param Quad|QuadTemplate|callable $offset
-     * @return Quad
+     * @param  Quad|QuadTemplate|callable $offset
      */
     public function offsetGet($offset): Quad;
 
     /**
-     *
-     * @param Quad|QuadTemplate|callable $offset
-     * @param Quad $value
-     * @return void
+     * @param  Quad|QuadTemplate|callable $offset
+     * @param  Quad                       $value
      */
     public function offsetSet($offset, $value): void;
 
     /**
-     *
-     * @param Quad|QuadTemplate|callable $offset
-     * @return void
+     * @param  Quad|QuadTemplate|callable $offset
      */
     public function offsetUnset($offset): void;
 }

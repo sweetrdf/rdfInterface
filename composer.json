@@ -10,6 +10,11 @@
             "name": "Mateusz Żółtak",
             "email": "zozlak@zozlak.org",
             "role": "Developer"
+        },
+        {
+            "name": "Konrad Abicht",
+            "email": "hi@inspirito.de",
+            "role": "Developer"
         }
     ],
     "require": {
