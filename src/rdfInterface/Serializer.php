@@ -23,11 +23,9 @@ interface Serializer
     public function serialise(QuadIterator $graph, ?RdfNamespace $nmsp = null): string;
 
     /**
-     *
      * @param  resource          $output
      * @param  QuadIterator      $graph
      * @param  RdfNamespace|null $nmsp
-     * @return void
      */
     public function serialiseStream(
         $output,
