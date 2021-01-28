@@ -11,7 +11,7 @@ e.g. combine a faster parser from one library with a nicer triplestore from the 
 
 The solution for these troubles is to agree on
 
-* A set of separate RDF stack layers: parser, serializer, dataset, sparql client, etc.
+* A set of separate RDF stack layers: parser, serializer, dataset, SPARQL client, etc.
 * Common interfaces each layer should use to communicate with the other
   (think of it as a PSR-7 for RDF).
 
@@ -22,9 +22,9 @@ as well as [EasyRdf](https://github.com/easyrdf/easyrdf) and [ARC2](https://gith
 
 ## Reference implementation
 
-* The reference implementation of various `Term` classes and the `Dataset` class is provided by the [quickRdf](https://github.com/zozlak/quickRdf) library.
-* A quick and dirty implementation of a few parsers and serializers is provided by the [quickRdfIO][https://github.com/zozlak/quickRdfIO] library.
-* Some generic helpers which can be reuesed when developing your own implementations or plugging foreign code can be found in the [rdfHelpers](https://github.com/zozlak/rdfHelpers) library.
+* The reference implementation of various `Term` classes and the `Dataset` class is provided by the [quickRdf](https://github.com/sweetrdf/quickRdf) library.
+* A quick and dirty implementation of a few parsers and serialisers is provided by the [quickRdfIo](https://github.com/sweetrdf/quickRdfIo) library.
+* Some generic helpers which can be reuesed when developing your own implementations or plugging foreign code can be found in the [rdfHelpers](https://github.com/sweetrdf/rdfHelpers) library.
 
 ## Design decisions
 
