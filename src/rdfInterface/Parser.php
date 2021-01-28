@@ -23,9 +23,7 @@ interface Parser
     public function parse(string $input): QuadIterator;
 
     /**
-     *
-     * @param  resource $input
-     * @return \rdfInterface\QuadIterator
+     * @param resource $input
      */
     public function parseStream($input): QuadIterator;
 }
