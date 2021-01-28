@@ -1,5 +1,5 @@
 {
-    "name": "zozlak/rdf-interface",
+    "name": "sweetrdf/rdf-interface",
     "type": "library",
     "description": "A common RDF interface for PHP RDF libraries.",
     "keywords": [],
