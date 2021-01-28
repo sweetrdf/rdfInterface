@@ -5,7 +5,7 @@
  * the terms of the MIT license.
  *
  * (c) Mateusz Żółtak <zozlak@zozlak.org>
- * (c) Konrad Abicht <hi@inspirito.de>
+ * (c) Konrad Abicht <hi@inspiritozozlak.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -49,12 +49,12 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable
     public function add(Quad | QuadIterator $quads): void;
 
     /**
-     * callable(Quad, Dataset)
+     * @return DataSet callable(Quad, Dataset)
      */
     public function delete(Quad | QuadTemplate | QuadIterator | callable $filter): Dataset;
 
     /**
-     * callable(Quad, Dataset)
+     * @return DataSet callable(Quad, Dataset)
      */
     public function deleteExcept(Quad | QuadTemplate | QuadIterator | callable $filter): Dataset;
 
