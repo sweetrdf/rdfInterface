@@ -35,7 +35,7 @@ interface Serializer
 
     public function __construct();
 
-    public function serialise(QuadIterator $graph, ?RdfNamespace $nmsp = null): string;
+    public function serialize(QuadIterator $graph, ?RdfNamespace $nmsp = null): string;
 
     /**
      *
@@ -44,7 +44,7 @@ interface Serializer
      * @param RdfNamespace|null $nmsp
      * @return void
      */
-    public function serialiseStream(
+    public function serializeStream(
         $output,
         QuadIterator $graph,
         RdfNamespace | null $nmsp = null

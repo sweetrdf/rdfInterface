@@ -3,7 +3,7 @@
     "type": "library",
     "description": "A common RDF interface for PHP RDF libraries.",
     "keywords": [],
-    "homepage": "https://github.com/zozlak/rdfInterface",
+    "homepage": "https://github.com/sweetrdf/rdfInterface",
     "license": "MIT",
     "authors": [
         {
