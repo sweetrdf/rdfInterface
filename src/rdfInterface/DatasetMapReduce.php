@@ -21,9 +21,7 @@ namespace rdfInterface;
 interface DatasetMapReduce
 {
     /**
-     *
      * @param  callable $fn function applied to every quad with signature `fn(quad, dataset)`
-     * @return Dataset
      */
     public function map(callable $fn): Dataset;
 
