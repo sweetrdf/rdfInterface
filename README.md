@@ -19,7 +19,7 @@ The solution for these troubles is to agree on
 [RDF/JS](http://rdf.js.org/), [RDFLib](https://rdflib.readthedocs.io/en/stable/) are examples of good APIs from other programming languages as well as [EasyRdf](https://github.com/easyrdf/easyrdf) and [ARC2](https://github.com/semsol/arc2) as a reference of existing PHP solutions.
 
 ## Reference implementation
-swe
+
 * The reference implementation of various `Term` classes and the `Dataset` class is provided by the [quickRdf](https://github.com/sweetrdf/quickRdf) library.
 * A quick and dirty implementation of a few parsers and serialisers is provided by the [quickRdfIo](https://github.com/sweetrdf/quickRdfIo) library.
 * Some generic helpers which can be reuesed when developing your own implementations or plugging foreign code can be found in the [rdfHelpers](https://github.com/sweetrdf/rdfHelpers) library.
