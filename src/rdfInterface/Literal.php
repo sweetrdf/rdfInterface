@@ -39,7 +39,7 @@ interface Literal extends Term
     public function __construct(
         int | float | string | bool | Stringable $value,
         ?string $lang = null,
-        string $datatype = RDF::XSD_STRING
+        ?string $datatype = RDF::XSD_STRING
     );
 
     public function getValue(): int | float | string | bool | Stringable;
