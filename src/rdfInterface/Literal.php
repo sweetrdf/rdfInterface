@@ -42,8 +42,6 @@ interface Literal extends Term
         ?string $datatype = RDF::XSD_STRING
     );
 
-    public function getValue(): int | float | string | bool | Stringable;
-
     public function getLang(): ?string;
 
     public function getDatatype(): string;
