@@ -47,7 +47,7 @@ interface DataFactory
 
     public static function variable(string | Stringable $name): Variable;
 
-    public static function defaultGraph(string | Stringable | null $iri): DefaultGraph;
+    public static function defaultGraph(string | Stringable | null $iri = null): DefaultGraph;
 
     public static function quad(
         Term $subject,
