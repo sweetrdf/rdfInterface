@@ -33,8 +33,17 @@ namespace rdfInterface;
 interface Parser
 {
 
-    public function __construct();
+    /**
+     * 
+     * @param DataFactory $dataFactory factory to be used to generate RDF terms.
+     */
+    public function __construct(DataFactory $dataFactory);
 
+    /**
+     * 
+     * @param string $input
+     * @return QuadIterator
+     */
     public function parse(string $input): QuadIterator;
 
     /**
