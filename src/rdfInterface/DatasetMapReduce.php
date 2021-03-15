@@ -31,7 +31,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface DatasetMapReduce {
+interface DatasetMapReduce extends Dataset {
 
     /**
      * 
