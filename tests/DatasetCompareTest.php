@@ -26,12 +26,10 @@
 
 namespace rdfInterface\tests;
 
-use OutOfBoundsException;
 use rdfHelpers\GenericQuadIterator;
 use rdfInterface\DataFactory;
 use rdfInterface\Literal;
 use rdfInterface\Quad;
-use rdfInterface\Dataset;
 use rdfInterface\DatasetCompare;
 
 /**

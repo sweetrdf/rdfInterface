@@ -26,14 +26,14 @@
 
 namespace rdfInterface\tests;
 
-use rdfInterface\DataFactory as iDataFactory;
-use rdfInterface\Term as iTerm;
-use rdfInterface\BlankNode as iBlankNode;
-use rdfInterface\NamedNode as iNamedNode;
-use rdfInterface\Literal as iLiteral;
-use rdfInterface\DefaultGraph as iDefaultGraph;
-use rdfInterface\Quad as iQuad;
-use rdfInterface\QuadTemplate as iQuadTemplate;
+use rdfInterface\DataFactory;
+use rdfInterface\Term;
+use rdfInterface\BlankNode;
+use rdfInterface\NamedNode;
+use rdfInterface\Literal;
+use rdfInterface\DefaultGraph;
+use rdfInterface\Quad;
+use rdfInterface\QuadTemplate;
 
 /**
  * Description of LoggerTest
@@ -42,12 +42,13 @@ use rdfInterface\QuadTemplate as iQuadTemplate;
  */
 abstract class DataFactoryTest extends \PHPUnit\Framework\TestCase {
 
-    /**
-     * Initialize to an object implementing the rdfInterface\DataFactory interface
-     * in the setUpBeforeClass() method.
-     * @var iDataFactory
-     */
-    protected static iDataFactory $df;
+    abstract public static function getDataFactory(): DataFactory;
+
+    protected static DataFactory $df;
+
+    public static function setUpBeforeClass(): void {
+        self::$df = static::getDataFactory();
+    }
 
     public function testCreateBasic(): void {
         $bn = self::$df::blankNode();
@@ -57,17 +58,17 @@ abstract class DataFactoryTest extends \PHPUnit\Framework\TestCase {
         $q  = self::$df::quad($bn, $nn, $l, $dg);
         $qt = self::$df::quadTemplate($bn, $nn, $l, $dg);
 
-        $this->assertInstanceOf(iTerm::class, $bn);
-        $this->assertInstanceOf(iTerm::class, $nn);
-        $this->assertInstanceOf(iTerm::class, $l);
-        $this->assertInstanceOf(iTerm::class, $dg);
-        $this->assertInstanceOf(iTerm::class, $q);
-        $this->assertInstanceOf(iTerm::class, $qt);
-        $this->assertInstanceOf(iBlankNode::class, $bn);
-        $this->assertInstanceOf(iNamedNode::class, $nn);
-        $this->assertInstanceOf(iLiteral::class, $l);
-        $this->assertInstanceOf(iDefaultGraph::class, $dg);
-        $this->assertInstanceOf(iQuad::class, $q);
-        $this->assertInstanceOf(iQuadTemplate::class, $qt);
+        $this->assertInstanceOf(Term::class, $bn);
+        $this->assertInstanceOf(Term::class, $nn);
+        $this->assertInstanceOf(Term::class, $l);
+        $this->assertInstanceOf(Term::class, $dg);
+        $this->assertInstanceOf(Term::class, $q);
+        $this->assertInstanceOf(Term::class, $qt);
+        $this->assertInstanceOf(BlankNode::class, $bn);
+        $this->assertInstanceOf(NamedNode::class, $nn);
+        $this->assertInstanceOf(Literal::class, $l);
+        $this->assertInstanceOf(DefaultGraph::class, $dg);
+        $this->assertInstanceOf(Quad::class, $q);
+        $this->assertInstanceOf(QuadTemplate::class, $qt);
     }
 }
