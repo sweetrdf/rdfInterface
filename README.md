@@ -24,6 +24,16 @@ The solution for these troubles is to agree on
 * A quick and dirty implementation of a few parsers and serialisers is provided by the [quickRdfIo](https://github.com/sweetrdf/quickRdfIo) library.
 * Some generic helpers which can be reuesed when developing your own implementations or plugging foreign code can be found in the [rdfHelpers](https://github.com/sweetrdf/rdfHelpers) library.
 
+## Using the test set
+
+The tests directory provides a set of PHPUnit tests for rdfInterface implementation validation.
+
+To reuse it just create your own test classes inheriting from provided ones and implementing abstract methods
+(see e.g. [simpleRdf library tests](https://github.com/sweetrdf/simpleRdf/tree/master/tests)).
+
+Then you can just run PHPUnit with `vendor/bin/phpunit --bootstrap vendor/autoload.php tests` 
+(assuming you have PHPUnit installed with composer and test classes in the `tests` directory).
+
 ## Design decisions
 
 ### Strong typing
