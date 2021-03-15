@@ -32,7 +32,7 @@ Using classes instead of arrays comes with the following advantages. Classes pro
 
 ### Immutability
 
-Using strong typing brings an important issue, so let's compare two code variants:
+Using strong typing brings an important issue. Let's compare two code variants:
 
 ```php
 class GraphObject {
@@ -45,16 +45,15 @@ class GraphArray {
     public function getRandomQuad(): array { (...) }
 }
 
-$g1 = new GraphObject();
-$g2 = new GraphArray();
+$gObj = new GraphObject();
+$gArr = new GraphArray();
 
-// (... fill in $g1 and $g2 with some data ...)
+$qObj = $gObj->getRandomQuad();
+$qObj->object->value = 'foo';
 
-$q1 = $g1->getRandomQuad();
-$q1['object']['value'] = 'foo';
+$qArr = $gArr->getRandomQuad();
+$qArr['object']['value'] = 'foo';
 
-$q2 = $g2->getRandomQuad();
-$q2->object->value = 'foo';
 ```
 
 In the array implementation we expect the change not to be propagated back to the graph (as arrays in PHP are passed by value by default).
@@ -62,40 +61,41 @@ In the object implementation our intuition tells us the change is propagated bac
 
 In our opinion the lack of propagation behaviour is more intuitive and desired in typical use cases.
 
-There are two ways of achieving it while using classes:
+There are two ways of achieving lack of propagation while using classes:
 
 * (deep) Cloning every object before returning/after receiving it by a function.
-* By enforcing objects are immutable.
+* Making object immutable.
   Meaning one can only get a new copy of the object with a given property being assigned a new value but can't modify a value of already existing object
   (like all `withSOMETHING()` methods of the [PSR-7](https://www.php-fig.org/psr/psr-7/#3-interfaces)).
   In such a case the last line in the code above would look as follows:
   ```php
-  $q2->getObject()->withValue('foo');
+  $qObj->getObject()->withValue('foo');
   ```
 
 The second approach has three benefits:
 
-1. It's much easier to implement without flaws. Deep cloning brings performance penalty so we'll try to guess where we can safely avoid it and we're likely to make wrong guesses.
+1. It's much easier to implement without flaws. Deep cloning brings performance penalty and quite some boiler plate code.
+   This makes it likely for developers to avoid deep cloning and this will often lead to (hard to track) bugs.
 2. Modern PHP programmers are already familiar with the idea.
-3. It allows to easily implement a global objects cache, which can save quite some memory in dense graphs
-  (if an object is immutable we can just use references to its single copy, no matter in how many copies we use it).
+3. It allows a straightforward implementation of a global objects cache, which can save quite some memory in dense graphs
+  (if an object is immutable we can just use references to its single copy, no matter how many times it appears in a graph).
 
 ### Use streams for data import and export
 
 Streams are far more flexible than strings.
-It allows asynchronous operation, lower memory footprint, coupling with modern PHP HTTP interface and much more.
+They allow asynchronous operation, they have lower memory footprint, they fit the PSR-7 interface nicely and much more.
 
-And a string can be easilly packed as an in memory stream.
+Last but not least a string can be easilly packed into a in-memory stream.
 
 ### Reuse native PHP interfaces
 
-PHP itself provides useful native interfaces which we promote to a part of the RDF API, e.g.
+PHP itself provides useful native interfaces which reuse in the RDF API, e.g.
 
-* [iterable](https://www.php.net/manual/en/language.types.iterable.php) over edges/nodes of a graph or edges of a graph node.
-* [ArrayAccess](https://www.php.net/manual/en/class.arrayaccess.php) for adding/removing/accessing edges/nodes of a graph or a graph node.
+* [iterable](https://www.php.net/manual/en/language.types.iterable.php) over edges/nodes of a graph.
+* [ArrayAccess](https://www.php.net/manual/en/class.arrayaccess.php) for adding/removing/accessing edges of a graph.
 * [Countable](https://www.php.net/manual/en/class.countable.php) for e.g. counting quads in a graph.
 
-Using native interfaces makes the library easier to learn and it feels better integrated.
+Using native interfaces makes the library easier to learn and it feels better integrated with the PHP ecosystem.
 
 ### Extensibility
 
@@ -106,7 +106,7 @@ RDF is changing with new ideas being introduced (like RDF*) and the API should b
 That's the purpose of the `Term` class and the reason for `Quad`/`QuadTemplate` use `Term` as the type for subject and object.
 
 It doesn't mean particular implementations must support just any `Term`.
-Implementations may support any subset they want, they just check types and throw errors when they see something they can't process.
+Implementations may support any subset they want, they should just check argument types and throw errors when they see something they can't process.
 
 ## Design considerations
 
@@ -118,13 +118,15 @@ EasyRdf has only node-oriented API.
 RDF/JS has only edge-oriented API.
 RDFLib has both.
 
-I would say we want both.
+Initially I would say we want both.
+But the more I'm using it, the more I'm convinced a library providing a ready to reuse set of `QuadTemplate` classes
+coupled with the edge-oriented API can easily do the job of the node-oriented API.
 
 ### QuadIterator vs iterable
 
 QuadIterator allows strong typing but is more troublesome to implement.
 
-A workaround would be to provide a utility class providing a QuadIterator over an array and a Generator.
+A workaround would be to provide a utility class providing a QuadIterator over an arrays and Generators.
 
 ### Can Quad properties be null?
 
@@ -136,9 +138,9 @@ The RDF/JS Quad class doesn't allow for empty components which requires separate
 RDFLib doesn't have a special datatype for a triple/quad and uses a simple three/four element Python tuple to represent them.
 This solution allows empty triple/quad parts.
 
-As we prefer for a Quad to be an object (so we can easily assure it's immutable) 
+As we prefer a Quad to be an object (so we can easily assure it's immutable) 
 and it seems useful to be able to distinuigh beetween a complete and an incomplete quad
-we may try to use two interfaces - one for a complete Quad and the other allowing empty elements.
+we may try to use two interfaces - one for a complete Quad and the other allowing empty elements (QuadTemplate).
 
 ### Should Quads be aware of Dataset they belong too?
 
@@ -165,14 +167,15 @@ While it's tempting to assume `__toString()` can be used as a *get object's valu
   If for such classes `__toString()` means *just return a string representation which can be nicely printed*,
   we end up with a semantically inconsistent API which would be better to avoid.
 
-Because of that let's assume for now the Term should provide a `getValue()` method.
+Because of that let's assume the Term should provide a separate `getValue()` method.
 
 ### Should Term provide some kind of serialization method?
 
-While it's tempting to incorporate some kind of serialization into the Term interface it isn't a good idea.
+While it's tempting to incorporate some kind of serialization into the Term interface I think it isn't a good idea.
 
-The main reason is it breaks separation of the serialization layer.
-Also as there are dozens of serialization formats and if we implement one, we will quickly
+The main reason is it breaks separation of the serialization layer (which would at least partially overlap with Term).
+
+Also, there are dozens of serialization formats and if we implement one, we will quickly
 want to implement another. Before we realize, the serialization layer will be completely
 merged with the Term. And we would definitely prefer to separate them.
 
