@@ -35,10 +35,6 @@ interface QuadTemplate extends Term {
     /**
      * At least one parameter has to be not null.
      *
-     * @param Term|null $subject
-     * @param NamedNode|null $predicate
-     * @param Term|null $object
-     * @param NamedNode|BlankNode|null $graphIri
      */
     public function __construct(
         Term | null $subject = null, NamedNode | null $predicate = null,
@@ -56,7 +52,6 @@ interface QuadTemplate extends Term {
      * DefaultGraph is skipped to avoid ambiguity between null and DefaultGraph
      * (as all quads belong to the DefaultGraph it effectively means no filter at
      * all, just like null).
-     * @return NamedNode|BlankNode|null
      */
     public function getGraphIri(): NamedNode | BlankNode | null;
 
