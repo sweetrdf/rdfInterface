@@ -31,8 +31,7 @@ namespace rdfInterface;
  * @author zozlak
  * @extends \Iterator<int, Quad>
  */
-interface QuadIterator extends \Iterator
-{
+interface QuadIterator extends \Iterator {
 
     public function current(): Quad;
 }

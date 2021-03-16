@@ -27,10 +27,9 @@
 namespace rdfInterface;
 
 /**
- *
+ * 
  * @author zozlak
  */
-interface DefaultGraph extends BlankNode
-{
-
+interface DefaultGraph extends BlankNode {
+    
 }

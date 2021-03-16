@@ -33,12 +33,10 @@ use zozlak\RdfConstants as RDF;
  *
  * @author zozlak
  */
-interface Literal extends Term
-{
+interface Literal extends Term {
 
     public function __construct(
-        int | float | string | bool | Stringable $value,
-        ?string $lang = null,
+        int | float | string | bool | Stringable $value, ?string $lang = null,
         ?string $datatype = RDF::XSD_STRING
     );
 

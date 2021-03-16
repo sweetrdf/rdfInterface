@@ -32,8 +32,7 @@ use Stringable;
  *
  * @author zozlak
  */
-interface DataFactory
-{
+interface DataFactory {
 
     public static function namedNode(string | Stringable $iri): NamedNode;
 
@@ -50,16 +49,12 @@ interface DataFactory
     public static function defaultGraph(string | Stringable | null $iri = null): DefaultGraph;
 
     public static function quad(
-        Term $subject,
-        NamedNode $predicate,
-        Term $object,
+        Term $subject, NamedNode $predicate, Term $object,
         NamedNode | BlankNode | null $graph = null
     ): Quad;
 
     public static function quadTemplate(
-        Term | null $subject = null,
-        NamedNode | null $predicate = null,
-        Term | null $object = null,
-        NamedNode | BlankNode | null $graph = null
+        Term | null $subject = null, NamedNode | null $predicate = null,
+        Term | null $object = null, NamedNode | BlankNode | null $graph = null
     ): QuadTemplate;
 }

@@ -30,8 +30,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface Serializer
-{
+interface Serializer {
 
     public function __construct();
 
@@ -45,8 +44,6 @@ interface Serializer
      * @return void
      */
     public function serializeStream(
-        $output,
-        QuadIterator $graph,
-        RdfNamespace | null $nmsp = null
+        $output, QuadIterator $graph, RdfNamespace | null $nmsp = null
     ): void;
 }

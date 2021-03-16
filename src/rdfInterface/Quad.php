@@ -36,8 +36,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface Quad extends Term
-{
+interface Quad extends Term {
 
     /**
      *
@@ -47,9 +46,7 @@ interface Quad extends Term
      * @param NamedNode|BlankNode|null $graphIri
      */
     public function __construct(
-        Term $subject,
-        NamedNode $predicate,
-        Term $object,
+        Term $subject, NamedNode $predicate, Term $object,
         NamedNode | BlankNode | null $graphIri = null
     );
 

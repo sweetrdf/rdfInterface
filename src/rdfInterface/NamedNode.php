@@ -30,8 +30,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface NamedNode extends Term
-{
+interface NamedNode extends Term {
 
     public function __construct(string $iri);
 }

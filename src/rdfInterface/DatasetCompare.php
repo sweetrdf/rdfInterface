@@ -30,8 +30,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface DatasetCompare extends Dataset
-{
+interface DatasetCompare extends Dataset {
 
     public function every(Quad | QuadTemplate | callable $filter): bool;
 

@@ -30,7 +30,6 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface Variable extends Term
-{
-
+interface Variable extends Term {
+    
 }

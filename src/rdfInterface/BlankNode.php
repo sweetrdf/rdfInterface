@@ -30,8 +30,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface BlankNode extends Term
-{
+interface BlankNode extends Term {
 
     public function __construct(?string $id = null);
 }

@@ -30,8 +30,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface QuadTemplate extends Term
-{
+interface QuadTemplate extends Term {
 
     /**
      * At least one parameter has to be not null.
@@ -42,8 +41,7 @@ interface QuadTemplate extends Term
      * @param NamedNode|BlankNode|null $graphIri
      */
     public function __construct(
-        Term | null $subject = null,
-        NamedNode | null $predicate = null,
+        Term | null $subject = null, NamedNode | null $predicate = null,
         Term | null $object = null,
         NamedNode | BlankNode | null $graphIri = null
     );

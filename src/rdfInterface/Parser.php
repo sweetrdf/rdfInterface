@@ -30,8 +30,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface Parser
-{
+interface Parser {
 
     /**
      * 
