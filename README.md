@@ -28,11 +28,33 @@ The solution for these troubles is to agree on
 
 The tests directory provides a set of PHPUnit tests for rdfInterface implementation validation.
 
-To reuse it just create your own test classes inheriting from provided ones and implementing abstract methods
-(see e.g. [simpleRdf library tests](https://github.com/sweetrdf/simpleRdf/tree/master/tests)).
+To reuse it just create your own test classes inheriting from provided ones and implementing abstract methods.
 
 Then you can just run PHPUnit with `vendor/bin/phpunit --bootstrap vendor/autoload.php tests` 
 (assuming you have PHPUnit installed with composer and test classes in the `tests` directory).
+
+### Sample implementation
+
+```php
+namespace myLibNmsp;
+
+class MyDataFactoryTest extends \rdfInterface\tests\DataFactoryTest {
+
+    // so \rdfInterface\tests\DataFactoryTest method know how to get my own implementation of the DataFactory interface
+    public static function getDataFactory(): \rdfInterface\DataFactory {
+        return new MyDataFactoryClass();
+    }
+
+    // bypass the testCreateVariable() test as my library doesn't support terms of type variable
+    public function testCreateVariable(): void {
+        $this->expectException(ExceptionThrownByMyDataFactoryClass::class);
+        parent::testCreateVariable();
+    }
+
+}
+```
+
+More examples can be found in [simpleRdf library tests](https://github.com/sweetrdf/simpleRdf/tree/master/tests) and [quickRdf library tests](https://github.com/sweetrdf/quickRdf/tree/master/tests).
 
 ## Design decisions
 
