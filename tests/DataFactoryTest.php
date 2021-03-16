@@ -26,7 +26,6 @@
 
 namespace rdfInterface\tests;
 
-use rdfInterface\DataFactory;
 use rdfInterface\Term;
 use rdfInterface\BlankNode;
 use rdfInterface\NamedNode;
@@ -42,13 +41,7 @@ use rdfInterface\QuadTemplate;
  */
 abstract class DataFactoryTest extends \PHPUnit\Framework\TestCase {
 
-    abstract public static function getDataFactory(): DataFactory;
-
-    protected static DataFactory $df;
-
-    public static function setUpBeforeClass(): void {
-        self::$df = static::getDataFactory();
-    }
+    use TestBaseTrait;
 
     public function testCreateBasic(): void {
         $bn = self::$df::blankNode();

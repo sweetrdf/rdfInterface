@@ -27,7 +27,6 @@
 namespace rdfInterface\tests;
 
 use rdfHelpers\GenericQuadIterator;
-use rdfInterface\DataFactory;
 use rdfInterface\Literal;
 use rdfInterface\Quad;
 use rdfInterface\DatasetCompare;
@@ -39,27 +38,9 @@ use rdfInterface\DatasetCompare;
  */
 abstract class DatasetCompareTest extends \PHPUnit\Framework\TestCase {
 
-    abstract public static function getDataFactory(): DataFactory;
+    use TestBaseTrait;
 
     abstract public static function getDataset(): DatasetCompare;
-
-    protected static DataFactory $df;
-
-    /**
-     *
-     * @var array<Quad>
-     */
-    private static array $quads;
-
-    public static function setUpBeforeClass(): void {
-        self::$df    = static::getDataFactory();
-        self::$quads = [
-            self::$df::quad(self::$df::namedNode('foo'), self::$df::namedNode('bar'), self::$df::literal('baz')),
-            self::$df::quad(self::$df::namedNode('baz'), self::$df::namedNode('foo'), self::$df::namedNode('bar')),
-            self::$df::quad(self::$df::namedNode('bar'), self::$df::namedNode('baz'), self::$df::namedNode('foo')),
-            self::$df::quad(self::$df::namedNode('foo'), self::$df::namedNode('bar'), self::$df::literal('baz', 'en'), self::$df::namedNode('graph')),
-        ];
-    }
 
     public function testAnyNone(): void {
         $d1 = static::getDataset();
