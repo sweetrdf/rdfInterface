@@ -30,22 +30,67 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface RdfNamespace
-{
-
-    public function add(string $uri, ?string $prefix = null): string;
-
-    public function remove(string $prefix): void;
-
-    public function get(string $prefix): string;
+interface RdfNamespace {
 
     /**
-     *
-     * @return string[]
+     * Registers a given URL prefix.
+     * 
+     * @param string $iriPrefix
+     * @param string|null $shortName Short name to register the IRI prefix under.
+     *   If null or empty, the short name is automatically generated.
+     * @return string The short name under which the URL prefix was registered.
+     */
+    public function add(string $iriPrefix, ?string $shortName = null): string;
+
+    /**
+     * Drops a given short name and IRI prefix associated with it.
+     * 
+     * @param string $shortName
+     * @return void
+     */
+    public function remove(string $shortName): void;
+
+    /**
+     * Returns a IRI prefix for a given short name.
+     * 
+     * Throws an exception if a given short name isn't registered.
+     * @param string $shortName
+     * @return string
+     * @throws \OutOfBoundsException
+     */
+    public function get(string $shortName): string;
+
+    /**
+     * Returns associative array of all registered namespaces with array keys
+     * being namespace short names and array values containing URL prefixes.
+     * 
+     * @return array<string, string>
      */
     public function getAll(): array;
 
+    /**
+     * Expands a shortened IRI to a NamedNode.
+     * 
+     * Throws an error if the short name used in the shortened IRI is unknown or
+     * when the $shortIri is not a shortened IRI.
+     * @param string $shortIri
+     * @return NamedNode
+     * @throws \OutOfBoundsException
+     * @throws \BadMethodCallException
+     */
     public function expand(string $shortIri): NamedNode;
 
+    /**
+     * Shortens provided NamedNode IRI.
+     * 
+     * If corresponding IRI prefix is not registered yet, the behavior depends on
+     * the $create parameter value. If it's true, a new short name is registered
+     * automatically. Otherwise an expception is thrown.
+     * @param NamedNode $Iri
+     * @param bool $create Should a new short name be registered for the IRI
+     *   prefix if there is no matching one?
+     * @return string
+     * @throws \OutOfBoundsException
+     */
     public function shorten(NamedNode $Iri, bool $create): string;
 }
