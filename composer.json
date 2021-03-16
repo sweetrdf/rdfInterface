@@ -18,7 +18,8 @@
     },
     "autoload": {
         "psr-4": {
-            "rdfInterface\\": "src/rdfInterface"
+            "rdfInterface\\": "src/rdfInterface",
+            "rdfInterface\\tests\\": "tests"
         },
         "files": [
             "src/rdfInterface/constants.php"
@@ -30,10 +31,5 @@
         "phpstan/phpstan": "*",
         "squizlabs/php_codesniffer": "*",
         "sweetrdf/rdf-helpers": "*"
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "rdfInterface\\tests\\": "tests"
-        }
     }
 }
