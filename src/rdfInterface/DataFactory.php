@@ -46,15 +46,15 @@ interface DataFactory {
 
     public static function variable(string | Stringable $name): Variable;
 
-    public static function defaultGraph(string | Stringable | null $iri = null): DefaultGraph;
+    public static function defaultGraph(): DefaultGraph;
 
     public static function quad(
         Term $subject, NamedNode $predicate, Term $object,
-        NamedNode | BlankNode | null $graph = null
+        NamedNode | BlankNode | DefaultGraph | null $graph = null
     ): Quad;
 
     public static function quadTemplate(
         Term | null $subject = null, NamedNode | null $predicate = null,
-        Term | null $object = null, NamedNode | BlankNode | null $graph = null
+        Term | null $object = null, NamedNode | BlankNode | DefaultGraph | null $graph = null
     ): QuadTemplate;
 }

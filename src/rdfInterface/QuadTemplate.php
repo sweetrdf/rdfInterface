@@ -43,7 +43,7 @@ interface QuadTemplate extends Term {
     public function __construct(
         Term | null $subject = null, NamedNode | null $predicate = null,
         Term | null $object = null,
-        NamedNode | BlankNode | null $graphIri = null
+        NamedNode | BlankNode | DefaultGraph | null $graphIri = null
     );
 
     public function getSubject(): Term | null;
@@ -52,6 +52,12 @@ interface QuadTemplate extends Term {
 
     public function getObject(): Term | null;
 
+    /**
+     * DefaultGraph is skipped to avoid ambiguity between null and DefaultGraph
+     * (as all quads belong to the DefaultGraph it effectively means no filter at
+     * all, just like null).
+     * @return NamedNode|BlankNode|null
+     */
     public function getGraphIri(): NamedNode | BlankNode | null;
 
     public function withSubject(Term | null $subject): QuadTemplate;
@@ -60,5 +66,5 @@ interface QuadTemplate extends Term {
 
     public function withObject(Term | null $object): QuadTemplate;
 
-    public function withGraphIri(NamedNode | BlankNode | null $graphIri): QuadTemplate;
+    public function withGraphIri(NamedNode | BlankNode | DefaultGraph | null $graphIri): QuadTemplate;
 }

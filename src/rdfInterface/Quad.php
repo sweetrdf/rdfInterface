@@ -43,11 +43,11 @@ interface Quad extends Term {
      * @param Term $subject
      * @param NamedNode $predicate
      * @param Term $object
-     * @param NamedNode|BlankNode|null $graphIri
+     * @param NamedNode|BlankNode|DefaultGraph|null $graphIri
      */
     public function __construct(
         Term $subject, NamedNode $predicate, Term $object,
-        NamedNode | BlankNode | null $graphIri = null
+        NamedNode | BlankNode | DefaultGraph | null $graphIri = null
     );
 
     public function getSubject(): Term;
@@ -56,7 +56,13 @@ interface Quad extends Term {
 
     public function getObject(): Term;
 
-    public function getGraphIri(): NamedNode | BlankNode;
+    /**
+     * Null is not allowed to deal with the ambiguity between DefaultGraph and
+     * null which mean the same (although it should be noted that all quads in
+     * NamedNode/BlankNode graphs also belong to the DefaultGraph).
+     * @return NamedNode|BlankNode|DefaultGraph
+     */
+    public function getGraphIri(): NamedNode | BlankNode | DefaultGraph;
 
     public function withSubject(Term $subject): Quad;
 
@@ -64,5 +70,5 @@ interface Quad extends Term {
 
     public function withObject(Term $object): Quad;
 
-    public function withGraphIri(NamedNode | BlankNode $graphIri): Quad;
+    public function withGraphIri(NamedNode | BlankNode | DefaultGraph | null $graphIri): Quad;
 }

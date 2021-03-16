@@ -235,16 +235,16 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $l1  = self::$df::literal('foo');
         $l2  = self::$df::literal('foo', 'eng');
         $l3  = self::$df::literal('foo', '', RDF::XSD_STRING);
-        $dg1 = self::$df::defaultGraph();
-        $dg2 = self::$df::defaultGraph('foo');
+        $g1 = self::$df::defaultGraph();
+        $g2 = self::$df::blankNode('foo');
 
         $q = [
             0 => self::$df::quad($nn3, $nn2, $nn1),
             1 => self::$df::quad($nn3, $nn2, $l1),
             2 => self::$df::quad($nn3, $nn2, $l2),
             3 => self::$df::quad($nn3, $nn2, $l3),
-            4 => self::$df::quad($nn3, $nn2, $nn1, $dg1),
-            5 => self::$df::quad($nn3, $nn2, $nn1, $dg2),
+            4 => self::$df::quad($nn3, $nn2, $nn1, $g1),
+            5 => self::$df::quad($nn3, $nn2, $nn1, $g2),
             6 => self::$df::quad($nn2, $nn2, $nn1),
             7 => self::$df::quad($nn3, $nn3, $nn1),
         ];
