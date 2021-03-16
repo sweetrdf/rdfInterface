@@ -42,8 +42,24 @@ interface Literal extends Term
         ?string $datatype = RDF::XSD_STRING
     );
 
+    /**
+     * Returns literal's language tag.
+     * 
+     * If a literal lacks a language tag, null should be returned. It means this
+     * method is not allowed to return an empty string.
+     * @return string|null
+     */
     public function getLang(): ?string;
 
+    /**
+     * Returns literal's datatype.
+     * 
+     * The method must return the actual datatype even if it's implicit
+     * (meaning `http://www.w3.org/2001/XMLSchema#string` for literals with 
+     * a lang tag and literals with no datatype specified explicitely).
+     * Because of that the method can't return null nor an empty string. 
+     * @return string
+     */
     public function getDatatype(): string;
 
     public function withValue(int | float | string | bool | Stringable $value): Literal;
