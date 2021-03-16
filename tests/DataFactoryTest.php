@@ -33,6 +33,7 @@ use rdfInterface\Literal;
 use rdfInterface\DefaultGraph;
 use rdfInterface\Quad;
 use rdfInterface\QuadTemplate;
+use rdfInterface\Variable;
 
 /**
  * Description of LoggerTest
@@ -43,25 +44,45 @@ abstract class DataFactoryTest extends \PHPUnit\Framework\TestCase {
 
     use TestBaseTrait;
 
-    public function testCreateBasic(): void {
+    public function testCreateBlankNode(): void {
         $bn = self::$df::blankNode();
-        $nn = self::$df::namedNode('foo');
-        $l  = self::$df::literal('foo', 'lang');
-        $dg = self::$df::defaultGraph();
-        $q  = self::$df::quad($bn, $nn, $l, $dg);
-        $qt = self::$df::quadTemplate($bn, $nn, $l, $dg);
-
         $this->assertInstanceOf(Term::class, $bn);
-        $this->assertInstanceOf(Term::class, $nn);
-        $this->assertInstanceOf(Term::class, $l);
-        $this->assertInstanceOf(Term::class, $dg);
-        $this->assertInstanceOf(Term::class, $q);
-        $this->assertInstanceOf(Term::class, $qt);
         $this->assertInstanceOf(BlankNode::class, $bn);
+    }
+
+    public function testCreateNamedNode(): void {
+        $nn = self::$df::namedNode('foo');
+        $this->assertInstanceOf(Term::class, $nn);
         $this->assertInstanceOf(NamedNode::class, $nn);
+    }
+
+    public function testCreateLiteral(): void {
+        $l = self::$df::literal('foo', 'lang');
+        $this->assertInstanceOf(Term::class, $l);
         $this->assertInstanceOf(Literal::class, $l);
+    }
+
+    public function testCreateDefaultGraph(): void {
+        $dg = self::$df::defaultGraph();
+        $this->assertInstanceOf(Term::class, $dg);
         $this->assertInstanceOf(DefaultGraph::class, $dg);
+    }
+
+    public function testCreateQuad(): void {
+        $q = self::$df::quad($bn, $nn, $l, $dg);
+        $this->assertInstanceOf(Term::class, $q);
         $this->assertInstanceOf(Quad::class, $q);
+    }
+
+    public function testCreateQuadTemplate(): void {
+        $qt = self::$df::quadTemplate($bn, $nn, $l, $dg);
+        $this->assertInstanceOf(Term::class, $qt);
         $this->assertInstanceOf(QuadTemplate::class, $qt);
+    }
+
+    public function testCreateVariable(): void {
+        $qv = self::$df::variable('foo');
+        $this->assertInstanceOf(Term::class, $qv);
+        $this->assertInstanceOf(Variable::class, $qv);
     }
 }
