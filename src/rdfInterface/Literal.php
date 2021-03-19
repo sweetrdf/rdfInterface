@@ -85,6 +85,7 @@ interface Literal extends Term {
      *     Implementations may handle this kind of cast. It's up to the 
      *     implementation which datatypes are supported and how the mapping is
      *     being done.
+     *   Implementations may provide additional types of cast.
      * @return mixed
      */
     public function getValue(int $cast = self::CAST_LEXICAL_FORM): mixed;
