@@ -48,7 +48,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         foreach ($n as $i) {
             $this->assertTrue($i->equals($i));
             $this->assertFalse($i->equals($bn));
-            $this->assertEquals(\rdfInterface\TYPE_NAMED_NODE, $i->getType());
+            $this->assertInstanceOf(\rdfInterface\NamedNode::class, $i);
             $this->assertIsString((string) $i);
         }
         $this->assertEquals('foo', $n[0]->getValue());
@@ -76,7 +76,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         foreach ($n as $i) {
             $this->assertTrue($i->equals($i));
             $this->assertFalse($i->equals($nn));
-            $this->assertEquals(\rdfInterface\TYPE_BLANK_NODE, $i->getType());
+            $this->assertInstanceOf(\rdfInterface\BlankNode::class, $i);
             $this->assertIsString((string) $i);
             $this->assertStringStartsWith('_:', $i->getValue());
         }
@@ -110,7 +110,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
             $this->assertTrue($i->equals($i));
             $this->assertFalse($i->equals($nn));
             $this->assertIsString((string) $i);
-            $this->assertEquals(\rdfInterface\TYPE_LITERAL, $i->getType());
+            $this->assertInstanceOf(\rdfInterface\Literal::class, $i);
         }
 
         $this->assertNull($l[0]->getLang());
@@ -122,7 +122,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertTrue($l[0]->equals($l[5]));
 
         $this->assertEquals('eng', $l[1]->getLang());
-        $this->assertEquals(RDF::XSD_STRING, $l[1]->getDatatype());
+        $this->assertEquals(RDF::RDF_LANG_STRING, $l[1]->getDatatype());
         $this->assertFalse($l[1]->equals($l[2]));
         $this->assertFalse($l[1]->equals($l[3]));
         $this->assertFalse($l[1]->equals($l[4]));
@@ -141,7 +141,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertFalse($l[3]->equals($l[5]));
 
         $this->assertEquals('deu', $l[4]->getLang());
-        $this->assertEquals(RDF::XSD_STRING, $l[4]->getDatatype());
+        $this->assertEquals(RDF::RDF_LANG_STRING, $l[4]->getDatatype());
         $this->assertFalse($l[4]->equals($l[5]));
 
         $this->assertNull($l[5]->getLang());
@@ -164,7 +164,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $l2 = $l1->withLang('eng');
         $this->assertEquals('2', $l2->getValue());
         $this->assertEquals('eng', $l2->getLang());
-        $this->assertEquals(RDF::XSD_STRING, $l2->getDatatype());
+        $this->assertEquals(RDF::RDF_LANG_STRING, $l2->getDatatype());
 
         $l3 = $l2->withDatatype(RDF::XSD_INT);
         $this->assertEquals('2', (string) $l3->getValue());
@@ -173,13 +173,13 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
 
         $l4 = $l2->withDatatype(RDF::XSD_STRING);
         $this->assertEquals('2', $l4->getValue());
-        $this->assertEquals('eng', $l4->getLang());
+        $this->assertNull($l4->getLang());
         $this->assertEquals(RDF::XSD_STRING, $l4->getDatatype());
 
         $l5 = $l3->withLang('deu');
         $this->assertEquals('2', $l5->getValue());
         $this->assertEquals('deu', $l5->getLang());
-        $this->assertEquals(RDF::XSD_STRING, $l5->getDatatype());
+        $this->assertEquals(RDF::RDF_LANG_STRING, $l5->getDatatype());
 
         $l6 = $l3->withLang(null);
         $this->assertEquals('2', $l6->getValue());
@@ -189,7 +189,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $l7 = $l2->withValue('3');
         $this->assertEquals('3', $l7->getValue());
         $this->assertEquals('eng', $l7->getLang());
-        $this->assertEquals(RDF::XSD_STRING, $l7->getDatatype());
+        $this->assertEquals(RDF::RDF_LANG_STRING, $l7->getDatatype());
 
         $l8 = $l3->withValue('4');
         $this->assertEquals('4', (string) $l8->getValue());
@@ -207,7 +207,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
 
         $this->assertEquals('2', $l2->getValue());
         $this->assertEquals('eng', $l2->getLang());
-        $this->assertEquals(RDF::XSD_STRING, $l2->getDatatype());
+        $this->assertEquals(RDF::RDF_LANG_STRING, $l2->getDatatype());
 
         $this->assertEquals('2', (string) $l3->getValue());
         $this->assertNull($l3->getLang());
@@ -235,8 +235,8 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $l1  = self::$df::literal('foo');
         $l2  = self::$df::literal('foo', 'eng');
         $l3  = self::$df::literal('foo', '', RDF::XSD_STRING);
-        $g1 = self::$df::defaultGraph();
-        $g2 = self::$df::blankNode('foo');
+        $g1  = self::$df::defaultGraph();
+        $g2  = self::$df::blankNode('foo');
 
         $q = [
             0 => self::$df::quad($nn3, $nn2, $nn1),
@@ -250,7 +250,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         ];
         foreach ($q as $n => $i) {
             $this->assertTrue($i->equals($i));
-            $this->assertEquals(\rdfInterface\TYPE_QUAD, $i->getType());
+            $this->assertInstanceOf(\rdfInterface\Quad::class, $i);
             $this->assertFalse($i->equals($nn1));
             if ($n < 6) {
                 $this->assertTrue($nn3->equals($i->getSubject()));
@@ -332,9 +332,9 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
             6 => self::$df::quadTemplate($nn1, $nn1, null),
             7 => self::$df::quadTemplate(null, $nn1, $nn1, $dg1),
         ];
-        foreach ($q as $n => $i) {
+        foreach ($q as $i) {
             $this->assertTrue($i->equals($i));
-            $this->assertEquals(\rdfInterface\TYPE_QUAD_TMPL, $i->getType());
+            $this->assertInstanceOf(\rdfInterface\QuadTemplate::class, $i);
             $this->assertFalse($i->equals($nn1));
             $this->assertIsString((string) $i);
         }

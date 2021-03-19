@@ -20,10 +20,7 @@
         "psr-4": {
             "rdfInterface\\": "src/rdfInterface",
             "rdfInterface\\tests\\": "tests"
-        },
-        "files": [
-            "src/rdfInterface/constants.php"
-        ]
+        }
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",

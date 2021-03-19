@@ -37,8 +37,6 @@ interface Term {
 
     public function __toString(): string;
 
-    public function getType(): string;
-
     public function getValue(): int | float | string | bool | Stringable;
 
     public function equals(Term $term): bool;

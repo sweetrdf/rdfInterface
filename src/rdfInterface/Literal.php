@@ -26,6 +26,7 @@
 
 namespace rdfInterface;
 
+use BadMethodCallException;
 use Stringable;
 use zozlak\RdfConstants as RDF;
 
@@ -35,6 +36,28 @@ use zozlak\RdfConstants as RDF;
  */
 interface Literal extends Term {
 
+    /**
+     * Creates a new literal.
+     * 
+     * While the created literal must have valid combination of datatype and lang tag
+     * (meaning the datatype is rdf:langString if and only if the literal has 
+     * a lang tag), it's up to the implementation how to assure it. Both throwing
+     * an exception and one of $lang/$datatype parameters taking precedense over 
+     * the other are valid solutions.
+     * 
+     * See https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal for 
+     * a reference.
+     * 
+     * @param int|float|string|bool|Stringable $value Literal's value. It must be of a type
+     *   allowing casting to a string because RDF defines literal comparisons
+     *   in terms of their string values (lexical forms) comparison.
+     * @param string|null $lang Literal's lang tag. If null or empty string, the literal
+     *   is assumed not to have a lang tag (as an empty lang tag is not allowed in RDF).
+     * @param string|null $datatype Literal's datatype. If it's null, the datatype must be
+     *   assigned according to the $lang parameter value. Literals with a lang
+     *   tag are of type rdf:langString while other literals are assumed to be
+     *   of type xsd:string.
+     */
     public function __construct(
         int | float | string | bool | Stringable $value, ?string $lang = null,
         ?string $datatype = RDF::XSD_STRING
@@ -44,7 +67,7 @@ interface Literal extends Term {
      * Returns literal's language tag.
      * 
      * If a literal lacks a language tag, null should be returned. It means this
-     * method is not allowed to return an empty string.
+     * method can't return an empty string.
      * @return string|null
      */
     public function getLang(): ?string;
@@ -52,17 +75,54 @@ interface Literal extends Term {
     /**
      * Returns literal's datatype.
      * 
-     * The method must return the actual datatype even if it's implicit
-     * (meaning `http://www.w3.org/2001/XMLSchema#string` for literals with 
-     * a lang tag and literals with no datatype specified explicitely).
-     * Because of that the method can't return null nor an empty string. 
+     * The method must return the actual datatype even if it's implicit. It
+     * means `http://www.w3.org/1999/02/22-rdf-syntax-ns#langString` must be
+     * returned for literals with a lang tag and 
+     * `http://www.w3.org/2001/XMLSchema#string` must be returned for literals
+     * without lang tag and without datatype specified explicitely.
+     * 
      * @return string
+     * @see __construct()
      */
     public function getDatatype(): string;
 
     public function withValue(int | float | string | bool | Stringable $value): Literal;
 
+    /**
+     * Returns a new literal being a copy of this one with a lang tag set to 
+     * a given value.
+     * 
+     * Be aware setting a lang tag on a literal without one as well as dropping
+     * a lang tag from a literal having it implicitly changes literal's datatype.
+     * Setting a lang on a literal without one enforces setting its datatype to
+     * rdf:langString while dropping a lang from a literal having it changes
+     * literal's datatype to xsd:string (see 
+     * https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal for details).
+     * @param string|null $lang 
+     * @return Literal
+     */
     public function withLang(?string $lang): Literal;
 
-    public function withDatatype(?string $datatype): Literal;
+    /**
+     * Returns a new literal being a copy with this one with datatype set to
+     * a given value.
+     * 
+     * Be aware it's impossibe to set the datatype to rdf::langString that way
+     * as it would require setting a non-empty lang tag. The withLang()
+     * method should be used in such a case as it changes the datatype implicitly.
+     * 
+     * As this method by definition doesn't allow to set a datatype allowing
+     * a literal to have a lang tag, it must set returned literal's lang tag
+     * to null.
+     * 
+     * This method must throw a \BadMethodCallException when called with a wrong
+     * datatype (`http://www.w3.org/1999/02/22-rdf-syntax-ns#langString` or an
+     * empty one).
+     * 
+     * @param string $datatype
+     * @return Literal
+     * @see withLang()
+     * @throws BadMethodCallException
+     */
+    public function withDatatype(string $datatype): Literal;
 }
