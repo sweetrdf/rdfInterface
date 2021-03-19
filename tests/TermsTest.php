@@ -153,6 +153,25 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertFalse($l[5]->equals($l[4]));
     }
 
+    public function testLiteralCornerCases(): void {
+        $l = [
+            0 => [self::$df::literal(1), [1]],
+            1 => [self::$df::literal('1'), [0]],
+            2 => [self::$df::literal('01'), []],
+            3 => [self::$df::literal(1, null, RDF::XSD_INT), [4]],
+            4 => [self::$df::literal('1', null, RDF::XSD_INT), [3]],
+            5 => [self::$df::literal('01', null, RDF::XSD_INT), []],
+        ];
+        foreach ($l as $n => $i) {
+            foreach ($l as $m => $j) {
+                if ($n !== $m) {
+                    $valid = $i[1];
+                    $this->assertEquals(in_array($m, $valid), $i[0]->equals($j[0]));
+                }
+            }
+        }
+    }
+
     public function testLiteralWith(): void {
         $l0 = self::$df::literal('1');
 
