@@ -43,6 +43,8 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
 
     abstract public static function getDataset(): Dataset;
 
+    abstract public static function getForeignDataset(): Dataset; // foreign \rdfInterface\Dataset implementation
+
     public function testAddQuads(): void {
         $d = static::getDataset();
         for ($i = 0; $i + 1 < count(self::$quads); $i++) {

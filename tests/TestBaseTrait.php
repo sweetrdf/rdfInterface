@@ -37,7 +37,10 @@ trait TestBaseTrait {
 
     abstract public static function getDataFactory(): DataFactory;
 
+    abstract public static function getForeignDataFactory(): DataFactory;
+
     protected static DataFactory $df;
+    protected static DataFactory $fdf; // foreign \rdfInterface\DataFactory implementation
 
     /**
      *
@@ -47,6 +50,7 @@ trait TestBaseTrait {
 
     public static function setUpBeforeClass(): void {
         self::$df    = static::getDataFactory();
+        self::$fdf   = static::getForeignDataFactory();
         self::$quads = [
             self::$df::quad(self::$df::namedNode('foo'), self::$df::namedNode('bar'), self::$df::literal('baz')),
             self::$df::quad(self::$df::namedNode('baz'), self::$df::namedNode('foo'), self::$df::namedNode('bar')),

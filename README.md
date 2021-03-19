@@ -40,9 +40,16 @@ namespace myLibNmsp;
 
 class MyDataFactoryTest extends \rdfInterface\tests\DataFactoryTest {
 
-    // so \rdfInterface\tests\DataFactoryTest method know how to get my own implementation of the DataFactory interface
+    // So \rdfInterface\tests\DataFactoryTest method know how to get my own implementation of the DataFactory interface.
     public static function getDataFactory(): \rdfInterface\DataFactory {
         return new MyDataFactoryClass();
+    }
+
+    // So \rdfInterface\tests\DataFactoryTest method know how to get other implementation of the DataFactory interface.
+    // This is used to check interoperability of your implementation with the other one (all in all that's the point of a common interface).
+    // If you want to skip it, just make it return your implementation of \rdfInterface\DataFactory
+    public static function getForeignDataFactory(): \rdfInterface\DataFactory {
+        return new \simpleRdf\DataFactory();
     }
 
     // bypass the testCreateVariable() test as my library doesn't support terms of type variable

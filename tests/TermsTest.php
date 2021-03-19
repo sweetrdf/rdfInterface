@@ -28,6 +28,7 @@ namespace rdfInterface\tests;
 
 use BadMethodCallException;
 use zozlak\RdfConstants as RDF;
+use rdfInterface\Literal;
 
 /**
  * Description of TermsTest
@@ -65,6 +66,10 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertFalse($n[2]->equals($n[1]));
     }
 
+    public function testForeignNamedNode(): void {
+        $this->assertTrue(self::$df::namedNode('foo')->equals(self::$fdf::namedNode('foo')));
+    }
+
     public function testBlankNode(): void {
         $n  = [
             0 => self::$df::blankNode(),
@@ -93,6 +98,10 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertTrue($n[2]->equals($n[3]));
 
         $this->assertTrue($n[3]->equals($n[2]));
+    }
+
+    public function testForeignBlankNode(): void {
+        $this->assertTrue(self::$df::blankNode('_:n1')->equals(self::$fdf::blankNode('_:n1')));
     }
 
     public function testLiteralFactory(): void {
@@ -247,6 +256,17 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(RDF::XSD_STRING, $l4->getDatatype());
     }
 
+    public function testForeignLiteral(): void {
+        $this->assertTrue(self::$df::literal('foo')->equals(self::$fdf::literal('foo')));
+        $this->assertTrue(self::$df::literal('foo', '')->equals(self::$fdf::literal('foo', null, RDF::XSD_STRING)));
+        $this->assertTrue(self::$df::literal('foo', 'eng')->equals(self::$fdf::literal('foo', 'eng')));
+        $this->assertTrue(self::$df::literal('1', null, RDF::XSD_INT)->equals(self::$fdf::literal(1, '', RDF::XSD_INT)));
+    }
+
+    public function testForeignDefaultGraph(): void {
+        $this->assertTrue(self::$df::defaultGraph()->equals(self::$fdf::defaultGraph()));
+    }
+
     public function testQuad(): void {
         $nn1 = self::$df::namedNode('foo');
         $nn2 = self::$df::namedNode('bar');
@@ -333,6 +353,17 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertTrue($nn1->equals($q1->getSubject()));
         $this->assertTrue($nn1->equals($q2->getPredicate()));
         $this->assertTrue($nn1->equals($q3->getObject()));
+    }
+
+    public function testForeignQuad(): void {
+        $bn  = self::$df::blankNode('_:n1');
+        $nn  = self::$df::namedNode('foo');
+        $l   = self::$df::literal('1', null, RDF::XSD_INT);
+        $fbn = self::$fdf::blankNode('_:n1');
+        $fnn = self::$fdf::namedNode('foo');
+        $fl  = self::$fdf::literal(1, '', RDF::XSD_INT);
+
+        $this->assertTrue(self::$df::quad($bn, $nn, $l, $nn)->equals(self::$fdf::quad($fbn, $fnn, $fl, $fnn)));
     }
 
     public function testQuadTemplate(): void {
@@ -463,5 +494,23 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         } catch (BadMethodCallException $ex) {
             $this->assertTrue(true);
         }
+    }
+
+    public function testForeignQuadTemplate(): void {
+        $bn  = self::$df::blankNode('_:n1');
+        $nn  = self::$df::namedNode('foo');
+        $l   = self::$df::literal('1', null, RDF::XSD_INT);
+        $dg  = self::$df::defaultGraph();
+        $fbn = self::$fdf::blankNode('_:n1');
+        $fnn = self::$fdf::namedNode('foo');
+        $fl  = self::$fdf::literal(1, '', RDF::XSD_INT);
+        $fdg = self::$fdf::defaultGraph();
+
+        $this->assertTrue(self::$df::quadTemplate($bn, $nn, $l, $dg)->equals(self::$fdf::quadTemplate($fbn, $fnn, $fl)));
+
+        $this->assertTrue(self::$df::quadTemplate($bn, $nn, $l, $dg)->equals(self::$fdf::quad($fbn, $fnn, $fl)));
+        $this->assertTrue(self::$df::quadTemplate(null, $nn, $l, $dg)->equals(self::$fdf::quad($fbn, $fnn, $fl, $fdg)));
+        $this->assertTrue(self::$df::quadTemplate($bn, null, $l, null)->equals(self::$fdf::quad($fbn, $fnn, $fl)));
+        $this->assertTrue(self::$df::quadTemplate($bn, $nn, null, null)->equals(self::$fdf::quad($fbn, $fnn, $fl, $fdg)));
     }
 }
