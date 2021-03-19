@@ -122,7 +122,8 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertTrue($l[0]->equals($l[5]));
 
         $this->assertEquals('eng', $l[1]->getLang());
-        $this->assertEquals(RDF::XSD_STRING, $l[1]->getDatatype());
+        // FYI: https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal
+        $this->assertEquals('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString', $l[1]->getDatatype());
         $this->assertFalse($l[1]->equals($l[2]));
         $this->assertFalse($l[1]->equals($l[3]));
         $this->assertFalse($l[1]->equals($l[4]));
