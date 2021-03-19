@@ -109,76 +109,93 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
             0 => self::$df::literal('1'),
             1 => self::$df::literal('1', 'eng'),
             2 => self::$df::literal('1', null, RDF::XSD_STRING),
-            3 => self::$df::literal('1', null, RDF::XSD_INT),
+            3 => self::$df::literal('1', null, RDF::XSD_INTEGER),
             4 => self::$df::literal('1', 'deu'),
             5 => self::$df::literal('1', ''),
+            6 => self::$df::literal(1),
         ];
         $nn = self::$df::NamedNode('1');
         foreach ($l as $i) {
-            $this->assertEquals('1', (string) $i->getValue());
+            $this->assertInstanceOf(\rdfInterface\Literal::class, $i);
+            $this->assertSame('1', $i->getValue());
+            $this->assertSame('1', $i->getValue(Literal::CAST_LEXICAL_FORM));
             $this->assertTrue($i->equals($i));
             $this->assertFalse($i->equals($nn));
             $this->assertIsString((string) $i);
-            $this->assertInstanceOf(\rdfInterface\Literal::class, $i);
         }
 
         $this->assertNull($l[0]->getLang());
-        $this->assertEquals(RDF::XSD_STRING, $l[0]->getDatatype());
-        $this->assertFalse($l[0]->equals($l[1]));
-        $this->assertTrue($l[0]->equals($l[2]));
-        $this->assertFalse($l[0]->equals($l[3]));
-        $this->assertFalse($l[0]->equals($l[4]));
-        $this->assertTrue($l[0]->equals($l[5]));
-
         $this->assertEquals('eng', $l[1]->getLang());
-        $this->assertEquals(RDF::RDF_LANG_STRING, $l[1]->getDatatype());
-        $this->assertFalse($l[1]->equals($l[2]));
-        $this->assertFalse($l[1]->equals($l[3]));
-        $this->assertFalse($l[1]->equals($l[4]));
-        $this->assertFalse($l[1]->equals($l[5]));
-
         $this->assertNull($l[2]->getLang());
-        $this->assertEquals(RDF::XSD_STRING, $l[2]->getDatatype());
-        $this->assertFalse($l[2]->equals($l[3]));
-        $this->assertFalse($l[2]->equals($l[4]));
-        $this->assertTrue($l[2]->equals($l[5]));
-        $this->assertTrue($l[2]->equals($l[0]));
-
         $this->assertNull($l[3]->getLang());
-        $this->assertEquals(RDF::XSD_INT, $l[3]->getDatatype());
-        $this->assertFalse($l[3]->equals($l[4]));
-        $this->assertFalse($l[3]->equals($l[5]));
-
         $this->assertEquals('deu', $l[4]->getLang());
-        $this->assertEquals(RDF::RDF_LANG_STRING, $l[4]->getDatatype());
-        $this->assertFalse($l[4]->equals($l[5]));
-
         $this->assertNull($l[5]->getLang());
+        $this->assertNull($l[6]->getLang());
+
+        $this->assertEquals(RDF::XSD_STRING, $l[0]->getDatatype());
+        $this->assertEquals(RDF::RDF_LANG_STRING, $l[1]->getDatatype());
+        $this->assertEquals(RDF::XSD_STRING, $l[2]->getDatatype());
+        $this->assertEquals(RDF::XSD_INTEGER, $l[3]->getDatatype());
+        $this->assertEquals(RDF::RDF_LANG_STRING, $l[4]->getDatatype());
         $this->assertEquals(RDF::XSD_STRING, $l[5]->getDatatype());
-        $this->assertTrue($l[5]->equals($l[0]));
-        $this->assertFalse($l[5]->equals($l[1]));
-        $this->assertTrue($l[5]->equals($l[2]));
-        $this->assertFalse($l[5]->equals($l[3]));
-        $this->assertFalse($l[5]->equals($l[4]));
+        $this->assertEquals(RDF::XSD_INTEGER, $l[6]->getDatatype());
+
+        $l  = [
+            0 => self::$df::literal(true),
+            1 => self::$df::literal(false),
+            2 => self::$df::literal(1.0),
+            3 => self::$df::literal(1, null, 'foo'),
+        ];
+        $nn = self::$df::NamedNode('1');
+        foreach ($l as $i) {
+            $this->assertInstanceOf(\rdfInterface\Literal::class, $i);
+            $this->assertSame($i->getValue(), $i->getValue(Literal::CAST_LEXICAL_FORM));
+            $this->assertTrue($i->equals($i));
+            $this->assertFalse($i->equals($nn));
+            $this->assertIsString((string) $i);
+            $this->assertNull($i->getLang());
+        }
+        $this->assertEquals(RDF::XSD_BOOLEAN, $l[0]->getDatatype());
+        $this->assertEquals(RDF::XSD_BOOLEAN, $l[1]->getDatatype());
+        $this->assertEquals(RDF::XSD_DECIMAL, $l[2]->getDatatype());
+        $this->assertEquals('foo', $l[3]->getDatatype());
     }
 
-    public function testLiteralCornerCases(): void {
-        $l = [
-            0 => [self::$df::literal(1), [1]],
-            1 => [self::$df::literal('1'), [0]],
-            2 => [self::$df::literal('01'), []],
-            3 => [self::$df::literal(1, null, RDF::XSD_INT), [4]],
-            4 => [self::$df::literal('1', null, RDF::XSD_INT), [3]],
-            5 => [self::$df::literal('01', null, RDF::XSD_INT), []],
-        ];
-        foreach ($l as $n => $i) {
-            foreach ($l as $m => $j) {
-                if ($n !== $m) {
-                    $valid = $i[1];
-                    $this->assertEquals(in_array($m, $valid), $i[0]->equals($j[0]));
-                }
-            }
-        }
+    public function testLiteralEqual(): void {
+        $l1 = self::$df::literal(1);
+        $l2 = self::$df::literal(1, null, RDF::XSD_INTEGER);
+        $l3 = self::$df::literal('1');
+        $this->assertTrue($l1->equals($l2));
+        $this->assertFalse($l1->equals($l3));
+        $this->assertFalse($l2->equals($l3));
+
+        $l1 = self::$df::literal(1, null, RDF::XSD_INTEGER);
+        $l2 = self::$df::literal('1', null, RDF::XSD_INTEGER);
+        $l3 = self::$df::literal('01', null, RDF::XSD_INTEGER);
+        $l4 = self::$df::literal(1, null, RDF::XSD_INT);
+        $this->assertTrue($l1->equals($l2));
+        $this->assertFalse($l1->equals($l3));
+        $this->assertFalse($l2->equals($l3));
+        $this->assertFalse($l1->equals($l4));
+        $this->assertFalse($l2->equals($l4));
+        
+        $objValue = new DummyStringable('01');
+        $l1 = self::$df::literal($objValue);
+        $l2 = self::$df::literal($objValue, 'eng');
+        $l3 = self::$df::literal($objValue, null, RDF::XSD_INT);
+        $l4 = self::$df::literal('01');
+        $l5 = self::$df::literal('01', 'eng');
+        $l6 = self::$df::literal('01', null, RDF::XSD_INT);
+        $this->assertTrue($l1->equals($l4));
+        $this->assertTrue($l2->equals($l5));
+        $this->assertTrue($l3->equals($l6));
+        $this->assertEquals('01', $l1->getValue());
+        $this->assertEquals('01', $l2->getValue());
+        $this->assertEquals('01', $l3->getValue());
+        $this->assertFalse($l1->equals($l2));
+        $this->assertFalse($l1->equals($l5));
+        $this->assertFalse($l2->equals($l3));
+        $this->assertFalse($l2->equals($l6));
     }
 
     public function testLiteralWith(): void {
@@ -195,7 +212,7 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(RDF::RDF_LANG_STRING, $l2->getDatatype());
 
         $l3 = $l2->withDatatype(RDF::XSD_INT);
-        $this->assertEquals('2', (string) $l3->getValue());
+        $this->assertEquals('2', $l3->getValue());
         $this->assertNull($l3->getLang());
         $this->assertEquals(RDF::XSD_INT, $l3->getDatatype());
 
@@ -220,9 +237,39 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(RDF::RDF_LANG_STRING, $l7->getDatatype());
 
         $l8 = $l3->withValue('4');
-        $this->assertEquals('4', (string) $l8->getValue());
+        $this->assertEquals('4', $l8->getValue());
         $this->assertNull($l8->getLang());
         $this->assertEquals(RDF::XSD_INT, $l8->getDatatype());
+
+        $l9 = $l2->withValue(9);
+        $this->assertEquals('9', $l9->getValue());
+        $this->assertNull($l9->getLang());
+        $this->assertEquals(RDF::XSD_INTEGER, $l9->getDatatype());
+
+        $l10 = $l2->withValue(7.3);
+        $this->assertEquals(7.3, (float) $l10->getValue());
+        $this->assertNull($l10->getLang());
+        $this->assertEquals(RDF::XSD_DECIMAL, $l10->getDatatype());
+
+        $l11 = $l2->withValue(true);
+        $this->assertEquals(true, (bool) $l11->getValue());
+        $this->assertNull($l11->getLang());
+        $this->assertEquals(RDF::XSD_BOOLEAN, $l11->getDatatype());
+
+        $l12 = $l2->withValue(false);
+        $this->assertEquals(false, (bool) $l12->getValue());
+        $this->assertNull($l12->getLang());
+        $this->assertEquals(RDF::XSD_BOOLEAN, $l12->getDatatype());
+
+        $l13 = $l2->withValue(5);
+        $this->assertEquals(5, (int) $l13->getValue());
+        $this->assertNull($l13->getLang());
+        $this->assertEquals(RDF::XSD_INTEGER, $l13->getDatatype());
+
+        $l14 = $l13->withLang('pol');
+        $this->assertEquals('5', $l14->getValue());
+        $this->assertEquals('pol', $l14->getLang());
+        $this->assertEquals(RDF::RDF_LANG_STRING, $l14->getDatatype());
 
         // immutability
         $this->assertEquals('1', $l0->getValue());
