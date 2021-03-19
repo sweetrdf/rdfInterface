@@ -26,8 +26,6 @@
 
 namespace rdfInterface;
 
-use Stringable;
-
 /**
  * Description of RdfTerm
  *
@@ -37,7 +35,7 @@ interface Term {
 
     public function __toString(): string;
 
-    public function getValue(): int | float | string | bool | Stringable;
+    public function getValue(): mixed;
 
     public function equals(Term $term): bool;
 }

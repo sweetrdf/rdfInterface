@@ -36,6 +36,10 @@ use zozlak\RdfConstants as RDF;
  */
 interface Literal extends Term {
 
+    public const CAST_LEXICAL_FORM = 1;
+    public const CAST_NONE         = 2;
+    public const CAST_DATATYPE     = 3;
+
     /**
      * Creates a new literal.
      * 
@@ -48,9 +52,10 @@ interface Literal extends Term {
      * See https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal for 
      * a reference.
      * 
-     * @param int|float|string|bool|Stringable $value Literal's value. It must be of a type
-     *   allowing casting to a string because RDF defines literal comparisons
-     *   in terms of their string values (lexical forms) comparison.
+     * @param int|float|string|bool|Stringable $value Literal's value.
+     *   Only values which can be casted to a string are allowed so it's clear
+     *   how to obtain literal's value lexical form (see the RDF specification
+     *   mentioned above).
      * @param string|null $lang Literal's lang tag. If null or empty string, the literal
      *   is assumed not to have a lang tag (as an empty lang tag is not allowed in RDF).
      * @param string|null $datatype Literal's datatype. If it's null, the datatype must be
@@ -62,6 +67,27 @@ interface Literal extends Term {
         int | float | string | bool | Stringable $value, ?string $lang = null,
         ?string $datatype = RDF::XSD_STRING
     );
+
+    /**
+     * Returns literal's value.
+     * 
+     * Separate cast options are needed as the RDF specification defines a few
+     * kinds of literal values. See 
+     * https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal for details.
+     * 
+     * @param int $cast Determines the kind of value being returned:
+     *   * \rdfInterface\CAST_LEXICAL_FORM - a string with literal's lexical form.
+     *     All implementations must handle this kind of cast.
+     *   * \rdfInterface\CAST_NONE - just a value passed to the literal
+     *     constructor is returned. All implemenations must handle this kind of 
+     *     cast.
+     *   * \rdfInterface\CAST_DATATYPE - value mapped to the datatype's domain.
+     *     Implementations may handle this kind of cast. It's up to the 
+     *     implementation which datatypes are supported and how the mapping is
+     *     being done.
+     * @return mixed
+     */
+    public function getValue(int $cast = self::CAST_LEXICAL_FORM): mixed;
 
     /**
      * Returns literal's language tag.
