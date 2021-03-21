@@ -491,4 +491,81 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(2, (int) (string) $d[self::$df::quadTemplate(self::$df::namedNode('foo'))]->getObject()->getValue());
         $this->assertEquals(10, (int) (string) $d[self::$df::quadTemplate(self::$df::namedNode('bar'))]->getObject()->getValue());
     }
+
+    public function testForeignTerms(): void {
+        $nn = self::$df::namedNode('foo');
+        $q  = self::$df::quad($nn, $nn, $nn);
+
+        $fnn = self::$fdf::namedNode('foo');
+        $fq  = self::$fdf::quad($fnn, $fnn, $fnn);
+        $fqt = self::$fdf::quadTemplate($fnn);
+        $fqi = new GenericQuadIterator($fq);
+        $fd = static::getForeignDataset();
+        $fd->add($fq);
+
+        // add
+        $d = static::getDataset();
+        $d->add($q);
+        $this->assertTrue($d->equals($fd));
+        $this->assertTrue(isset($d[$fq]));
+
+        $d->add($fq);
+        $this->assertEquals(1, count($d));
+        $this->assertTrue(isset($d[$fq]));
+        $d->add($fqi);
+        $this->assertEquals(1, count($d));
+        $this->assertTrue(isset($d[$fq]));
+
+        // offsetSet
+        $d[$fq]  = $fq;
+        $this->assertEquals(1, count($d));
+        $this->assertTrue(isset($d[$q]));
+        $d[$fqt] = $q;
+        $this->assertEquals(1, count($d));
+        $this->assertTrue(isset($d[$fq]));
+
+        // offsetSet as add
+        $d   = static::getDataset();
+        $d[] = $fq;
+        $this->assertEquals(1, count($d));
+        $this->assertTrue(isset($d[$q]));
+        $d[] = $q;
+        $this->assertEquals(1, count($d));
+        $this->assertTrue(isset($d[$q]));
+
+        // copy
+        $d = static::getDataset();
+        $d->add($q);
+        foreach ([$fq, $fqt, $fqi] as $i) {
+            $d2 = $d->copy($i);
+            $this->assertEquals(1, count($d2), "Tested class " . $fq::class);
+            $this->assertTrue(isset($d2[$q]), "Tested class " . $fq::class);
+            $this->assertTrue($d2->equals($fd), "Tested class " . $fq::class);
+
+            $d2->deleteExcept($i);
+            $this->assertEquals(1, count($d2), "Tested class " . $fq::class);
+            $this->assertTrue(isset($d2[$q]), "Tested class " . $fq::class);
+            $this->assertTrue($d2->equals($fd), "Tested class " . $fq::class);
+
+            $r = $d2->delete($i);
+            $this->assertEquals(0, count($d2), "Tested class " . $fq::class);
+            $this->assertTrue(isset($r[$q]), "Tested class " . $fq::class);
+
+            $d3 = $d->copyExcept($i);
+            $this->assertEquals(0, count($d3), "Tested class " . $fq::class);
+        }
+
+        // union / xor
+        $d = static::getDataset();
+        $d->add($q);
+
+        $d2 = $d->union($fqi);
+        $this->assertEquals(1, count($d2));
+        $this->assertTrue(isset($d2[$q]));
+        $this->assertTrue(isset($d2[$fqt]));
+        $this->assertTrue($d2->equals($fd), "Tested class " . $fq::class);
+
+        $d3 = $d->xor($fqi);
+        $this->assertEquals(0, count($d3));
+    }
 }

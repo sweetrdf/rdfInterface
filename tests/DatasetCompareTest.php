@@ -113,4 +113,25 @@ abstract class DatasetCompareTest extends \PHPUnit\Framework\TestCase {
         };
         $this->assertFalse($d1->every($fn));
     }
+
+    public function testForeignTerms(): void {
+        $nn = self::$df::namedNode('foo');
+        $q  = self::$df::quad($nn, $nn, $nn);
+
+        $fnn = self::$fdf::namedNode('foo');
+        $fq  = self::$fdf::quad($fnn, $fnn, $fnn);
+        $fqt = self::$fdf::quadTemplate($fnn);
+        $fc  = function($x)use($fqt) {
+            return $fqt->equals($x);
+        };
+
+        $d = static::getDataset();
+        $d->add($q);
+        $this->assertTrue(isset($d[$fq]));
+        foreach ([$fq, $fqt, $fc] as $i) { // add callable
+            $this->assertTrue($d->any($i), "Tested class " . $fq::class);
+            $this->assertTrue($d->every($i), "Tested class " . $fq::class);
+            $this->assertFalse($d->none($i), "Tested class " . $fq::class);
+        }
+    }
 }
