@@ -494,27 +494,45 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
 
     public function testForeignTerms(): void {
         $nn = self::$df::namedNode('foo');
+        $bn = self::$df::blankNode('bar');
+        $l  = self::$df::literal('baz');
+        $dg = self::$df::defaultGraph();
         $q  = self::$df::quad($nn, $nn, $nn);
+        $q2 = self::$df::quad($nn, $nn, $bn);
+        $q3 = self::$df::quad($nn, $nn, $l, $dg);
 
         $fnn = self::$fdf::namedNode('foo');
+        $fbn = self::$fdf::blankNode('bar');
+        $fl  = self::$fdf::literal('baz');
+        $fdg = self::$fdf::defaultGraph();
         $fq  = self::$fdf::quad($fnn, $fnn, $fnn);
+        $fq2 = self::$fdf::quad($fnn, $fnn, $fbn);
+        $fq3 = self::$fdf::quad($fnn, $fnn, $fl, $fdg);
         $fqt = self::$fdf::quadTemplate($fnn);
         $fqi = new GenericQuadIterator($fq);
-        $fd = static::getForeignDataset();
-        $fd->add($fq);
 
         // add
-        $d = static::getDataset();
-        $d->add($q);
+        $d  = static::getDataset();
+        $d->add(new GenericQuadIterator([$q, $q2, $q3]));
+        $fd = static::getForeignDataset();
+        $fd->add(new GenericQuadIterator([$fq, $fq2, $fq3]));
         $this->assertTrue($d->equals($fd));
         $this->assertTrue(isset($d[$fq]));
+        $this->assertTrue(isset($d[$fq2]));
+        $this->assertTrue(isset($d[$fq3]));
 
         $d->add($fq);
-        $this->assertEquals(1, count($d));
+        $this->assertEquals(3, count($d));
         $this->assertTrue(isset($d[$fq]));
         $d->add($fqi);
-        $this->assertEquals(1, count($d));
+        $this->assertEquals(3, count($d));
         $this->assertTrue(isset($d[$fq]));
+
+        // base for other tests
+        $d = static::getDataset();
+        $d->add($q);
+        $fd = static::getDataset();
+        $fd->add($q);
 
         // offsetSet
         $d[$fq]  = $fq;

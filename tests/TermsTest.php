@@ -178,14 +178,14 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertFalse($l2->equals($l3));
         $this->assertFalse($l1->equals($l4));
         $this->assertFalse($l2->equals($l4));
-        
+
         $objValue = new DummyStringable('01');
-        $l1 = self::$df::literal($objValue);
-        $l2 = self::$df::literal($objValue, 'eng');
-        $l3 = self::$df::literal($objValue, null, RDF::XSD_INT);
-        $l4 = self::$df::literal('01');
-        $l5 = self::$df::literal('01', 'eng');
-        $l6 = self::$df::literal('01', null, RDF::XSD_INT);
+        $l1       = self::$df::literal($objValue);
+        $l2       = self::$df::literal($objValue, 'eng');
+        $l3       = self::$df::literal($objValue, null, RDF::XSD_INT);
+        $l4       = self::$df::literal('01');
+        $l5       = self::$df::literal('01', 'eng');
+        $l6       = self::$df::literal('01', null, RDF::XSD_INT);
         $this->assertTrue($l1->equals($l4));
         $this->assertTrue($l2->equals($l5));
         $this->assertTrue($l3->equals($l6));
@@ -287,6 +287,14 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals('2', (string) $l3->getValue());
         $this->assertNull($l3->getLang());
         $this->assertEquals(RDF::XSD_INT, $l3->getDatatype());
+
+        // exceptions
+        try {
+            $l0->withDatatype(RDF::RDF_LANG_STRING);
+            $this->assertTrue(false);
+        } catch (BadMethodCallException) {
+            
+        }
     }
 
     public function testLiteralStringable(): void {
@@ -410,7 +418,10 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $fnn = self::$fdf::namedNode('foo');
         $fl  = self::$fdf::literal(1, '', RDF::XSD_INT);
 
-        $this->assertTrue(self::$df::quad($bn, $nn, $l, $nn)->equals(self::$fdf::quad($fbn, $fnn, $fl, $fnn)));
+        $q  = self::$df::quad($bn, $nn, $l, $nn);
+        $fq = self::$fdf::quad($fbn, $fnn, $fl, $fnn);
+        $this->assertTrue($q->equals($fq));
+        $this->assertFalse($q->equals($fnn));
     }
 
     public function testQuadTemplate(): void {
