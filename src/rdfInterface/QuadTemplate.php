@@ -30,36 +30,30 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface QuadTemplate extends Term {
+interface QuadTemplate extends TermCompare {
 
     /**
      * At least one parameter has to be not null.
      *
      */
-    public function __construct(
-        Term | null $subject = null, NamedNode | null $predicate = null,
-        Term | null $object = null,
-        NamedNode | BlankNode | DefaultGraph | null $graphIri = null
-    );
+    public function __construct(TermCompare | null $subject = null,
+                                TermCompare | null $predicate = null,
+                                TermCompare | null $object = null,
+                                TermCompare | null $graphIri = null);
 
-    public function getSubject(): Term | null;
+    public function getSubject(): TermCompare | null;
 
-    public function getPredicate(): NamedNode | null;
+    public function getPredicate(): TermCompare | null;
 
-    public function getObject(): Term | null;
+    public function getObject(): TermCompare | null;
 
-    /**
-     * DefaultGraph is skipped to avoid ambiguity between null and DefaultGraph
-     * (as all quads belong to the DefaultGraph it effectively means no filter at
-     * all, just like null).
-     */
-    public function getGraphIri(): NamedNode | BlankNode | null;
+    public function getGraphIri(): TermCompare | null;
 
-    public function withSubject(Term | null $subject): QuadTemplate;
+    public function setSubject(TermCompare | null $subject): QuadTemplate;
 
-    public function withPredicate(NamedNode | null $predicate): QuadTemplate;
+    public function setPredicate(TermCompare | null $predicate): QuadTemplate;
 
-    public function withObject(Term | null $object): QuadTemplate;
+    public function setObject(TermCompare | null $object): QuadTemplate;
 
-    public function withGraphIri(NamedNode | BlankNode | DefaultGraph | null $graphIri): QuadTemplate;
+    public function setGraphIri(TermCompare | null $graphIri): QuadTemplate;
 }
