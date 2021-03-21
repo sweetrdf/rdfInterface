@@ -27,13 +27,11 @@
 namespace rdfInterface;
 
 /**
- * Description of RdfTerm
+ * Description of TermCompare
  *
  * @author zozlak
  */
-interface Term extends TermCompare {
+interface TermCompare {
 
-    public function __toString(): string;
-
-    public function getValue(): mixed;
+    public function equals(Term $term): bool;
 }
