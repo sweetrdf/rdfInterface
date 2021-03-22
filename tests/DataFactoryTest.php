@@ -32,7 +32,6 @@ use rdfInterface\NamedNode;
 use rdfInterface\Literal;
 use rdfInterface\DefaultGraph;
 use rdfInterface\Quad;
-use rdfInterface\Variable;
 
 /**
  * Description of LoggerTest
