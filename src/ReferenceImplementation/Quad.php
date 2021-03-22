@@ -78,7 +78,7 @@ class Quad implements iQuad
         return $this->object;
     }
 
-    public function getGraphIri(): iNamedNode | iBlankNode
+    public function getGraphIri(): iNamedNode | iBlankNode | iDefaultGraph
     {
         return $this->graphIri;
     }

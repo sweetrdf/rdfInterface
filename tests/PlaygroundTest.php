@@ -24,12 +24,12 @@ class PlaygroundTest extends TestCase
 
         $d = new Dataset();
         
-        $q1raw = DataFactory::quad(new BlankNode(), new NamedNode('http://a'), $l1raw);
-        $q2raw = DataFactory::quad(new BlankNode(), new NamedNode('http://a'), $l1raw);
+        $q1raw = DataFactory::quad(new NamedNode('http://a'), new NamedNode('http://b'), $l1raw);
+        $q2raw = DataFactory::quad(new NamedNode('http://a'), new NamedNode('http://b'), $l1string);
 
         $d->add($q1raw);
         $d->add($q2raw);
-        $this->assertTrue(count($d) === 1);
+        $this->assertEquals(1, count($d));
         $this->assertTrue(current($d)->getObject()->getValue() === '1');
         $this->assertTrue(current($d)->getObject()->getValue() === 1);
     }
