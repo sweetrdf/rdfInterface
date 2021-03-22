@@ -40,4 +40,6 @@ namespace rdfInterface;
 interface QuadCompare {
 
     public function equals(Quad $quad): bool;
+
+    public function __toString(): string;
 }
