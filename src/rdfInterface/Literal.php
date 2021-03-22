@@ -34,7 +34,7 @@ use zozlak\RdfConstants as RDF;
  *
  * @author zozlak
  */
-interface Literal extends Term {
+interface Literal extends Term, TermCompare {
 
     public const CAST_LEXICAL_FORM = 1;
     public const CAST_DATATYPE     = 2;

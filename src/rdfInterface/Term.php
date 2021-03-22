@@ -31,9 +31,11 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface Term extends TermCompare {
+interface Term {
 
     public function __toString(): string;
 
     public function getValue(): mixed;
+
+    public function equals(Term $term): bool;
 }

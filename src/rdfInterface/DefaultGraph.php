@@ -30,7 +30,7 @@ namespace rdfInterface;
  * 
  * @author zozlak
  */
-interface DefaultGraph extends Term {
+interface DefaultGraph extends Term, TermCompare {
 
     public function __construct();
 }
