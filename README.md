@@ -14,56 +14,22 @@ The solution for these troubles is to agree on
 * A set of separate RDF stack layers: parser, serializer, dataset, SPARQL client, etc.
 * Common interfaces each layer should use to communicate with the other (think of it as a PSR-7 for RDF).
 
-## Reference solutions
-
-[RDF/JS](http://rdf.js.org/), [RDFLib](https://rdflib.readthedocs.io/en/stable/) are examples of good APIs from other programming languages as well as [EasyRdf](https://github.com/easyrdf/easyrdf) and [ARC2](https://github.com/semsol/arc2) as a reference of existing PHP solutions.
-
 ## Reference implementation
 
-* The reference implementation of various `Term` classes and the `Dataset` class is provided by the [quickRdf](https://github.com/sweetrdf/quickRdf) library.
+* The reference implementation of various `Term` classes and the `Dataset` class are provided by the [quickRdf](https://github.com/sweetrdf/quickRdf) library and the [simpleRdf](https://github.com/sweetrdf/simpleRdf) library.
 * A quick and dirty implementation of a few parsers and serialisers is provided by the [quickRdfIo](https://github.com/sweetrdf/quickRdfIo) library.
 * Some generic helpers which can be reuesed when developing your own implementations or plugging foreign code can be found in the [rdfHelpers](https://github.com/sweetrdf/rdfHelpers) library.
 
-## Using the test set
+## Compliance tests
 
-The tests directory provides a set of PHPUnit tests for rdfInterface implementation validation.
-
-To reuse it just create your own test classes inheriting from provided ones and implementing abstract methods.
-
-Then you can just run PHPUnit with `vendor/bin/phpunit --bootstrap vendor/autoload.php tests` 
-(assuming you have PHPUnit installed with composer and test classes in the `tests` directory).
-
-### Sample implementation
-
-```php
-namespace myLibNmsp;
-
-class MyDataFactoryTest extends \rdfInterface\tests\DataFactoryTest {
-
-    // So \rdfInterface\tests\DataFactoryTest method know how to get my own implementation of the DataFactory interface.
-    public static function getDataFactory(): \rdfInterface\DataFactory {
-        return new MyDataFactoryClass();
-    }
-
-    // So \rdfInterface\tests\DataFactoryTest method know how to get other implementation of the DataFactory interface.
-    // This is used to check interoperability of your implementation with the other one (all in all that's the point of a common interface).
-    // If you want to skip it, just make it return your implementation of \rdfInterface\DataFactory
-    public static function getForeignDataFactory(): \rdfInterface\DataFactory {
-        return new \simpleRdf\DataFactory();
-    }
-
-    // bypass the testCreateVariable() test as my library doesn't support terms of type variable
-    public function testCreateVariable(): void {
-        $this->expectException(ExceptionThrownByMyDataFactoryClass::class);
-        parent::testCreateVariable();
-    }
-
-}
-```
-
-More examples can be found in [simpleRdf library tests](https://github.com/sweetrdf/simpleRdf/tree/master/tests) and [quickRdf library tests](https://github.com/sweetrdf/quickRdf/tree/master/tests).
+The [rdfInterfaceTests])https://github.com/sweetrdf/rdfInterfaceTests) provides a set of tests for validating if your library is compliant with the rdfInterface.
 
 ## Design decisions
+
+### Reference solutions
+
+[RDF/JS](http://rdf.js.org/), [RDFLib](https://rdflib.readthedocs.io/en/stable/) are examples of good APIs from other programming languages as well as [EasyRdf](https://github.com/easyrdf/easyrdf) and [ARC2](https://github.com/semsol/arc2) as a reference of existing PHP solutions.
+
 
 ### Strong typing
 
