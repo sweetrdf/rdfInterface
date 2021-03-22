@@ -42,4 +42,12 @@ interface QuadCompare {
     public function equals(Quad $quad): bool;
 
     public function __toString(): string;
+
+    public function getSubject(): Term | TermCompare | null;
+
+    public function getPredicate(): Term | TermCompare | null;
+
+    public function getObject(): Term | TermCompare | null;
+
+    public function getGraph(): Term | TermCompare | null;
 }

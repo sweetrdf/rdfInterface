@@ -30,6 +30,7 @@ use rdfHelpers\GenericQuadIterator;
 use rdfInterface\Literal;
 use rdfInterface\Quad;
 use rdfInterface\DatasetCompare;
+use rdfInterface\Term;
 use rdfInterface\TermCompare;
 use rdfInterface\QuadCompare;
 
@@ -44,10 +45,10 @@ abstract class DatasetCompareTest extends \PHPUnit\Framework\TestCase {
 
     abstract public static function getDataset(): DatasetCompare;
 
-    abstract public static function getQuadTemplate(TermCompare | null $subject = null,
-                                                    TermCompare | null $predicate = null,
-                                                    TermCompare | null $object = null,
-                                                    TermCompare | null $graphIri = null): QuadCompare;
+    abstract public static function getQuadTemplate(TermCompare | Term | null $subject = null,
+                                                    TermCompare | Term | null $predicate = null,
+                                                    TermCompare | Term | null $object = null,
+                                                    TermCompare | Term | null $graph = null): QuadCompare;
 
     public function testAnyNone(): void {
         $d1 = static::getDataset();

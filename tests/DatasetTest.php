@@ -32,6 +32,7 @@ use rdfInterface\Literal;
 use rdfInterface\Quad;
 use rdfInterface\Dataset;
 use rdfInterface\QuadCompare;
+use rdfInterface\Term;
 use rdfInterface\TermCompare;
 
 /**
@@ -47,10 +48,10 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
 
     abstract public static function getForeignDataset(): Dataset; // foreign \rdfInterface\Dataset implementation
 
-    abstract public static function getQuadTemplate(TermCompare | null $subject = null,
-                                                    TermCompare | null $predicate = null,
-                                                    TermCompare | null $object = null,
-                                                    TermCompare | null $graphIri = null): QuadCompare;
+    abstract public static function getQuadTemplate(TermCompare | Term | null $subject = null,
+                                                    TermCompare | Term | null $predicate = null,
+                                                    TermCompare | Term | null $object = null,
+                                                    TermCompare | Term | null $graph = null): QuadCompare;
 
     public function testAddQuads(): void {
         $d = static::getDataset();
@@ -186,7 +187,7 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
         // 2 - bar baz foo
         // 3 + foo bar "baz"@en graph
         $fn = function(Quad $q, Dataset $d) {
-            return $q->getGraphIri()->getValue() === 'graph';
+            return $q->getGraph()->getValue() === 'graph';
         };
         $d[$fn] = self::$quads[2];
         $this->assertCount(2, $d);

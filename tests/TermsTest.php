@@ -401,9 +401,9 @@ abstract class TermsTest extends \PHPUnit\Framework\TestCase {
         $this->assertFalse($q3->equals($q4));
         $this->assertTrue($l1->equals($q4->getObject()));
 
-        $q5 = $q4->withGraphIri($nn1);
+        $q5 = $q4->withGraph($nn1);
         $this->assertFalse($q5->equals($q4));
-        $this->assertTrue($nn1->equals($q5->getGraphIri()));
+        $this->assertTrue($nn1->equals($q5->getGraph()));
 
         $this->assertTrue($nn1->equals($q1->getSubject()));
         $this->assertTrue($nn1->equals($q2->getPredicate()));

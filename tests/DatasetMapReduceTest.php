@@ -29,6 +29,7 @@ namespace rdfInterface\tests;
 use rdfInterface\Literal;
 use rdfInterface\Quad;
 use rdfInterface\DatasetMapReduce;
+use rdfInterface\Term;
 use rdfInterface\TermCompare;
 use rdfInterface\QuadCompare;
 
@@ -43,10 +44,10 @@ abstract class DatasetMapReduceTest extends \PHPUnit\Framework\TestCase {
 
     abstract public static function getDataset(): DatasetMapReduce;
 
-    abstract public static function getQuadTemplate(TermCompare | null $subject = null,
-                                                    TermCompare | null $predicate = null,
-                                                    TermCompare | null $object = null,
-                                                    TermCompare | null $graphIri = null): QuadCompare;
+    abstract public static function getQuadTemplate(TermCompare | Term | null $subject = null,
+                                                    TermCompare | Term | null $predicate = null,
+                                                    TermCompare | Term | null $object = null,
+                                                    TermCompare | Term | null $graph = null): QuadCompare;
 
     public function testMap(): void {
         $d1   = static::getDataset();

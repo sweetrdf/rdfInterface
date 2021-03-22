@@ -43,11 +43,11 @@ interface Quad extends Term, TermCompare {
      * @param Term $subject
      * @param NamedNode $predicate
      * @param Term $object
-     * @param NamedNode|BlankNode|DefaultGraph|null $graphIri
+     * @param NamedNode|BlankNode|DefaultGraph|null $graph
      */
     public function __construct(
         Term $subject, NamedNode $predicate, Term $object,
-        NamedNode | BlankNode | DefaultGraph | null $graphIri = null
+        NamedNode | BlankNode | DefaultGraph | null $graph = null
     );
 
     public function getSubject(): Term;
@@ -62,7 +62,7 @@ interface Quad extends Term, TermCompare {
      * NamedNode/BlankNode graphs also belong to the DefaultGraph).
      * @return NamedNode|BlankNode|DefaultGraph
      */
-    public function getGraphIri(): NamedNode | BlankNode | DefaultGraph;
+    public function getGraph(): NamedNode | BlankNode | DefaultGraph;
 
     public function withSubject(Term $subject): Quad;
 
@@ -70,5 +70,5 @@ interface Quad extends Term, TermCompare {
 
     public function withObject(Term $object): Quad;
 
-    public function withGraphIri(NamedNode | BlankNode | DefaultGraph | null $graphIri): Quad;
+    public function withGraph(NamedNode | BlankNode | DefaultGraph | null $graph): Quad;
 }
