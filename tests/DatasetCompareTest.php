@@ -30,6 +30,8 @@ use rdfHelpers\GenericQuadIterator;
 use rdfInterface\Literal;
 use rdfInterface\Quad;
 use rdfInterface\DatasetCompare;
+use rdfInterface\TermCompare;
+use rdfInterface\QuadCompare;
 
 /**
  * Description of LoggerTest
@@ -42,6 +44,11 @@ abstract class DatasetCompareTest extends \PHPUnit\Framework\TestCase {
 
     abstract public static function getDataset(): DatasetCompare;
 
+    abstract public static function getQuadTemplate(TermCompare | null $subject = null,
+                                                    TermCompare | null $predicate = null,
+                                                    TermCompare | null $object = null,
+                                                    TermCompare | null $graphIri = null): QuadCompare;
+
     public function testAnyNone(): void {
         $d1 = static::getDataset();
         $d1->add(new GenericQuadIterator(self::$quads));
@@ -53,10 +60,10 @@ abstract class DatasetCompareTest extends \PHPUnit\Framework\TestCase {
         $this->assertTrue($d1->none(self::$quads[0]->withSubject(self::$df::namedNode('aaa'))));
 
         // QuadTemplate
-        $this->assertTrue($d1->any(self::$df::quadTemplate(self::$df::namedNode('foo'))));
-        $this->assertFalse($d1->none(self::$df::quadTemplate(self::$df::namedNode('foo'))));
-        $this->assertFalse($d1->any(self::$df::quadTemplate(self::$df::namedNode('aaa'))));
-        $this->assertTrue($d1->none(self::$df::quadTemplate(self::$df::namedNode('aaa'))));
+        $this->assertTrue($d1->any(static::getQuadTemplate(self::$df::namedNode('foo'))));
+        $this->assertFalse($d1->none(static::getQuadTemplate(self::$df::namedNode('foo'))));
+        $this->assertFalse($d1->any(static::getQuadTemplate(self::$df::namedNode('aaa'))));
+        $this->assertTrue($d1->none(static::getQuadTemplate(self::$df::namedNode('aaa'))));
 
         // QuadIterator
         $d2   = static::getDataset();
@@ -120,8 +127,8 @@ abstract class DatasetCompareTest extends \PHPUnit\Framework\TestCase {
 
         $fnn = self::$fdf::namedNode('foo');
         $fq  = self::$fdf::quad($fnn, $fnn, $fnn);
-        $fqt = self::$fdf::quadTemplate($fnn);
-        $fc  = function($x)use($fqt) {
+        $fqt = static::getQuadTemplate($fnn);
+        $fc  = function($x) use($fqt) {
             return $fqt->equals($x);
         };
 

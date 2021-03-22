@@ -29,6 +29,8 @@ namespace rdfInterface\tests;
 use rdfInterface\Literal;
 use rdfInterface\Quad;
 use rdfInterface\DatasetMapReduce;
+use rdfInterface\TermCompare;
+use rdfInterface\QuadCompare;
 
 /**
  * Description of LoggerTest
@@ -41,6 +43,11 @@ abstract class DatasetMapReduceTest extends \PHPUnit\Framework\TestCase {
 
     abstract public static function getDataset(): DatasetMapReduce;
 
+    abstract public static function getQuadTemplate(TermCompare | null $subject = null,
+                                                    TermCompare | null $predicate = null,
+                                                    TermCompare | null $object = null,
+                                                    TermCompare | null $graphIri = null): QuadCompare;
+
     public function testMap(): void {
         $d1   = static::getDataset();
         $d1[] = self::$df::quad(self::$df::namedNode('foo'), self::$df::namedNode('baz'), self::$df::literal(1));
@@ -50,11 +57,11 @@ abstract class DatasetMapReduceTest extends \PHPUnit\Framework\TestCase {
             return $obj instanceof Literal ? $x->withObject($obj->withValue((float) (string) $obj->getValue() * 2)) : $x;
         });
         $this->assertCount(2, $d1);
-        $this->assertEquals(1, (int) (string) $d1[self::$df::quadTemplate(self::$df::namedNode('foo'))]->getObject()->getValue());
-        $this->assertEquals(5, (int) (string) $d1[self::$df::quadTemplate(self::$df::namedNode('bar'))]->getObject()->getValue());
+        $this->assertEquals(1, (int) (string) $d1[static::getQuadTemplate(self::$df::namedNode('foo'))]->getObject()->getValue());
+        $this->assertEquals(5, (int) (string) $d1[static::getQuadTemplate(self::$df::namedNode('bar'))]->getObject()->getValue());
         $this->assertCount(2, $d2);
-        $this->assertEquals(2, (int) (string) $d2[self::$df::quadTemplate(self::$df::namedNode('foo'))]->getObject()->getValue());
-        $this->assertEquals(10, (int) (string) $d2[self::$df::quadTemplate(self::$df::namedNode('bar'))]->getObject()->getValue());
+        $this->assertEquals(2, (int) (string) $d2[static::getQuadTemplate(self::$df::namedNode('foo'))]->getObject()->getValue());
+        $this->assertEquals(10, (int) (string) $d2[static::getQuadTemplate(self::$df::namedNode('bar'))]->getObject()->getValue());
     }
 
     public function testReduce(): void {
@@ -66,7 +73,7 @@ abstract class DatasetMapReduceTest extends \PHPUnit\Framework\TestCase {
         }, 0);
         $this->assertEquals(6, $sum);
         $this->assertCount(2, $d1);
-        $this->assertEquals(1, (int) (string) $d1[self::$df::quadTemplate(self::$df::namedNode('foo'))]->getObject()->getValue());
-        $this->assertEquals(5, (int) (string) $d1[self::$df::quadTemplate(self::$df::namedNode('bar'))]->getObject()->getValue());
+        $this->assertEquals(1, (int) (string) $d1[static::getQuadTemplate(self::$df::namedNode('foo'))]->getObject()->getValue());
+        $this->assertEquals(5, (int) (string) $d1[static::getQuadTemplate(self::$df::namedNode('bar'))]->getObject()->getValue());
     }
 }

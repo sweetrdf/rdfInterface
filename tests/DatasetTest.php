@@ -515,7 +515,7 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
         $fq  = self::$fdf::quad($fnn, $fnn, $fnn);
         $fq2 = self::$fdf::quad($fnn, $fnn, $fbn);
         $fq3 = self::$fdf::quad($fnn, $fnn, $fl, $fdg);
-        $fqt = self::$fdf::quadTemplate($fnn);
+        $fqt = static::getQuadTemplate($fnn);
         $fqi = new GenericQuadIterator($fq);
 
         // add
