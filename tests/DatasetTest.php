@@ -31,6 +31,8 @@ use rdfHelpers\GenericQuadIterator;
 use rdfInterface\Literal;
 use rdfInterface\Quad;
 use rdfInterface\Dataset;
+use rdfInterface\QuadCompare;
+use rdfInterface\TermCompare;
 
 /**
  * Description of LoggerTest
@@ -44,6 +46,11 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
     abstract public static function getDataset(): Dataset;
 
     abstract public static function getForeignDataset(): Dataset; // foreign \rdfInterface\Dataset implementation
+
+    abstract public static function getQuadTemplate(TermCompare | null $subject = null,
+                                                    TermCompare | null $predicate = null,
+                                                    TermCompare | null $object = null,
+                                                    TermCompare | null $graphIri = null): QuadCompare;
 
     public function testAddQuads(): void {
         $d = static::getDataset();
@@ -83,10 +90,10 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
         }
 
         // by QuadTemplate
-        $tmpl = self::$df::quadTemplate(self::$df::namedNode('bar'));
+        $tmpl = static::getQuadTemplate(self::$df::namedNode('bar'));
         $this->assertTrue(self::$quads[2]->equals($d[$tmpl]));
         try {
-            $tmpl = self::$df::quadTemplate(null, self::$df::namedNode('bar'));
+            $tmpl = static::getQuadTemplate(null, self::$df::namedNode('bar'));
             $x    = $d[$tmpl];
             $this->assertTrue(false);
         } catch (OutOfBoundsException) {
@@ -146,28 +153,28 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
         // 1 - baz foo bar
         // 2 + bar baz foo
         // 3 - foo bar "baz"@en graph
-        $tmpl     = self::$df::quadTemplate(self::$df::namedNode('bar'), self::$df::namedNode('baz'));
+        $tmpl     = static::getQuadTemplate(self::$df::namedNode('bar'), self::$df::namedNode('baz'));
         $d[$tmpl] = self::$quads[3];
         $this->assertCount(2, $d);
         $this->assertContains(self::$quads[3], $d);
         $this->assertNotContains(self::$quads[2], $d);
         try {
             // two quads match
-            $d[self::$df::quadTemplate(self::$df::namedNode('foo'))] = self::$quads[0];
+            $d[static::getQuadTemplate(self::$df::namedNode('foo'))] = self::$quads[0];
             $this->assertTrue(false);
         } catch (OutOfBoundsException) {
             
         }
         try {
             // no quad matches
-            $d[self::$df::quadTemplate(self::$df::namedNode('bar'), self::$df::namedNode('foo'))] = self::$quads[0];
+            $d[static::getQuadTemplate(self::$df::namedNode('bar'), self::$df::namedNode('foo'))] = self::$quads[0];
             $this->assertTrue(false);
         } catch (OutOfBoundsException) {
             
         }
         try {
             // no quad matches
-            $d[self::$df::quadTemplate(self::$df::namedNode('aaa'))] = self::$quads[0];
+            $d[static::getQuadTemplate(self::$df::namedNode('aaa'))] = self::$quads[0];
             $this->assertTrue(false);
         } catch (OutOfBoundsException) {
             
@@ -217,7 +224,7 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
         $this->assertCount(3, $d);
         $this->assertNotContains(self::$quads[0], $d);
         // by QuadTemplate
-        unset($d[self::$df::quadTemplate(self::$quads[1]->getSubject())]);
+        unset($d[static::getQuadTemplate(self::$quads[1]->getSubject())]);
         $this->assertCount(2, $d);
         $this->assertNotContains(self::$quads[1], $d);
         // by callable
@@ -288,7 +295,7 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
         $this->assertFalse(isset($d2[self::$quads[1]]));
 
         // QuadTemplate
-        $d2   = $d1->copy(self::$df::quadTemplate(self::$df::namedNode('foo')));
+        $d2   = $d1->copy(static::getQuadTemplate(self::$df::namedNode('foo')));
         $this->assertFalse($d1->equals($d2));
         $this->assertCount(2, $d2);
         $d2[] = self::$quads[1];
@@ -324,7 +331,7 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
         $this->assertTrue($d1->equals($d2));
 
         // QuadTemplate
-        $d2   = $d1->copyExcept(self::$df::quadTemplate(self::$df::namedNode('foo')));
+        $d2   = $d1->copyExcept(static::getQuadTemplate(self::$df::namedNode('foo')));
         $this->assertFalse($d1->equals($d2));
         $this->assertCount(2, $d2);
         $d2[] = self::$quads[0];
@@ -346,7 +353,7 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
 
         $d1 = static::getDataset();
         $d1->add(new GenericQuadIterator(self::$quads));
-        $d2 = $d1->copyExcept(self::$df::quadTemplate(self::$quads[0]->getSubject()));
+        $d2 = $d1->copyExcept(static::getQuadTemplate(self::$quads[0]->getSubject()));
         $this->assertFalse($d1->equals($d2));
         $this->assertCount(2, $d2);
         $this->assertNotContains(self::$quads[0], $d2);
@@ -370,7 +377,7 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
 
         // QuadTemplate
         $d2 = $d1->copy();
-        $d2->delete(self::$df::quadTemplate(self::$df::namedNode('foo')));
+        $d2->delete(static::getQuadTemplate(self::$df::namedNode('foo')));
         $this->assertCount(2, $d2);
         $this->assertFalse($d2->equals($d1));
         $this->assertNotContains(self::$quads[0], $d2);
@@ -413,7 +420,7 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
 
         // QuadTemplate
         $d2 = $d1->copy();
-        $d2->deleteExcept(self::$df::quadTemplate(self::$df::namedNode('foo')));
+        $d2->deleteExcept(static::getQuadTemplate(self::$df::namedNode('foo')));
         $this->assertCount(2, $d2);
         $this->assertFalse($d2->equals($d1));
         $this->assertTrue(isset($d2[self::$quads[0]]));
@@ -488,8 +495,8 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
             $obj = $x->getObject();
             return $obj instanceof Literal ? $x->withObject($obj->withValue((float) (string) $obj->getValue() * 2)) : $x;
         });
-        $this->assertEquals(2, (int) (string) $d[self::$df::quadTemplate(self::$df::namedNode('foo'))]->getObject()->getValue());
-        $this->assertEquals(10, (int) (string) $d[self::$df::quadTemplate(self::$df::namedNode('bar'))]->getObject()->getValue());
+        $this->assertEquals(2, (int) (string) $d[static::getQuadTemplate(self::$df::namedNode('foo'))]->getObject()->getValue());
+        $this->assertEquals(10, (int) (string) $d[static::getQuadTemplate(self::$df::namedNode('bar'))]->getObject()->getValue());
     }
 
     public function testForeignTerms(): void {
@@ -529,7 +536,7 @@ abstract class DatasetTest extends \PHPUnit\Framework\TestCase {
         $this->assertTrue(isset($d[$fq]));
 
         // base for other tests
-        $d = static::getDataset();
+        $d  = static::getDataset();
         $d->add($q);
         $fd = static::getDataset();
         $fd->add($q);

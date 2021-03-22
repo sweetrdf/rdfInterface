@@ -31,7 +31,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface TermCompare {
+interface TermCompare extends QuadCompare {
 
     public function equals(Term $term): bool;
 }

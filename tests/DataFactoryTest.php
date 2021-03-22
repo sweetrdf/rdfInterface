@@ -32,7 +32,6 @@ use rdfInterface\NamedNode;
 use rdfInterface\Literal;
 use rdfInterface\DefaultGraph;
 use rdfInterface\Quad;
-use rdfInterface\QuadTemplate;
 use rdfInterface\Variable;
 
 /**
@@ -77,22 +76,5 @@ abstract class DataFactoryTest extends \PHPUnit\Framework\TestCase {
         $q = self::$df::quad($bn, $nn, $l, $dg);
         $this->assertInstanceOf(Term::class, $q);
         $this->assertInstanceOf(Quad::class, $q);
-    }
-
-    public function testCreateQuadTemplate(): void {
-        $bn = self::$df::blankNode();
-        $nn = self::$df::namedNode('foo');
-        $l = self::$df::literal('foo', 'lang');
-        $dg = self::$df::defaultGraph();
-
-        $qt = self::$df::quadTemplate($bn, $nn, $l, $dg);
-        $this->assertInstanceOf(Term::class, $qt);
-        $this->assertInstanceOf(QuadTemplate::class, $qt);
-    }
-
-    public function testCreateVariable(): void {
-        $qv = self::$df::variable('foo');
-        $this->assertInstanceOf(Term::class, $qv);
-        $this->assertInstanceOf(Variable::class, $qv);
     }
 }

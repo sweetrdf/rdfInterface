@@ -42,9 +42,9 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
 
     // Immutable set operations
 
-    public function copy(Quad | QuadTemplate | QuadIterator | callable | null $filter = null): Dataset;
+    public function copy(QuadCompare | QuadIterator | callable | null $filter = null): Dataset;
 
-    public function copyExcept(Quad | QuadTemplate | QuadIterator | callable | null $filter = null): Dataset;
+    public function copyExcept(QuadCompare | QuadIterator | callable | null $filter = null): Dataset;
 
     public function union(Quad | QuadIterator $other): Dataset;
 
@@ -62,9 +62,9 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      */
     public function add(Quad | QuadIterator $quads): void;
 
-    public function delete(Quad | QuadTemplate | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
+    public function delete(QuadCompare | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
 
-    public function deleteExcept(Quad | QuadTemplate | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
+    public function deleteExcept(QuadCompare | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
     // In-place modification
 
     /**
@@ -79,21 +79,21 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
 
     /**
      *
-     * @param Quad|QuadTemplate|callable $offset
+     * @param QuadCompare|callable $offset
      * @return bool
      */
     public function offsetExists($offset): bool;
 
     /**
      *
-     * @param Quad|QuadTemplate|callable $offset
+     * @param QuadCompare|callable $offset
      * @return Quad
      */
     public function offsetGet($offset): Quad;
 
     /**
      *
-     * @param Quad|QuadTemplate|callable $offset
+     * @param QuadCompare|callable $offset
      * @param Quad $value
      * @return void
      */
@@ -101,7 +101,7 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
 
     /**
      *
-     * @param Quad|QuadTemplate|callable $offset
+     * @param QuadCompare|callable $offset
      * @return void
      */
     public function offsetUnset($offset): void;

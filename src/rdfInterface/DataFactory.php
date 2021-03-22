@@ -38,23 +38,14 @@ interface DataFactory {
 
     public static function blankNode(string | Stringable | null $iri = null): BlankNode;
 
-    public static function literal(
-        int | float | string | bool | Stringable $value,
-        string | Stringable | null $lang = null,
-        string | Stringable | null $datatype = null
-    ): Literal;
-
-    public static function variable(string | Stringable $name): Variable;
+    public static function literal(int | float | string | bool | Stringable $value,
+                                   string | Stringable | null $lang = null,
+                                   string | Stringable | null $datatype = null): Literal;
 
     public static function defaultGraph(): DefaultGraph;
 
-    public static function quad(
-        Term $subject, NamedNode $predicate, Term $object,
-        NamedNode | BlankNode | DefaultGraph | null $graph = null
-    ): Quad;
+    public static function quad(Term $subject, NamedNode $predicate,
+                                Term $object,
+                                NamedNode | BlankNode | DefaultGraph | null $graph = null): Quad;
 
-    public static function quadTemplate(
-        Term | null $subject = null, NamedNode | null $predicate = null,
-        Term | null $object = null, NamedNode | BlankNode | DefaultGraph | null $graph = null
-    ): QuadTemplate;
 }
