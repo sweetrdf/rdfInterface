@@ -36,7 +36,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface Quad extends Term, TermCompare {
+interface Quad extends Term, TermCompare, QuadCompare {
 
     /**
      *
