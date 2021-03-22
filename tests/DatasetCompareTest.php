@@ -96,8 +96,8 @@ abstract class DatasetCompareTest extends \PHPUnit\Framework\TestCase {
         $d1   = static::getDataset();
         $d1[] = self::$quads[0];
         $d1[] = self::$quads[3];
-        $this->assertTrue($d1->every(self::$df::quadTemplate(self::$df::namedNode('foo'))));
-        $this->assertFalse($d1->none(self::$df::quadTemplate(null, null, self::$df::literal('baz', 'en'))));
+        $this->assertTrue($d1->every(static::getQuadTemplate(self::$df::namedNode('foo'))));
+        $this->assertFalse($d1->none(static::getQuadTemplate(null, null, self::$df::literal('baz', 'en'))));
 
         // callable
         $d1   = static::getDataset();
