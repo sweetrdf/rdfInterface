@@ -18,8 +18,13 @@
     },
     "autoload": {
         "psr-4": {
-            "rdfInterface\\": "src/rdfInterface",
-            "rdfInterface\\tests\\": "tests"
+            "rdfInterface\\": "src/rdfInterface"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "rdfInterface\\tests\\": "tests",
+            "rdfInterface\\ReferenceImplementation\\": "src/ReferenceImplementation"
         }
     },
     "require-dev": {

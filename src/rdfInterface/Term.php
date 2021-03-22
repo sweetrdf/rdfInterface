@@ -35,7 +35,7 @@ interface Term {
 
     public function __toString(): string;
 
-    public function getValue(): mixed;
+    public function getValue(): string;
 
     public function equals(Term $term): bool;
 }

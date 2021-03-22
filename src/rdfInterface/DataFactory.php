@@ -39,7 +39,7 @@ interface DataFactory {
     public static function blankNode(string | Stringable | null $iri = null): BlankNode;
 
     public static function literal(
-        int | float | string | bool | Stringable $value,
+        string | Stringable $value,
         string | Stringable | null $lang = null,
         string | Stringable | null $datatype = null
     ): Literal;
