@@ -3,12 +3,10 @@
 From EasyRdf user's perspective there are few fundamental differences between the EasyRdf nad the rdfInterface ecosystem:
 
 * EasyRdf is a single library doing it all. It provides parsers, serializers, implementation of RDF terms (`EasyRdf\Literal` and `EasyRdf\Resource`), RDF dataset (`EasyRdf\Graph`), SPARQL client, etc.
-  What's convenient about it is that you install one package and you are ready to go. But it also makes it less flexible and difficult to modernize, especially in the long term.\  
-  RdfInterface took a different approach. It's an ecosystem of (rather small) libraries which can exchange data because all of them use same data structures and follow a common API defined in this repository.
-  In the rdfInterface ecosystem you have a separate library for parsing/serializaing ([quickRdfIo](https://github.com/sweetrdf/quickRdfIo)), separate ones implementing RDF terms and dataset (you can choose betwenn [simpleRdf](https://github.com/sweetrdf/simpleRdf) and [quickRdf](https://github.com/sweetrdf/quickRdf)), separate one providing so-called term templates ([termTemplates](https://github.com/sweetrdf/termTemplates), we will talk a lot about term templates later), etc.
-  At the beginning it may see much more troubling but installing packages with composer requires only a few key strokes and this approach procides a great flexibility. 
-  It allows you to choose between different implementations (like between simpleRdf and quickRdf) and you can pretty easily add you own library to this ecosystem as you can implement only those parts of the rdfInterface you are interested in.
-* EasyRdf dataset API is graph node-centric. You get to the node (`EasyRdf\Resource`) you are interested in and then deal with its properties and their values.\
+  What's convenient about it is that you install one package and you are ready to go. But it also makes it less flexible and difficult to modernize, especially in the long term.  
+  RdfInterface took a different approach. It's an ecosystem of (rather small) libraries which can work with each other because they implement a common interfaces defined in this repository.
+  In the rdfInterface ecosystem you have a separate library for parsing/serializaing RDF ([quickRdfIo](https://github.com/sweetrdf/quickRdfIo)), separate libraries implementing RDF terms and dataset (you can choose between [simpleRdf](https://github.com/sweetrdf/simpleRdf) and [quickRdf](https://github.com/sweetrdf/quickRdf)), separate one providing so-called term templates ([termTemplates](https://github.com/sweetrdf/termTemplates)), etc. And what is important is it's easy to extend the ecosystem with new libraries.
+* EasyRdf dataset API is graph node-centric. You get to the node (`EasyRdf\Resource`) you are interested in and then deal with its properties and their values.  
   In contrary to that RdfInterface dataset API is edge-centric. You add/delete/filter/iterate trough edges (quads).
   This might feel strange and first but I will try to convince you it's very convenient.
 * EasyRdf is weak-typed. It allows to refer to predicates and nodes using strings with their (shortened or fully-qualified) URIs and when it comes to predicates it even supports a rudimentaty SPARQL paths-like syntax. 
