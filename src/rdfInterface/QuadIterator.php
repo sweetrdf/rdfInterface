@@ -33,5 +33,5 @@ namespace rdfInterface;
  */
 interface QuadIterator extends \Iterator {
 
-    public function current(): Quad;
+    public function current(): Quad | null;
 }
