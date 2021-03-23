@@ -44,7 +44,7 @@ $graph->add($parser->parse('RDF DATA GO HERE'));
 
 RdfInterface syntax is longer and more verbose (we explicitly specify three classes instead of only one) but it decouples the parser and the dataset. It means we can freely mix a parser, a terms factory and a dataset implementations (of course until all of them are rdfInterface-compliant).
 
-EasyRdf provides us with a shorter syntax at the cost of limiting us to the parsers embedded into EasyRdf.
+EasyRdf provides us with a shorter syntax at the cost of limiting us to parsers embedded into the EasyRdf.
 
 ### Finding graph node(s)
 
@@ -56,17 +56,14 @@ $resource = $graph->resource('URI');
 
 # Having a given predicate
 $resources = $graph->resourcesMatching('predicateURI');
-
 # Having predicate pointing to a given node
 $resources = [];
 foreach ($graph->reversePropertyUris('targetNodeURI') as $property) {
     $resources = array_merge($resources, $graph->resourcesMatching($property, $graph->resource('targetNodeURI')));
 }
-
 # Having a given literal value of a given predicate
 $resources = $graph->resourcesMatching('predicateURI', new \EasyRdf\Literal('value'));
-
-# Having a literal value of a given predicate with any language tag
+# Having a literal value of a given predicate with any non-empty language tag
 $resources = [];
 foreach ($graph->resourcesMatching('predicateURI') as $i) {
     foreach ($i->allLiterals('predicateURI') as $j) {
@@ -83,17 +80,13 @@ rdfInterface
 use \quickRdf\DataFactory as DF;
 use \termTemplates\QuadTemplate as QT;
 use \termTemplates\LiteralTemplate as LT;
-
 # By URI
 $resource = $graph->copy(new QT(DF::namedNode('URI')));
-
 # Having a given predicate
 $resources = $graph->copy(new QT(null, DF::namedNode('predicateURI')));
-
 # Having predicate pointing to a given node
 $resources = $graph->copy(new QT(null, null, DF::namedNode('targetNodeURI')));
-
-# Having a literal value of a given predicate with any language tag
+# Having a literal value of a given predicate with any non-empty language tag
 $resources = $graph->copy(new QT(null, DF::namedNode('predicateURI'), new LT(null, LT::ANY, ''));
 ```
 
