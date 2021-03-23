@@ -85,7 +85,7 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * @return Dataset
      * @see delete()
      */
-    public function copyExcept(QuadCompare | QuadIterator | callable | null $filter = null): Dataset;
+    public function copyExcept(QuadCompare | QuadIterator | callable | null $filter): Dataset;
 
     /**
      * Returns a new dataset being a union of the current one and the $other one.
@@ -133,7 +133,7 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
      *   All quads for which the callable returns true are removed.
      * 
-     * A copying equivalent is the copyExcept($filter) method.
+     * An immputable equivalent is the copyExcept($filter) method.
      * 
      * @param QuadCompare|QuadIterator|callable $filter
      * @return Dataset a dataset containing removed quads.
@@ -155,7 +155,7 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
      *   All quads for which the callable returns false are removed.
      * 
-     * A copying equivalent is the copy($filter) method.
+     * An immputable equivalent is the copy($filter) method.
      * 
      * @param QuadCompare|QuadIterator|callable $filter
      * @return Dataset a dataset containing removed quads.
