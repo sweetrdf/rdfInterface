@@ -1,11 +1,10 @@
 # Intruduction to rdfInterface for EasyRdf users
 
-There are few main differences between the rdfInterface (ecosystem) and EasyRdf from the EasyRdf user's point of view:
+From EasyRdf user's perspective there are few fundamental differences between the EasyRdf nad the rdfInterface ecosystem:
 
 * EasyRdf is a single library doing it all. It provides parsers, serializers, implementation of RDF terms (`EasyRdf\Literal` and `EasyRdf\Resource`), RDF dataset (`EasyRdf\Graph`), SPARQL client, etc.
-  What's convenient about it is that you install one package and you are ready to go.
-  What's bad about it is that all elements are tightly coupled to each other and you can't easily reuse EasyRdf classes outside of the EasyRdf (e.g. use one of EasyRdf parsers without `EasyRdf\Graph`) nor update them selectively (as you would most probably need to update the rest of the EasyRdf as well).
-  RdfInterface took a different approach. It's an ecosystem of (rahter small) libraries which can exchange data because all of them use same data structures and follow a common API defined in this repository.
+  What's convenient about it is that you install one package and you are ready to go. But it also makes it less flexible and difficult to modernize, especially in the long term.\  
+  RdfInterface took a different approach. It's an ecosystem of (rather small) libraries which can exchange data because all of them use same data structures and follow a common API defined in this repository.
   In the rdfInterface ecosystem you have a separate library for parsing/serializaing ([quickRdfIo](https://github.com/sweetrdf/quickRdfIo)), separate ones implementing RDF terms and dataset (you can choose betwenn [simpleRdf](https://github.com/sweetrdf/simpleRdf) and [quickRdf](https://github.com/sweetrdf/quickRdf)), separate one providing so-called term templates ([termTemplates](https://github.com/sweetrdf/termTemplates), we will talk a lot about term templates later), etc.
   At the beginning it may see much more troubling but installing packages with composer requires only a few key strokes and this approach procides a great flexibility. 
   It allows you to choose between different implementations (like between simpleRdf and quickRdf) and you can pretty easily add you own library to this ecosystem as you can implement only those parts of the rdfInterface you are interested in.
