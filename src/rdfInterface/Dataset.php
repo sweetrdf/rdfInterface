@@ -30,7 +30,7 @@ namespace rdfInterface;
  * Main, edge(quad) and Dataset-oriented Dataset API
  *
  * @author zozlak
- * @extends \ArrayAccess<int|Quad|QuadIterator|callable, Quad>
+ * @extends \ArrayAccess<Quad|QuadIterator|callable, Quad>
  */
 interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
 
@@ -185,13 +185,8 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      *   signature. Matching quads are the ones for which the callable returns
      *   `true`.
      *   If more than one quad is matched \OutOfBoundsException must be thrown.
-     * - Int value of 0. This is just a syntactic sugar allowing to check if 
-     *   there is any quad in the dataset (in scenarios like 
-     *   `$value = $dataset[] ?? $defaultValue`). The return value should be 
-     *   false if the dataset is empty and true otherwise.
-     *   If value other than 0 is used, \OutOfRangeException must be thrown.
      * 
-     * @param int|QuadCompare|callable $offset
+     * @param QuadCompare|callable $offset
      * @return bool
      * @throws \OutOfBoundsException
      * @throws \OutOfRangeException
@@ -209,13 +204,8 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      *   signature. Matching quads are the ones for which the callable returns
      *   `true`.
      *   If more than one quad is matched \OutOfBoundsException must be thrown.
-     * - Int value of 0. This is just a syntactic sugar for accessing any quad 
-     *   in the dataset. It allows to skip the \Iterator interface when you just 
-     *   want to get any single quad in the dataset.
-     *   If the dataset is empty, \OutOfBoundsException must be thrown.
-     *   If value other than 0 is passed, \OutOfRangeException must be thrown
      * 
-     * @param int|QuadCompare|callable $offset
+     * @param QuadCompare|callable $offset
      * @return Quad
      * @throws \OutOfBoundsException
      * @throws \OutOfRangeException
@@ -256,4 +246,20 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * @return void
      */
     public function offsetUnset($offset): void;
+    
+    /**
+     * Returns the current quad.
+     * 
+     * No particular order of quad traversal is guaranteed.
+     * 
+     * It must not require calling rewind() for a call to current() to return
+     * a quad after the dataset has been created and at least one quad has been
+     * added to it.
+     * 
+     * If valid() returns false, this method must return null (it must not throw
+     * an exception).
+     * 
+     * @return mixed
+     */
+    public function current(): mixed;
 }
