@@ -42,28 +42,125 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
 
     // Immutable set operations
 
+    /**
+     * Creates a copy of the dataset.
+     * 
+     * If $filter is provided, the copy contains only quads matching the $filter.
+     * 
+     * $filter can be specified as:
+     * 
+     * - An object implementing the \rdfInterface\QuadCompare interface
+     *   (e.g. a single Quad)
+     * - An object implementing the \rdfInterface\QuadIterator interface
+     *   (e.g. another Dataset)
+     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     *   All quads for which the callable returns true are copied.
+     * 
+     * An in-place equivalent of a call using the $filter is the deleteExcept() method.
+     * 
+     * @param QuadCompare|QuadIterator|callable|null $filter
+     * @return Dataset
+     * @see deleteExcept
+     */
     public function copy(QuadCompare | QuadIterator | callable | null $filter = null): Dataset;
 
+    /**
+     * Creates a copy of the dataset.
+     * 
+     * If $filter is provided, the copy contains only quads not matching the 
+     * $filter.
+     * 
+     * $filter can be specified as:
+     * 
+     * - An object implementing the \rdfInterface\QuadCompare interface
+     *   (e.g. a single Quad)
+     * - An object implementing the \rdfInterface\QuadIterator interface
+     *   (e.g. another Dataset)
+     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     *   All quads for which the callable returns false are copied.
+     * 
+     * An in-place equivalent of a call using the $filter is the delete() method.
+     * 
+     * @param QuadCompare|QuadIterator|callable|null $filter
+     * @return Dataset
+     * @see delete()
+     */
     public function copyExcept(QuadCompare | QuadIterator | callable | null $filter = null): Dataset;
 
+    /**
+     * Returns a new dataset being a union of the current one and the $other one.
+     * 
+     * For in-place union use add().
+     * 
+     * @param Quad|QuadIterator $other
+     * @return Dataset
+     * @see add()
+     */
     public function union(Quad | QuadIterator $other): Dataset;
 
+    /**
+     * Returns a dataset being a symmetric difference of the current dataset and
+     * the $other one.
+     * 
+     * There is no in-place equivalent.
+     * 
+     * @param Quad|QuadIterator $other
+     * @return Dataset
+     */
     public function xor(Quad | QuadIterator $other): Dataset;
 
     // In-place set operations
 
     /**
-     * Adds set of quads.
-     *
-     * Use array append syntax to append a single quad.
+     * Adds quad(s) to the dataset.
      *
      * @param Quad|QuadIterator $quads
      * @return void
      */
     public function add(Quad | QuadIterator $quads): void;
 
+    /**
+     * In-place removes quads from the dataset.
+     * 
+     * All quads matching the $filter parameter are removed.
+     * 
+     * $filter can be specified as:
+     * 
+     * - An object implementing the \rdfInterface\QuadCompare interface
+     *   (e.g. a single Quad)
+     * - An object implementing the \rdfInterface\QuadIterator interface
+     *   (e.g. another Dataset)
+     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     *   All quads for which the callable returns true are removed.
+     * 
+     * A copying equivalent is the copyExcept($filter) method.
+     * 
+     * @param QuadCompare|QuadIterator|callable $filter
+     * @return Dataset a dataset containing removed quads.
+     * @see copyExcept()
+     */
     public function delete(QuadCompare | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
 
+    /**
+     * In-place removes quads from the dataset.
+     * 
+     * All quads but ones matching the $filter parameter are removed.
+     * 
+     * $filter can be specified as:
+     * 
+     * - An object implementing the \rdfInterface\QuadCompare interface
+     *   (e.g. a single Quad)
+     * - An object implementing the \rdfInterface\QuadIterator interface
+     *   (e.g. another Dataset)
+     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     *   All quads for which the callable returns false are removed.
+     * 
+     * A copying equivalent is the copy($filter) method.
+     * 
+     * @param QuadCompare|QuadIterator|callable $filter
+     * @return Dataset a dataset containing removed quads.
+     * @see copy()
+     */
     public function deleteExcept(QuadCompare | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
     // In-place modification
 
@@ -78,21 +175,61 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
     // ArrayAccess (with narrower types)
 
     /**
-     *
-     * @param QuadCompare|callable $offset
+     * Checks if a given offset exists.
+     * 
+     * Offset can be specified as:
+     * 
+     * - An object implementing the \rdfInterface\QuadCompare interface.
+     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     *   signature. Matching quads are the ones for which the callable returns
+     *   `true`.
+     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     * - Null. This is just a syntactic sugar allowing to check if there is any
+     *   quad in the dataset (in scenarios like `$value = $dataset[] ?? $defaultValue`).
+     *   The return value should be false if the dataset is empty and true 
+     *   otherwise.
+     * 
+     * @param null|QuadCompare|callable $offset
      * @return bool
+     * @throws \OutOfBoundsException
      */
     public function offsetExists($offset): bool;
 
     /**
-     *
-     * @param QuadCompare|callable $offset
+     * Returns a quad matching the $offset.
+     * 
+     * The $offset can be specified as:
+     * 
+     * - An object implementing the \rdfInterface\QuadCompare interface.
+     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     *   signature. Matching quads are the ones for which the callable returns
+     *   `true`.
+     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     * - Null. This is just a syntactic sugar for accessing any quad in
+     *   the dataset. It allows to skip the \Iterator interface when you just 
+     *   want to get any single quad in the dataset.
+     *   If the dataset
+     * 
+     * @param null|QuadCompare|callable $offset
      * @return Quad
+     * @throws \OutOfBoundsException
      */
     public function offsetGet($offset): Quad;
 
     /**
-     *
+     * Assigns a new value to the quad matching the $offset.
+     * 
+     * Offset can be specified as:
+     * 
+     * - An object implementing the \rdfInterface\QuadCompare interface.
+     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     *   signature. Matching quads are the ones for which the callable returns
+     *   `true`.
+     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     * 
      * @param QuadCompare|callable $offset
      * @param Quad $value
      * @return void
@@ -100,7 +237,17 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
     public function offsetSet($offset, $value): void;
 
     /**
-     *
+     * Removes a quad matching the $offset.
+     * 
+     * Offset can be specified as:
+     * 
+     * - An object implementing the \rdfInterface\QuadCompare interface.
+     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     *   signature. Matching quads are the ones for which the callable returns
+     *   `true`.
+     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     * 
      * @param QuadCompare|callable $offset
      * @return void
      */
