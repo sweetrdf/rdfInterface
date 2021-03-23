@@ -24,6 +24,10 @@ The solution for these troubles is to agree on
 
 The [rdfInterfaceTests])https://github.com/sweetrdf/rdfInterfaceTests) provides a set of tests for validating if your library is compliant with the rdfInterface.
 
+## For EasyRdf users
+
+If you are using EasyRdf, you are likely to find the rdfInterface API quite strange and difficult to understand. [This document](blob/master/EasyRdfReadme.md) should help.
+
 ## Design decisions
 
 ### Reference solutions
