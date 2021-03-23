@@ -26,7 +26,8 @@ The [rdfInterfaceTests])https://github.com/sweetrdf/rdfInterfaceTests) provides 
 
 ## For EasyRdf users
 
-If you are using EasyRdf, you are likely to find the rdfInterface API quite strange and difficult to understand. [This document](blob/master/EasyRdfReadme.md) should help.
+If you are using EasyRdf, you are likely to find the rdfInterface API quite strange and difficult to understand.\
+[This document](EasyRdfReadme.md) should help.
 
 ## Design decisions
 
