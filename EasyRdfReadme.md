@@ -42,7 +42,9 @@ $graph = new \quickRdf\Dataset();
 $graph->add($parser->parse('RDF DATA GO HERE'));
 ```
 
-RdfInterface syntax is longer and more verbose but it decouples the parser and the dataset (meaning the dataset implementation doesn't have to know anything about the parser) making it easy to use any parser we want.
+RdfInterface syntax is longer and more verbose (we explicitly specify three classes instead of only one) but it decouples the parser and the dataset. It means we can freely mix a parser, a terms factory and a dataset implementations (of course until all of them are rdfInterface-compliant).
+
+EasyRdf provides us with a shorter syntax at the cost of limiting us to the parsers embedded into EasyRdf.
 
 ### Finding graph node(s)
 
