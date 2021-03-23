@@ -90,12 +90,11 @@ $resources = $graph->copy(new QT(null, null, DF::namedNode('targetNodeURI')));
 $resources = $graph->copy(new QT(null, DF::namedNode('predicateURI'), new LT(null, LT::ANY, ''));
 ```
 
-What is nice about the rdfInterface syntax is it's fully orthogonal. No matter for what you search for, you always do it in a same way. And it's always a one-liner.
+On the EasyRdf side the syntax depends heavily on the use case.
+For simple cases it's more compact than in rdfInterface but quickly gets long and complex for more complicated searches.
 
-While the EasyRdf syntax is a little shorted in simplest cases, it becomes pretty comples when more advanced searches are used.
-
-What is more, the [termTemplates](https://github.com/sweetrdf/termTemplates) library provides plenty of other term templates allowing you to flexibly match quads you are interested in
-(e.g. matching term values with regular expressions, matching values starting/containing/ending with a given string, values greater or smaller than a give value, etc.).
+The syntax provided by the RdfInterface is nicely orthogonal. No matter what you search for, you always do it in a same way. And it's always a one-liner.
+Moreover, there are many other term templates available in the [termTemplates](https://github.com/sweetrdf/termTemplates) library allowing you to perform searches using many other criterions.
 
 ### Interacting with a single graph node
 
