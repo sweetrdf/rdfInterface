@@ -185,14 +185,16 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      *   signature. Matching quads are the ones for which the callable returns
      *   `true`.
      *   If more than one quad is matched \OutOfBoundsException must be thrown.
-     * - Null. This is just a syntactic sugar allowing to check if there is any
-     *   quad in the dataset (in scenarios like `$value = $dataset[] ?? $defaultValue`).
-     *   The return value should be false if the dataset is empty and true 
-     *   otherwise.
+     * - Int value of 0. This is just a syntactic sugar allowing to check if 
+     *   there is any quad in the dataset (in scenarios like 
+     *   `$value = $dataset[] ?? $defaultValue`). The return value should be 
+     *   false if the dataset is empty and true otherwise.
+     *   If value other than 0 is used, \OutOfRangeException must be thrown.
      * 
-     * @param null|QuadCompare|callable $offset
+     * @param int|QuadCompare|callable $offset
      * @return bool
      * @throws \OutOfBoundsException
+     * @throws \OutOfRangeException
      */
     public function offsetExists($offset): bool;
 
@@ -207,14 +209,16 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      *   signature. Matching quads are the ones for which the callable returns
      *   `true`.
      *   If more than one quad is matched \OutOfBoundsException must be thrown.
-     * - Null. This is just a syntactic sugar for accessing any quad in
-     *   the dataset. It allows to skip the \Iterator interface when you just 
+     * - Int value of 0. This is just a syntactic sugar for accessing any quad 
+     *   in the dataset. It allows to skip the \Iterator interface when you just 
      *   want to get any single quad in the dataset.
-     *   If the dataset
+     *   If the dataset is empty, \OutOfBoundsException must be thrown.
+     *   If value other than 0 is passed, \OutOfRangeException must be thrown
      * 
-     * @param null|QuadCompare|callable $offset
+     * @param int|QuadCompare|callable $offset
      * @return Quad
      * @throws \OutOfBoundsException
+     * @throws \OutOfRangeException
      */
     public function offsetGet($offset): Quad;
 
