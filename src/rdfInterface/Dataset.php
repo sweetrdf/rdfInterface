@@ -246,7 +246,7 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * @return void
      */
     public function offsetUnset($offset): void;
-    
+
     /**
      * Returns the current quad.
      * 
