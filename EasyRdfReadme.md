@@ -5,14 +5,23 @@ From EasyRdf user's perspective there are few fundamental differences between th
 * EasyRdf is a single library doing it all. It provides parsers, serializers, implementation of RDF terms (`EasyRdf\Literal` and `EasyRdf\Resource`), RDF dataset (`EasyRdf\Graph`), SPARQL client, etc.
   What's convenient about it is that you install one package and you are ready to go. But it also makes it less flexible and difficult to modernize, especially in the long term.  
   RdfInterface took a different approach. It's an ecosystem of (rather small) libraries which can work with each other because they implement a common interfaces defined in this repository.
-  In the rdfInterface ecosystem you have a separate library for parsing/serializaing RDF ([quickRdfIo](https://github.com/sweetrdf/quickRdfIo)), separate libraries implementing RDF terms and dataset (you can choose between [simpleRdf](https://github.com/sweetrdf/simpleRdf) and [quickRdf](https://github.com/sweetrdf/quickRdf)), separate one providing so-called term templates ([termTemplates](https://github.com/sweetrdf/termTemplates)), etc. And what is important is it's easy to extend the ecosystem with new libraries.
-* EasyRdf dataset API is graph node-centric. You get to the node (`EasyRdf\Resource`) you are interested in and then deal with its properties and their values.  
-  In contrary to that RdfInterface dataset API is edge-centric. You add/delete/filter/iterate trough edges (quads).
-  This might feel strange and first but I will try to convince you it's very convenient.
-* EasyRdf is weak-typed. It allows to refer to predicates and nodes using strings with their (shortened or fully-qualified) URIs and when it comes to predicates it even supports a rudimentaty SPARQL paths-like syntax. 
-  Unfortunately this flexibility leads to many inconsistencies in the API and inherently leads to errors when non-standard (but still RDF-compliant) URIs are being used. What is worse, this problem can't be solved without introducing serious backward incompatibilities.
-  RdfInterface enforces strict typing. Every RDF term has its own class and requires explicit initialization.
-  This leads (unfortunately) to more verbose and longer syntax but it allows to avoid ambiguities and allow to benefit from static code analysis of your code (e.g. with [phpstan](https://github.com/phpstan/phpstan))
+  In the rdfInterface ecosystem you have a separate library for parsing/serializaing RDF ([quickRdfIo](https://github.com/sweetrdf/quickRdfIo)), separate libraries implementing RDF terms and dataset (you can choose between [simpleRdf](https://github.com/sweetrdf/simpleRdf) and [quickRdf](https://github.com/sweetrdf/quickRdf)), separate one providing so-called term templates ([termTemplates](https://github.com/sweetrdf/termTemplates)), etc. It is very important that it's easy to extend the ecosystem with new libraries implementing new features or implementing already available features in a better way.  
+    *  All in all it means with rdfInterface you will need to type `composer require` a few times instead of only once.
+* EasyRdf's dataset API is graph node-centric. You fetch the node (`EasyRdf\Resource`) you are interested in from the graph and then deal with node's predicate values (being `EasyRdf\Resource` or `EasyRdf\Literal`). EasyRdf has no data structure representing graph's edge.  
+  In the contrary RdfInterface's dataset API is edge-centric. You always add/delete/filter/iterate trough graph edges.  
+    * It means the same graph operations are expresses in slightly different way in EasyRdf and rdfInterface.
+      The [Basic task](#basic-tasks) section below provides a comparison of some sample task.
+    * It's hard to tell that one approach is better than the other. All in all it's quite subjective and comes down to personal taste and habits.
+      Anyway I hope you'll see some advantages brought by the approach introduced by the rdfInterface.
+* EasyRdf is weak-typed. It allows to refer to predicates and named nodes using strings containing their (shortened or fully-qualified) URIs.
+  Literals can be represented by just strings.
+  When it comes to predicates it even supports a rudimentaty SPARQL paths-like syntax.  
+  RdfInterface doesn't allow that. RdfInterface enforces strict typing - named node/predicate has to be an `rdfInterface\NamedNode` object, literal has to be an `rdfInterface\Literal` object, etc.
+    * I'm pretty sure you will find rdfInterface behavior annoying.
+      It may feel like introducing a lot of unnecessary boilerplate code.
+      While I agree it makes the syntax longer, it's for a reason.
+      There are many corner cases where the syntax used by the EasyRdf is intrinsically ambigous.
+      Strict typing assures there are no such ambiguities in the rdfInterface API.
 
 ## Basic tasks
 
