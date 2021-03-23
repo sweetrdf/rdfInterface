@@ -93,7 +93,7 @@ $resources = $graph->copy(new QT(null, DF::namedNode('predicateURI'), new LT(nul
 On the EasyRdf side the syntax depends heavily on the use case.
 For simple cases it's more compact than in rdfInterface but quickly gets long and complex for more complicated searches.
 
-The syntax provided by the RdfInterface is nicely orthogonal. No matter what you search for, you always do it in a same way. And it's always a one-liner.
+The syntax provided by the rdfInterface is nicely orthogonal. No matter what you search for, you always do it in a same way. And it's always a one-liner.
 Moreover, there are many other term templates available in the [termTemplates](https://github.com/sweetrdf/termTemplates) library allowing you to perform searches using many other criterions.
 
 ### Interacting with a single graph node
@@ -123,8 +123,9 @@ use \quickRdf\DataFactory as DF;
 use \termTemplates\QuadTemplate as QT;
 use \termTemplates\LiteralTemplate as LT;
 
-# iterate over all values of a given predicate
 $resource = $graph->copy(new QT(DF::namedNode('URI')));
+
+# iterate over all values of a given predicate
 foreach ($resource->copy(new QT(null, DF::namedNode('predicateURI'))) as $i) {
     // do something
 }
@@ -140,6 +141,8 @@ $resource->delete(new QT(null, DF::namedNode('predicateURI')));
 $resource[] = DF::quad($resource->current()->getSubject(), DF::namedNode('predicateURI'), DF::literal('newValue'));
 ```
 
+
+
 ### Executing a SPARQL query and dealing with its results
 
 TODO
@@ -150,11 +153,11 @@ TODO
 
 * Make a copy of a dataset.\
   Suprisingly there is no method for doing that.
-  You must either serialize and deserialize the `EasyRdf\Graph` object or use a three-levels loop over resources, their properties and each property values.\
-  In rdfInterface it's just `$copy = $dataset->copy()` (and there are some goodies - see the optional `$filter` parameter).
+  You must either serialize and deserialize the `EasyRdf\Graph` object or use a three-level loop over resources, their predicates and each predicate values.\
+  In rdfInterface it's just `$newCopy = $dataset->copy()`.
 * Perform any set operation on two datasets.\
-  If you want a union, difference or intersection of two datasets, you must implement it by hand.
-  And as all those operations are on a quad/triple level and EasyRdf has no representation of a quad/triple, implementing it by hand is really troublesome (I'm too lazy to write a code snippet performing dataset intersection as it would require few dozens of lines).\
+  EasyRdf provides no methods to perform graph union, difference or intersection.
+  And implementing these operations using EasyRdf's API is quite troublesome (to be honest I'm to lazy to prepare a snippet).  
   In rdfInterface there are just `Dataset::add()`, `Dataset::delete()` and `Dataset::deleteExcept()` for in-place set operations and `Dataset::union()`, `Dataset::copyExcept()`, `Dataset::copy()` and `Dataset::xor()` for immutable set operations.
 
 ## Fundamental EasyRdf limitations addressed by the rdfInterface
