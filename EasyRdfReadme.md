@@ -46,106 +46,21 @@ RdfInterface syntax is longer and more verbose (we explicitly specify three clas
 
 EasyRdf provides us with a shorter syntax at the cost of limiting us to parsers embedded into the EasyRdf.
 
-### Finding graph node(s)
+### Iterating over all triples matching a given criteria
 
-EasyRdf
+TODO
 
-```php
-# By URI
-$resource = $graph->resource('URI');
+### Adding new triples
 
-# Having a given predicate
-$resources = $graph->resourcesMatching('predicateURI');
-# Having predicate pointing to a given node
-$resources = [];
-foreach ($graph->reversePropertyUris('targetNodeURI') as $property) {
-    $resources = array_merge($resources, $graph->resourcesMatching($property, $graph->resource('targetNodeURI')));
-}
-# Having a given literal value of a given predicate
-$resources = $graph->resourcesMatching('predicateURI', new \EasyRdf\Literal('value'));
-# Having a literal value of a given predicate with any non-empty language tag
-$resources = [];
-foreach ($graph->resourcesMatching('predicateURI') as $i) {
-    foreach ($i->allLiterals('predicateURI') as $j) {
-        if (!empty($j->getLang())) {
-            $resources[] = $i;
-            break;
-        }
-    }
-}
-```
+TODO
 
-rdfInterface
-```php
-use \quickRdf\DataFactory as DF;
-use \termTemplates\QuadTemplate as QT;
-use \termTemplates\LiteralTemplate as LT;
-# By URI
-$resource = $graph->copy(new QT(DF::namedNode('URI')));
-# Having a given predicate
-$resources = $graph->copy(new QT(null, DF::namedNode('predicateURI')));
-# Having predicate pointing to a given node
-$resources = $graph->copy(new QT(null, null, DF::namedNode('targetNodeURI')));
-# Having a literal value of a given predicate with any non-empty language tag
-$resources = $graph->copy(new QT(null, DF::namedNode('predicateURI'), new LT(null, LT::ANY, ''));
-```
+### Modyfying given triple values
 
-On the EasyRdf side the syntax depends heavily on the use case.
-For simple cases it's more compact than in rdfInterface but quickly gets long and complex for more complicated searches.
-
-The syntax provided by the rdfInterface is nicely orthogonal. No matter what you search for, you always do it in a same way. And it's always a one-liner.
-Moreover, there are many other term templates available in the [termTemplates](https://github.com/sweetrdf/termTemplates) library allowing you to perform searches using many other criterions.
-
-### Interacting with a single graph node
-
-EasyRdf
-
-```php
-$resource = $graph->resource('URI');
-
-# iterate over all values of a given predicate
-foreach ($resource->all('predicateURI') as $i) {
-    // do something
-}
-
-# get any value of a given predicate assigning a default value as a fallback
-$value = $resource->get('predicateURI') ?? 'defaultValue';
-
-# changing a given predicate value to a given literal
-$resource->delete('predicateURI');
-$resource->addLiteral('newValue');
-```
-
-rdfInterface
-
-```php
-use \quickRdf\DataFactory as DF;
-use \termTemplates\QuadTemplate as QT;
-use \termTemplates\LiteralTemplate as LT;
-
-$resource = $graph->copy(new QT(DF::namedNode('URI')));
-
-# iterate over all values of a given predicate
-foreach ($resource->copy(new QT(null, DF::namedNode('predicateURI'))) as $i) {
-    // do something
-}
-
-# get any value of a given predicate assigning a default value as a fallback
-$value = $resource->copy(new QT(null, DF::namedNode('predicateURI')))->current() ?? 'defaultValue';
-
-# changing a given predicate value to a given literal
-$filter = new QT(null, DF::namedNode('predicateURI'));
-$resource[$filter] = $resource[$filter]->withObject(DF::literal('newValue'));
-// or
-$resource->delete(new QT(null, DF::namedNode('predicateURI')));
-$resource[] = DF::quad($resource->current()->getSubject(), DF::namedNode('predicateURI'), DF::literal('newValue'));
-```
-
-
+TODO
 
 ### Executing a SPARQL query and dealing with its results
 
-TODO
+TODO - finish the SparqlClient implementation first
 
 ## Simple operations which you can't do with EasyRdf...
 
@@ -158,12 +73,12 @@ TODO
 * Perform any set operation on two datasets.\
   EasyRdf provides no methods to perform graph union, difference or intersection.
   And implementing these operations using EasyRdf's API is quite troublesome (to be honest I'm to lazy to prepare a snippet).  
-  In rdfInterface there are just `Dataset::add()`, `Dataset::delete()` and `Dataset::deleteExcept()` for in-place set operations and `Dataset::union()`, `Dataset::copyExcept()`, `Dataset::copy()` and `Dataset::xor()` for immutable set operations.
+  RdfInterface provides `Dataset::add()`, `Dataset::delete()` and `Dataset::deleteExcept()` for in-place set operations and `Dataset::union()`, `Dataset::copyExcept()`, `Dataset::copy()` and `Dataset::xor()` for immutable set operations.
 
 ## Fundamental EasyRdf limitations addressed by the rdfInterface
 
-* EasyRdf data model being limited to triples.\
-  EasyRdf can only handle triples and its internal architecture makes it really difficult to adjust it in any way.
-  There is no hope for quads, there is no hope for RDFstar.\
-  RdfInterface natively supports quads and can be easily extended to RDFstar (in fact simpleRdf and quickRdf can handle quads having quads as subjects and/or objects already just I'm not aware of any PHP RDF parser able to parse/serialize RDFstar).
+* EasyRdf data model is limited to triples.\
+  EasyRdf can only handle triples and its internal architecture makes it really difficult to change it.
+  Leaving no hope for quads and no hope for the [RDF-star](https://w3c.github.io/rdf-star/).\
+  RdfInterface natively supports quads and can be easily extended to RDF-star (in fact [simpleRdf](https://github.com/sweetrdf/simpleRdf/) and [quickRdf](https://github.com/sweetrdf/quickRdf) can already handle quads having quads as subjects and/or objects, just I'm not aware of any PHP RDF parser able to parse/serialize RDF-star).
 
