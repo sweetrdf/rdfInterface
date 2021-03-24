@@ -161,13 +161,16 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * @return Dataset a dataset containing removed quads.
      * @see copy()
      */
-    public function deleteExcept(QuadCompare | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
+    public function deleteExcept(QuadCompare | QuadIterator | callable $filter): Dataset;
     // In-place modification
 
     /**
      * Iterates trough all quads replacing them with a callback result.
      * 
-     * @param callable $fn with signature `fn(Quad, Dataset): Quad` runs on each quad
+     * If the callback returns null, the quad should be removed from the dataset.
+     * 
+     * @param callable $fn with signature `fn(Quad, Dataset): ?Quad` to be run 
+     *   an all quads
      * @return void
      */
     public function forEach(callable $fn): void;
