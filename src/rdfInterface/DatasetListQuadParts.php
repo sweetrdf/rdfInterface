@@ -34,7 +34,7 @@ use Generator;
  *
  * @author zozlak
  */
-interface DatasetListQuadParts {
+interface DatasetListQuadParts extends Dataset {
 
     /**
      * 
