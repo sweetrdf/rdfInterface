@@ -171,9 +171,11 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * 
      * @param callable $fn with signature `fn(Quad, Dataset): ?Quad` to be run 
      *   an all quads
+     * @param QuadCompare|QuadIterator|callable $filter
      * @return void
      */
-    public function forEach(callable $fn): void;
+    public function forEach(callable $fn,
+                            QuadCompare | QuadIterator | callable $filter = null): void;
 
     // ArrayAccess (with narrower types)
 
