@@ -32,7 +32,7 @@ namespace rdfInterface;
  */
 interface DatasetCompare extends Dataset {
 
-    public function every(QuadCompare | callable $filter): bool;
+    public function every(QuadCompare | QuadIterator | callable $filter): bool;
 
     public function none(QuadCompare | QuadIterator | callable $filter): bool;
 
