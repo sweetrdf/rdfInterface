@@ -14,11 +14,13 @@ The solution for these troubles is to agree on
 * A set of separate RDF stack layers: parser, serializer, dataset, SPARQL client, etc.
 * Common interfaces each layer should use to communicate with the other (think of it as a PSR-7 for RDF).
 
-## Reference implementation
+## Implementations
 
-* The reference implementation of various `Term` classes and the `Dataset` class are provided by the [quickRdf](https://github.com/sweetrdf/quickRdf) library and the [simpleRdf](https://github.com/sweetrdf/simpleRdf) library.
-* A quick and dirty implementation of a few parsers and serialisers is provided by the [quickRdfIo](https://github.com/sweetrdf/quickRdfIo) library.
-* Some generic helpers which can be reuesed when developing your own implementations or plugging foreign code can be found in the [rdfHelpers](https://github.com/sweetrdf/rdfHelpers) library.
+* The reference implementation of `Term` and the `Dataset` classes are provided by the [quickRdf](https://github.com/sweetrdf/quickRdf) library and the [simpleRdf](https://github.com/sweetrdf/simpleRdf) library.
+* Turtle, NTriples, NQuads and NTriplesStar parsers and serialisers are provided by the [quickRdfIo](https://github.com/sweetrdf/quickRdfIo) library.
+* A collection of `QuadTemplate` and `LiteralTemplate` classes providing a convenient way for quads/triples filtering can be found in the [termTemplates](https://github.com/sweetrdf/termTemplates) library.
+* The [sparqlClient](https://github.com/sweetrdf/sparqlClient) library provides a SPARQL client (still in early development).
+* Generic helpers which can be reuesed when developing your own implementations or plugging foreign code can be found in the [rdfHelpers](https://github.com/sweetrdf/rdfHelpers) library.
 
 ## Compliance tests
 
