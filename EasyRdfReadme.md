@@ -336,7 +336,7 @@ Not much difference really.
   EasyRdf can only handle triples and its internal architecture makes it really difficult to change it.
   Leaving no hope for quads and no hope for the [RDF-star](https://w3c.github.io/rdf-star/).\
   RdfInterface natively supports quads and can be easily extended to RDF-star.
-  In fact [simpleRdf](https://github.com/sweetrdf/simpleRdf/) and [quickRdf](https://github.com/sweetrdf/quickRdf) can already handle quads having quads as subjects and/or objects,
+  In fact [simpleRdf](https://github.com/sweetrdf/simpleRdf/) and [quickRdf](https://github.com/sweetrdf/quickRdf) already handle quads having quads as subjects and/or objects,
   [quickRdfIO](https://github.com/sweetrdf/quickRdfIo) can parse and serialize n-triples-star
   and [sparqlClient](https://github.com/sweetrdf/sparqlClient) can parse sparql-star responses.
 
