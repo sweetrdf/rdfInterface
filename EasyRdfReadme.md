@@ -38,9 +38,9 @@ $graph->parse('RDF DATA GO HERE');
 rdfInterface
 
 ```php
-$parser = new \quickRdfIo\TrigParser(new \quickRdf\DataFactory());
-$graph = new \quickRdf\Dataset();
-$graph->add($parser->parse('RDF DATA GO HERE'));
+$parser = new \quickRdfIo\TriGParser(new \quickRdf\DataFactory());
+$dataset = new \quickRdf\Dataset();
+$dataset->add($parser->parse('RDF DATA GO HERE'));
 ```
 
 RdfInterface syntax is longer and more verbose (we explicitly specify three classes instead of only one) but it decouples the parser and the dataset. It means we can freely mix a parser, a terms factory and a dataset implementations (of course until all of them are rdfInterface-compliant).
@@ -54,10 +54,10 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
 * Iterating the whole graph.\
   EasyRdf
   ```php
-  foreach ($graph->resources as $resource) {
-      foreach ($resource->properties() as $predicate) {
-          foreach ($resource->all($predicate) as $object) {
-              echo "$resource $predicate $object\n";
+  foreach ($graph->resources() as $subject) {
+      foreach ($subject->properties() as $predicate) {
+          foreach ($subject->all($predicate) as $object) {
+              echo "$subject $predicate $object\n";
           }
       }
   }
@@ -71,7 +71,7 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
 * Iterating the whole graph in a resource->predicate->object order.\
   EasyRdf
   ```php
-  foreach ($graph->resources as $subject) {
+  foreach ($graph->resources() as $subject) {
       foreach ($subject->properties() as $predicate) {
           foreach ($subject->all($predicate) as $object) {
               echo "$subject $predicate $object\n";
@@ -85,7 +85,8 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
   foreach ($dataset->listSubjects() as $subject) {
       $d1 = $dataset->copy(new QT($subject));
       foreach ($d1->listPredicates() as $predicate) {
-          foreach ($d1->copy(new QT(null, $predicate) as $edge) {
+          $d2 = $d1->copy(new QT(null, $predicate));
+          foreach ($d2 as $edge) {
               echo "$edge\n";
           }
       }
@@ -94,20 +95,23 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
 * Fetching a given `$predicate` value in a given `$language` for a given `$subject` with a fallback `$default` value.\
   EasyRdf
   ```php
+  // if $predicate is fully-qualified, it must be quoted with <>
   $value = $graph->resource($subject)->getLiteral($predicate, $language) ?? $default;
   ```
   rdfInterface
   ```php
   use termTemplates\QuadTemplate as QT;
   use termTemplates\LiteralTemplate as LT;
-  $value = $dataset->copy(new QT($subject, $predicate, new LT(lang: $language))->current() ?? $default;
+  $template = new QT($subject, $predicate, new LT(lang: $language));
+  $value = $value = $dataset->copy($template)->current()?->getObject()->getValue() ?? $default;
   ```
 * Checking if there is any triple of a given `$subject` having given `$predicate` literal value tagged with a language (any).\
   EasyRdf
   ```php
   $result = false;
+  // if $predicate is fully-qualified, it must be quoted with <>
   foreach ($graph->resource($subject)->allLiterals($predicate) as $literal) {
-      if (!empty($literal->getLang()) {
+      if (!empty($literal->getLang())) {
           $result = true;
           break;
       }
@@ -117,7 +121,7 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
   ```php
   use termTemplates\QuadTemplate as QT;
   use termTemplates\LiteralTemplate as LT;
-  $results = $dataset->copy(new QT($subject, $predicate, new LT(lang: '')))->count() > 0;
+  $results = $dataset->any(new QT($subject, $predicate, new LT(lang: '')));
   ```
 * Searching for all subjects having a given `$value` of a given `$predicate`.\
   EasyRdf
@@ -134,7 +138,7 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
   ```php
   $subjects = [];
   foreach ($graph->reversePropertyUris($object) as $predicate) {
-      $subjects = array_merge($subjects, $graph->resourcesMatching($predicate, $graph->resource($object));
+      $subjects = array_merge($subjects, $graph->resourcesMatching($predicate, $graph->resource($object)));
   }
   ```
   rdfInterface
@@ -146,7 +150,9 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
   EasyRdf
   ```php
   $subjects = [];
-  foreach ($graph->resourceMatching($predicate) as $subject) {
+  // if $predicate is fully-qualified, it MUST NOT be quoted with <> in the line below
+  foreach ($graph->resourcesMatching($predicate) as $subject) {
+      // if $predicate is fully-qualified, it MUST be quoted with <> in the line below
       foreach ($subject->allLiterals($predicate) as $literal) {
           if (((float) $literal->getValue()) > $value) {
               $subjects[] = $subject;
@@ -165,17 +171,19 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
 EasyRdf syntax is longer or shorter depending on the task.
 What is for sure is it varies quite a lot and when it comes to more complex searches it requires you to write your own filtering loops.
 
+There is also an annoying inconsistency in fully qualified URI predicates treatment in EasyRdf. Some methods expect them to be quoted with `<>` (e.g. `\EeayRdf\Resource::get()` and related methods) while some expect them not to be quoted with `<>` (e.g. `\EeayRdf\Graph::resourcesMatching()`).
+
 In rdfInterface you search always in the same way - use `Dataset::copy()` with a `QuadTemplate` describing your search criteria.
-There are many helper classes allowing to perform various kind of filters including regular expression matching or numeric comparisons (see the [termTemplates](https://github.com/sweetrdf/termTemplates) library).
+There are many helper classes allowing to apply various filters including more fancy ones like regular expression matching or numeric comparisons (see the [termTemplates](https://github.com/sweetrdf/termTemplates) library).
 
 ### Adding new triples
 
-Let's say we want to add a `$subject $predicate $object` and `$subject $predicate $literal@$lang.
+Let's say we want to add a `$subject $predicate $object` and `$subject $predicate $value@$lang.
 
 EasyRdf
 ```php
 $graph->resource($subject)->addResource($predicate, $object);
-$graph->resource($subject)->addLiteral($predicate, $literal, $lang);
+$graph->resource($subject)->addLiteral($predicate, $value, $lang);
 ```
 
 rdfInterface
