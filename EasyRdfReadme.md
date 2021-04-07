@@ -335,10 +335,14 @@ Not much difference really.
 * EasyRdf data model is limited to triples.\
   EasyRdf can only handle triples and its internal architecture makes it really difficult to change it.
   Leaving no hope for quads and no hope for the [RDF-star](https://w3c.github.io/rdf-star/).\
-  RdfInterface natively supports quads and can be easily extended to RDF-star (in fact [simpleRdf](https://github.com/sweetrdf/simpleRdf/) and [quickRdf](https://github.com/sweetrdf/quickRdf) can already handle quads having quads as subjects and/or objects, just I'm not aware of any PHP RDF parser able to parse/serialize RDF-star).
+  RdfInterface natively supports quads and can be easily extended to RDF-star.
+  In fact [simpleRdf](https://github.com/sweetrdf/simpleRdf/) and [quickRdf](https://github.com/sweetrdf/quickRdf) can already handle quads having quads as subjects and/or objects,
+  [quickRdfIO](https://github.com/sweetrdf/quickRdfIo) can parse and serialize n-triples-star
+  and [sparqlClient](https://github.com/sweetrdf/sparqlClient) can parse sparql-star responses.
 
 ## Things you can easily do with EasyRdf but you can't with rdfInterface
 
 * High-level classes for most common RDF structures like collections and containers.\
 * Automatic mapping of RDF date/time literals to PHP date/time objects.\
   Maybe someone at some point will provide a `rdfInterface\Literal` implementation capable of doing that (it's not a rocket science) but here and now there is no such implementation available.
+
