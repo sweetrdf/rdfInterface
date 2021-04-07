@@ -342,7 +342,7 @@ Not much difference really.
 
 ## Things you can easily do with EasyRdf but you can't with rdfInterface
 
-* High-level classes for most common RDF structures like collections and containers.\
+* High-level classes for most common RDF structures like collections and containers.
 * Automatic mapping of RDF date/time literals to PHP date/time objects.\
   Maybe someone at some point will provide a `rdfInterface\Literal` implementation capable of doing that (it's not a rocket science) but here and now there is no such implementation available.
 
