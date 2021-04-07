@@ -33,90 +33,57 @@ If you are using EasyRdf, you are likely to find the rdfInterface API quite stra
 
 ## Design decisions
 
-### Reference solutions
+### Inspirations
 
-[RDF/JS](http://rdf.js.org/), [RDFLib](https://rdflib.readthedocs.io/en/stable/) are examples of good APIs from other programming languages as well as [EasyRdf](https://github.com/easyrdf/easyrdf) and [ARC2](https://github.com/semsol/arc2) as a reference of existing PHP solutions.
-
+The rdfInterface is strongly influenced by [RDF/JS](http://rdf.js.org/) and [RDFLib](https://rdflib.readthedocs.io/en/stable/).
 
 ### Strong typing
 
-Using classes instead of arrays comes with the following advantages. Classes provide unambiguity and allow to leverage static code analysis. When it comes to errors, it also generates errors which are easier to understand.
+The rdfInterface is strongly typed.
+
+Strong typing provides many benefits. It assures the syntax is unambiguous and extensible, allows to leverage static code analysis and makes errors easier to understand.
+
+The downside of strong typing is much more verbose syntax but we decided benefits outweight it easily.
 
 ### Immutability
 
-Using strong typing brings an important issue. Let's compare two code variants:
+RdfInterface terms are immutable. It's impossible to change their properties. You can only get a new object instance with a given property set to a new value.
 
-```php
-class GraphObject {
-    (...)
-    public function getRandomQuad(): Quad { (...) }
-}
+Immutability provides three benefits:
 
-class GraphArray {
-    (...)
-    public function getRandomQuad(): array { (...) }
-}
+1. It makes it clear for the programmer that there is no back-propagation of changes.
+2. It's easy to implement it without flaws (in contrary to deep cloning).
+3. It allows to implement useful performance optimizations (e.g. a global term cache).
 
-$gObj = new GraphObject();
-$gArr = new GraphArray();
-
-$qObj = $gObj->getRandomQuad();
-$qObj->object->value = 'foo';
-
-$qArr = $gArr->getRandomQuad();
-$qArr['object']['value'] = 'foo';
-
-```
-
-In the array implementation we expect the change not to be propagated back to the graph (as arrays in PHP are passed by value by default).
-In the object implementation our intuition tells us the change is propagated back to the graph (as objects in PHP >=5 are passed by reference).
-
-In our opinion the lack of propagation behaviour is more intuitive and desired in typical use cases.
-
-There are two ways of achieving lack of propagation while using classes:
-
-* (deep) Cloning every object before returning/after receiving it by a function.
-* Making object immutable.
-  Meaning one can only get a new copy of the object with a given property being assigned a new value but can't modify a value of already existing object
-  (like all `withSOMETHING()` methods of the [PSR-7](https://www.php-fig.org/psr/psr-7/#3-interfaces)).
-  In such a case the last line in the code above would look as follows:
-  ```php
-  $qObj->getObject()->withValue('foo');
-  ```
-
-The second approach has three benefits:
-
-1. It's much easier to implement without flaws. Deep cloning brings performance penalty and quite some boiler plate code.
-   This makes it likely for developers to avoid deep cloning and this will often lead to (hard to track) bugs.
-2. Modern PHP programmers are already familiar with the idea.
-3. It allows a straightforward implementation of a global objects cache, which can save quite some memory in dense graphs
-  (if an object is immutable we can just use references to its single copy, no matter how many times it appears in a graph).
+And modern PHP should be already familiar with it as e.g. PSR-7 request/response objects follow the same approach.
 
 ### Use streams for data import and export
 
+RdfInterface uses streams as RDF parsing input and serialization output.
+
 Streams are far more flexible than strings.
-They allow asynchronous operation, they have lower memory footprint, they fit the PSR-7 interface nicely and much more.
+They allow asynchronous operation, have lower memory footprint, fit the PSR-7 interface nicely and much more.
 
 Last but not least a string can be easilly packed into a in-memory stream.
 
 ### Reuse native PHP interfaces
 
-PHP itself provides useful native interfaces which reuse in the RDF API, e.g.
+RdfInterface, especially the `Dataset` interface extends native PHP interfaces, e.g.:
 
-* [iterable](https://www.php.net/manual/en/language.types.iterable.php) over edges/nodes of a graph.
-* [ArrayAccess](https://www.php.net/manual/en/class.arrayaccess.php) for adding/removing/accessing edges of a graph.
-* [Countable](https://www.php.net/manual/en/class.countable.php) for e.g. counting quads in a graph.
+* [iterable](https://www.php.net/manual/en/language.types.iterable.php) over edges/nodes of a dataset.
+* [ArrayAccess](https://www.php.net/manual/en/class.arrayaccess.php) for adding/removing/accessing edges of a dataset.
+* [Countable](https://www.php.net/manual/en/class.countable.php) for e.g. counting quads in a dataset.
 
 Using native interfaces makes the library easier to learn and it feels better integrated with the PHP ecosystem.
 
 ### Extensibility
 
-Our API must be easy to extend.
+RdfInterface is meant to be extensible.
 
-RDF is changing with new ideas being introduced (like RDF*) and the API should be able to accomodate such developments.
+RDF is changing with new ideas being introduced (like RDF-star) and the API should be able to accomodate such developments.
 
-That's the purpose of the `Term` class and the reason for `Quad`/`QuadTemplate` use `Term` as the type for subject and object.
+For that reason the `Quad` specification is rather relaxed and allows any term as a subject and object.
 
-It doesn't mean particular implementations must support just any `Term`.
-Implementations may support any subset they want, they should just check argument types and throw errors when they see something they can't process.
+It doesn't mean all implementations must support any possible term.
+Implementations may support any subset they want, just checking if they can deal with a term they recive from user is their responsibility.
 
