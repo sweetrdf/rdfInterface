@@ -211,7 +211,7 @@ EasyRdf syntax is definitely more compact. rdfInterface pays for strict typing h
 
   $dataset[DF::Quad($subject, $predicate, $object)] = DF::Quad($subject, $predicate, $newObject);
   // or
-  $dataset->delete(DF::Quad($subject, $predicate, $object)]);
+  $dataset->delete(DF::Quad($subject, $predicate, $object));
   $dataset->add(DF::Quad($subject, $predicate, $newObject));
   ```
 * Multiplying all literal values of a given `$predicate` by 2:\
@@ -219,7 +219,7 @@ EasyRdf syntax is definitely more compact. rdfInterface pays for strict typing h
   ```php
   foreach ($graph->resourcesMatching($predicate) as $subject) {
       foreach ($subject->allLiterals($predicate) as $literal) {
-          $subject->delete($literal);
+          $subject->delete($predicate, $literal);
           $subject->addLiteral($predicate, $literal->getValue() * 2);
       }
   }
@@ -244,10 +244,12 @@ EasyRdf syntax is definitely more compact. rdfInterface pays for strict typing h
 * Appending `$suffix` to all `$predicate` values beginning with `foo`.\
   EasyRdf
   ```php
+  // if $predicate is fully-qualified, it MUST NOT be quoted with <> in the line below
   foreach ($graph->resourcesMatching($predicate) as $subject) {
+      // if $predicate is fully-qualified, it MUST be quoted with <> in the line below
       foreach ($subject->allLiterals($predicate) as $literal) {
           if (substr($literal->getValue(), 0, 3) === 'foo') {
-              $subject->delete($literal);
+              $subject->delete($predicate, $literal);
               $subject->addLiteral($predicate, $literal->getValue() . $suffix);
           }
       }
@@ -279,7 +281,9 @@ Computing sum of all literal values of a given `$predicate`.
 EasyRdf
 ```php
 $sum = 0;
+// if $predicate is fully-qualified, it MUST NOT be quoted with <> in the line below
 foreach ($graph->resourcesMatching($predicate) as $subject) {
+    // if $predicate is fully-qualified, it MUST be quoted with <> in the line below
     foreach ($subject->allLiterals($predicate) as $literal) {
         $sum += $literal->getValue();
     }
@@ -293,7 +297,7 @@ use termTemplates\QuadTemplate as QT;
 $sum = $dataset->reduce(
     function ($acc, $edge) {
         return $acc + $edge->getObject()->getValue();
-    }
+    },
     0,
     new QT(null, $predicate)
 );
@@ -353,4 +357,5 @@ Not much difference really.
 * High-level classes for most common RDF structures like collections and containers.
 * Automatic mapping of RDF date/time literals to PHP date/time objects.\
   Maybe someone at some point will provide a `rdfInterface\Literal` implementation capable of doing that (it's not a rocket science) but here and now there is no such implementation available.
-
+* Use shortened URIs all around.\
+  TODO - elaborate on why the EasyRdf approach to URI shortening is wrong by design.
