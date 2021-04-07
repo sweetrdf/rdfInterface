@@ -22,6 +22,7 @@ From EasyRdf user's perspective there are few fundamental differences between th
       While I agree it makes the syntax longer, it's for a reason.
       There are many corner cases where the syntax used by the EasyRdf is intrinsically ambigous.
       Strict typing assures there are no such ambiguities in the rdfInterface API.
+      It also makes it easy to add new extensions.
 
 ## Basic tasks
 
@@ -48,19 +49,273 @@ EasyRdf provides us with a shorter syntax at the cost of limiting us to parsers 
 
 ### Iterating over all triples matching a given criteria
 
-TODO
+EasyRdf provides no universal search API so the actual code depends a lot on what we do so we need to pick specific tasks.
+
+* Iterating the whole graph.\
+  EasyRdf
+  ```php
+  foreach ($graph->resources as $resource) {
+      foreach ($resource->properties() as $predicate) {
+          foreach ($resource->all($predicate) as $object) {
+              echo "$resource $predicate $object\n";
+          }
+      }
+  }
+  ```
+  rdfInterface
+  ```
+  foreach ($dataset as $edge) {
+      echo "$edge\n";
+  }
+  ```
+* Iterating the whole graph in a resource->predicate->object order.\
+  EasyRdf
+  ```php
+  foreach ($graph->resources as $subject) {
+      foreach ($subject->properties() as $predicate) {
+          foreach ($subject->all($predicate) as $object) {
+              echo "$subject $predicate $object\n";
+          }
+      }
+  }
+  ```
+  rdfInterface
+  ```php
+  use termTemplates\QuadTemplate as QT;
+  foreach ($dataset->listSubjects() as $subject) {
+      $d1 = $dataset->copy(new QT($subject));
+      foreach ($d1->listPredicates() as $predicate) {
+          foreach ($d1->copy(new QT(null, $predicate) as $edge) {
+              echo "$edge\n";
+          }
+      }
+  }
+  ```
+* Fetching a given `$predicate` value in a given `$language` for a given `$subject` with a fallback `$default` value.\
+  EasyRdf
+  ```php
+  $value = $graph->resource($subject)->getLiteral($predicate, $language) ?? $default;
+  ```
+  rdfInterface
+  ```php
+  use termTemplates\QuadTemplate as QT;
+  use termTemplates\LiteralTemplate as LT;
+  $value = $dataset->copy(new QT($subject, $predicate, new LT(lang: $language))->current() ?? $default;
+  ```
+* Checking if there is any triple of a given `$subject` having given `$predicate` literal value tagged with a language (any).\
+  EasyRdf
+  ```php
+  $result = false;
+  foreach ($graph->resource($subject)->allLiterals($predicate) as $literal) {
+      if (!empty($literal->getLang()) {
+          $result = true;
+          break;
+      }
+  }
+  ```
+  rdfInterface
+  ```php
+  use termTemplates\QuadTemplate as QT;
+  use termTemplates\LiteralTemplate as LT;
+  $results = $dataset->copy(new QT($subject, $predicate, new LT(lang: '')))->count() > 0;
+  ```
+* Searching for all subjects having a given `$value` of a given `$predicate`.\
+  EasyRdf
+  ```php
+  $subjects = $graph->resourcesMatching($predicate, $value);
+  ```
+  rdfInterface
+  ```php
+  use termTemplates\QuadTemplate as QT;
+  $subjects = $dataset->copy(new QT(null, $predicate, $value))->listSubjects();
+  ```
+* Searching for all subjects pointing to a given `$object` with any predicate.\
+  EasyRdf
+  ```php
+  $subjects = [];
+  foreach ($graph->reversePropertyUris($object) as $predicate) {
+      $subjects = array_merge($subjects, $graph->resourcesMatching($predicate, $graph->resource($object));
+  }
+  ```
+  rdfInterface
+  ```php
+  use termTemplates\QuadTemplate as QT;
+  $subjects = $dataset->copy(new QT(null, null, $object))->listSubjects();
+  ```
+* Searching for all subjects with a given `$predicate` literal value greater than `$value` (comparing as numbers).\
+  EasyRdf
+  ```php
+  $subjects = [];
+  foreach ($graph->resourceMatching($predicate) as $subject) {
+      foreach ($subject->allLiterals($predicate) as $literal) {
+          if (((float) $literal->getValue()) > $value) {
+              $subjects[] = $subject;
+              break;
+          }
+      }
+  }
+  ```
+  rdfInterface
+  ```php
+  use termTemplates\QuadTemplate as QT;
+  use termTemplates\NumericTemplate as NT;
+  $subjects = $dataset->copy(new QT(null, $predicate, new NT($value, NT::GREATER)))->listSubjects();
+  ```
+
+EasyRdf syntax is longer or shorter depending on the task.
+What is for sure is it varies quite a lot and when it comes to more complex searches it requires you to write your own filtering loops.
+
+In rdfInterface you search always in the same way - use `Dataset::copy()` with a `QuadTemplate` describing your search criteria.
+There are many helper classes allowing to perform various kind of filters including regular expression matching or numeric comparisons (see the [termTemplates](https://github.com/sweetrdf/termTemplates) library).
 
 ### Adding new triples
 
-TODO
+Let's say we want to add a `$subject $predicate $object` and `$subject $predicate $literal@$lang.
+
+EasyRdf
+```php
+$graph->resource($subject)->addResource($predicate, $object);
+$graph->resource($subject)->addLiteral($predicate, $literal, $lang);
+```
+
+rdfInterface
+```php
+use quickRdf\DataFactory as DF;
+$subject = DF::namedNode($subject);
+$predicate = DF::namedNode($predicate);
+$dataset->add(DF::quad($subject, $predicate, DF::namedNode($object)));
+$dataset->add(DF::quad($subject, $predicate, DF::literal($value, $lang)));
+```
+
+EasyRdf syntax is definitely more compact. rdfInterface pays for strict typing here and there is no workaround for that.
 
 ### Modyfying given triple values
 
-TODO
+* Replacing a single `$subject $predicate $object` triple with `$subject $predicate $newObject`.\
+  EasyRdf
+  ```php
+  $graph->resource($subject)->delete($predicate, $object);
+  $graph->resource($subject)->add($predicate, $newObject);
+  ```
+  rdfInterface
+  ```php
+  use quickRdf\DataFactory as DF;
+
+  $dataset[DF::Quad($subject, $predicate, $object)] = DF::Quad($subject, $predicate, $newObject);
+  // or
+  $dataset->delete(DF::Quad($subject, $predicate, $object)]);
+  $dataset->add(DF::Quad($subject, $predicate, $newObject));
+  ```
+* Multiplying all literal values of a given `$predicate` by 2:\
+  EasyRdf
+  ```php
+  foreach ($graph->resourcesMatching($predicate) as $subject) {
+      foreach ($subject->allLiterals($predicate) as $literal) {
+          $subject->delete($literal);
+          $subject->addLiteral($predicate, $literal->getValue() * 2);
+      }
+  }
+  ```
+  rdfInterface
+  ```php
+  use termTemplates\QuadTemplate as QT;
+
+  $dataset->forEach(
+      function ($edge) {
+          $literal = $edge->getObject();
+          return $edge->withObject($literal->withValue($literal->getValue() * 2));
+      },
+      new QT(null, $predicate)
+  );
+  // or
+  foreach ($dataset->copy(new QT(null, $predicate)) as $edge) {
+      $literal = $edge->getObject();
+      $dataset[$edge] = $edge->withObject($literal->withValue($literal->getValue() * 2));
+  }
+  ```
+* Appending `$suffix` to all `$predicate` values beginning with `foo`.\
+  EasyRdf
+  ```php
+  foreach ($graph->resourcesMatching($predicate) as $subject) {
+      foreach ($subject->allLiterals($predicate) as $literal) {
+          if (substr($literal->getValue(), 0, 3) === 'foo') {
+              $subject->delete($literal);
+              $subject->addLiteral($predicate, $literal->getValue() . $suffix);
+          }
+      }
+  }
+  ```
+  rdfInterface
+  ```php
+  use termTemplates\QuadTemplate as QT;
+  use termTemplates\LiteralTemplate as LT;
+
+  $dataset->forEach(
+      function ($edge) use ($suffix) {
+          $literal = $edge->getObject();
+          return $edge->withObject($literal->withValue($literal->getValue() . $suffix));
+      },
+      new QT(null, $predicate, new LT('foo', LT::STARTS))
+  );
+  // or
+  foreach ($dataset->copy(new QT(null, $predicate, new LT('foo', LT::STARTS))) as $edge) {
+      $literal = $edge->getObject();
+      $dataset[$edge] = $edge->withObject($literal->withValue($literal->getValue() . $suffix));
+  }
+  ```
+
+### Computing aggregates
+
+Computing sum of all literal values of a given `$predicate`.
+
+EasyRdf
+```php
+$sum = 0;
+foreach ($graph->resourcesMatching($predicate) as $subject) {
+    foreach ($subject->allLiterals($predicate) as $literal) {
+        $sum += $literal->getValue();
+    }
+}
+```
+
+rdfInterface
+```php
+use termTemplates\QuadTemplate as QT;
+
+$sum = $dataset->reduce(
+    function ($acc, $edge) {
+        return $acc + $edge->getObject()->getValue();
+    }
+    0,
+    new QT(null, $predicate)
+);
+// or
+$sum = 0;
+foreach ($dataset->copy(new QT(null, $predicate)) as $edge) {
+    $sum += $edge->getObject()->getValue();
+}
+```
 
 ### Executing a SPARQL query and dealing with its results
 
-TODO - finish the SparqlClient implementation first
+EasyRdf
+
+```php
+$client = new EasyRdf\Sparql\Client('https://query.wikidata.org/sparql');
+foreach ($client->query('select ?a ?b ?c where {?a ?b ?c} limit 10') as $i) {
+    echo "$i->a $i->b $i->c\n";
+}
+```
+
+rdfInterface
+```php
+$client = new \sparqlClient\StandardConnection('https://query.wikidata.org/sparql', new \quickRdf\DataFactory());
+foreach ($client->query('select * where {?a ?b ?c} limit 10') as $i) {
+    echo "$i->a $i->b $i->c\n";
+}
+```
+
+Not much difference really.
 
 ## Simple operations which you can't do with EasyRdf...
 
@@ -82,3 +337,8 @@ TODO - finish the SparqlClient implementation first
   Leaving no hope for quads and no hope for the [RDF-star](https://w3c.github.io/rdf-star/).\
   RdfInterface natively supports quads and can be easily extended to RDF-star (in fact [simpleRdf](https://github.com/sweetrdf/simpleRdf/) and [quickRdf](https://github.com/sweetrdf/quickRdf) can already handle quads having quads as subjects and/or objects, just I'm not aware of any PHP RDF parser able to parse/serialize RDF-star).
 
+## Things you can easily do with EasyRdf but you can't with rdfInterface
+
+* High-level classes for most common RDF structures like collections and containers.\
+* Automatic mapping of RDF date/time literals to PHP date/time objects.\
+  Maybe someone at some point will provide a `rdfInterface\Literal` implementation capable of doing that (it's not a rocket science) but here and now there is no such implementation available.
