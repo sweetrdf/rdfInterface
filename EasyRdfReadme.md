@@ -83,10 +83,8 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
   ```php
   use termTemplates\QuadTemplate as QT;
   foreach ($dataset->listSubjects() as $subject) {
-      $d1 = $dataset->copy(new QT($subject));
-      foreach ($d1->listPredicates() as $predicate) {
-          $d2 = $d1->copy(new QT(null, $predicate));
-          foreach ($d2 as $edge) {
+      foreach ($dataset->listPredicates(new QT($subject)) as $predicate) {
+          foreach ($dataset->copy(new QT($subject, $predicate)) as $edge) {
               echo "$edge\n";
           }
       }
