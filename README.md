@@ -24,7 +24,7 @@ The solution for these troubles is to agree on
 
 ## Compliance tests
 
-The [rdfInterfaceTests])https://github.com/sweetrdf/rdfInterfaceTests) provides a set of tests for validating if your library is compliant with the rdfInterface.
+The [rdfInterfaceTests](https://github.com/sweetrdf/rdfInterfaceTests) provides a set of tests for validating if your library is compliant with the rdfInterface.
 
 ## For EasyRdf users
 
