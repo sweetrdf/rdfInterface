@@ -26,41 +26,12 @@
 
 namespace rdfInterface;
 
-use Generator;
-
 /**
- * Set of methods for listing distinct Terms being used on a given position
- * of dataset quads.
  *
  * @author zozlak
+ * @extends \Iterator<int, Term>
  */
-interface DatasetListQuadParts extends Dataset {
+interface TermIterator extends \Iterator {
 
-    /**
-     * 
-     * @param QuadCompare|QuadIterator|callable $filter
-     * @return TermIterator
-     */
-    public function listSubjects(QuadCompare | QuadIterator | callable $filter = null): TermIterator;
-
-    /**
-     * 
-     * @param QuadCompare|QuadIterator|callable $filter
-     * @return TermIterator
-     */
-    public function listPredicates(QuadCompare | QuadIterator | callable $filter = null): TermIterator;
-
-    /**
-     * 
-     * @param QuadCompare|QuadIterator|callable $filter
-     * @return TermIterator
-     */
-    public function listObjects(QuadCompare | QuadIterator | callable $filter = null): TermIterator;
-
-    /**
-     * 
-     * @param QuadCompare|QuadIterator|callable $filter
-     * @return TermIterator
-     */
-    public function listGraphs(QuadCompare | QuadIterator | callable $filter = null): TermIterator;
+    public function current(): Term | null;
 }
