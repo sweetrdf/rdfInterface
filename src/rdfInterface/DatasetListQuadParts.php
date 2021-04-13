@@ -26,8 +26,6 @@
 
 namespace rdfInterface;
 
-use Generator;
-
 /**
  * Set of methods for listing distinct Terms being used on a given position
  * of dataset quads.

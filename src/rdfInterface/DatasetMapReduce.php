@@ -37,7 +37,7 @@ interface DatasetMapReduce extends Dataset {
      * 
      * @param callable $fn function applied to every quad with signature `fn(quad, dataset)`
      * @param QuadCompare|QuadIterator|callable $filter
-     * @return Dataset
+     * @return DatasetMapReduce
      */
     public function map(callable $fn,
                         QuadCompare | QuadIterator | callable $filter = null): DatasetMapReduce;
