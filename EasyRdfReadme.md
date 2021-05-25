@@ -1,4 +1,4 @@
-# Intruduction to rdfInterface for EasyRdf users
+# Introduction to rdfInterface for EasyRdf users
 
 From EasyRdf user's perspective there are few fundamental differences between the EasyRdf nad the rdfInterface ecosystem:
 
