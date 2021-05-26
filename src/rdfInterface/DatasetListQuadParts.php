@@ -36,29 +36,29 @@ interface DatasetListQuadParts extends Dataset {
 
     /**
      * 
-     * @param QuadCompare|QuadIterator|callable $filter
+     * @param QuadCompare|QuadIterator|callable|null $filter
      * @return TermIterator
      */
-    public function listSubjects(QuadCompare | QuadIterator | callable $filter = null): TermIterator;
+    public function listSubjects(QuadCompare | QuadIterator | callable | null $filter = null): TermIterator;
 
     /**
      * 
-     * @param QuadCompare|QuadIterator|callable $filter
+     * @param QuadCompare|QuadIterator|callable|null $filter
      * @return TermIterator
      */
-    public function listPredicates(QuadCompare | QuadIterator | callable $filter = null): TermIterator;
+    public function listPredicates(QuadCompare | QuadIterator | callable | null $filter = null): TermIterator;
 
     /**
      * 
-     * @param QuadCompare|QuadIterator|callable $filter
+     * @param QuadCompare|QuadIterator|callable|null $filter
      * @return TermIterator
      */
-    public function listObjects(QuadCompare | QuadIterator | callable $filter = null): TermIterator;
+    public function listObjects(QuadCompare | QuadIterator | callable | null $filter = null): TermIterator;
 
     /**
      * 
-     * @param QuadCompare|QuadIterator|callable $filter
+     * @param QuadCompare|QuadIterator|callable|null $filter
      * @return TermIterator
      */
-    public function listGraphs(QuadCompare | QuadIterator | callable $filter = null): TermIterator;
+    public function listGraphs(QuadCompare | QuadIterator | callable | null $filter = null): TermIterator;
 }
