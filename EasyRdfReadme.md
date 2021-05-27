@@ -24,7 +24,7 @@ From EasyRdf user's perspective there are few fundamental differences between th
       Strict typing assures there are no such ambiguities in the rdfInterface API.
       It also makes it easy to add new extensions.
 * If you are used to using shortened URIs in EasyRdf you might be surprised it's not possible in RdfInterface.\
-  It's a well thought design decision. Rationalle is provided [here](ShortenedUris.md).
+  It's a well thought design decision. Rationale is provided [here](ShortenedUris.md).
 
 ## Basic tasks
 
