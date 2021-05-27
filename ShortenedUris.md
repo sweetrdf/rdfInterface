@@ -2,7 +2,7 @@
 
 The short answer is:
 
-* As prefixes to aliases mapping is not standardized it makes no sense to hardcode it in the library aimed for handling any RDF.
+* As prefixes to aliases mapping is not standardized it would has to be chosen arbitrary and arbitrary choices don't make much sense for generic libraries.
 * Allowing user to define aliases on his own brings boilerplate code to the library 
   while there are equally effective (from the user perspective) ways doing it purely on the user's side.
 
