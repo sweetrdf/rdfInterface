@@ -23,6 +23,8 @@ From EasyRdf user's perspective there are few fundamental differences between th
       There are many corner cases where the syntax used by the EasyRdf is intrinsically ambigous.
       Strict typing assures there are no such ambiguities in the rdfInterface API.
       It also makes it easy to add new extensions.
+* If you are used to using shortened URIs in EasyRdf you might be surprised it's not possible in RdfInterface.\
+  It's a well thought design decision. Rationalle is provided [here](ShortenedUris.md).
 
 ## Basic tasks
 
@@ -90,6 +92,18 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
       }
   }
   ```
+* Fetching all literals in a given `$language` of a given `$predicate` for a given `$subject`.\
+  EasyRdf
+  ```php
+  $values = $graph->resource($subject)->allLiterals($predicate, $language);
+  ```
+  rdfInterface
+  ```php
+  use termTemplates\QuadTemplate as QT;
+  use termTemplates\LiteralTemplate as LT;
+  $template = new QT($subject, $predicate, new LT(lang: $language));
+  $values = $dataset->copy($template)->listObjects();
+  ```
 * Fetching a given `$predicate` value in a given `$language` for a given `$subject` with a fallback `$default` value.\
   EasyRdf
   ```php
@@ -101,7 +115,10 @@ EasyRdf provides no universal search API so the actual code depends a lot on wha
   use termTemplates\QuadTemplate as QT;
   use termTemplates\LiteralTemplate as LT;
   $template = new QT($subject, $predicate, new LT(lang: $language));
-  $value = $value = $dataset->copy($template)->current()?->getObject()->getValue() ?? $default;
+  $value = $dataset->copy($template)->current()?->getObject()->getValue() ?? $default;
+  // the previous line can be also simplified with the DatasetExtractors class:
+  use termTemplates\DatasetExtractors as DE;
+  $value = DE::getObjectValue($dataset, $template) ?? $default;
   ```
 * Checking if there is any triple of a given `$subject` having given `$predicate` literal value tagged with a language (any).\
   EasyRdf
@@ -356,4 +373,6 @@ Not much difference really.
 * Automatic mapping of RDF date/time literals to PHP date/time objects.\
   Maybe someone at some point will provide a `rdfInterface\Literal` implementation capable of doing that (it's not a rocket science) but here and now there is no such implementation available.
 * Use shortened URIs all around.\
-  TODO - elaborate on why the EasyRdf approach to URI shortening is wrong by design.
+  It's not a bug, it's a feature.
+  Using shortened URIs is broken by design.
+  Read more [here](ShortenedUris.md).
