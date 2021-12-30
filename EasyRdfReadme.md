@@ -1,6 +1,6 @@
 # Introduction to rdfInterface for EasyRdf users
 
-From EasyRdf user's perspective there are few fundamental differences between the EasyRdf nad the rdfInterface ecosystem:
+There are a few fundamental differences between the EasyRdf and the rdfInterface ecosystems:
 
 * EasyRdf is a single library doing it all. It provides parsers, serializers, implementation of RDF terms (`EasyRdf\Literal` and `EasyRdf\Resource`), RDF dataset (`EasyRdf\Graph`), SPARQL client, etc.
   What's convenient about it is that you install one package and you are ready to go. But it also makes it less flexible and difficult to modernize, especially in the long term.  
