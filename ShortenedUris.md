@@ -2,7 +2,7 @@
 
 The short answer is:
 
-* As prefixes to aliases mapping is not standardized it would has to be chosen arbitrary and arbitrary choices don't make much sense for generic libraries.
+* As prefixes to aliases mapping is not standardized it has to be chosen arbitrary and arbitrary choices don't make much sense for generic libraries.
 * Allowing user to define aliases on his makes the library more complex while there are equally effective (from the user perspective) ways of doing it purely on the user's side.
 
 Now let's discuss it in details.
