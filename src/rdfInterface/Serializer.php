@@ -38,7 +38,7 @@ interface Serializer {
 
     /**
      *
-     * @param resource $output
+     * @param resource | \Psr\Http\Message\StreamInterface $output
      * @param QuadIterator $graph
      * @param RdfNamespace|null $nmsp
      * @return void

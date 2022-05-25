@@ -47,7 +47,7 @@ interface Parser {
 
     /**
      *
-     * @param resource $input
+     * @param resource | \Psr\Http\Message\StreamInterface $input
      * @return \rdfInterface\QuadIterator
      */
     public function parseStream($input): QuadIterator;
