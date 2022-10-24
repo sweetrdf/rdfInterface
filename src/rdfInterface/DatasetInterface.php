@@ -257,19 +257,4 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      */
     public function offsetUnset($offset): void;
 
-    /**
-     * Returns the current quad.
-     * 
-     * No particular order of quad traversal is guaranteed.
-     * 
-     * It must not require calling rewind() for a call to current() to return
-     * a quad after the dataset has been created and at least one quad has been
-     * added to it.
-     * 
-     * If valid() returns false, this method must return null (it must not throw
-     * an exception).
-     * 
-     * @return QuadInterface | null
-     */
-    public function current(): QuadInterface | null;
 }
