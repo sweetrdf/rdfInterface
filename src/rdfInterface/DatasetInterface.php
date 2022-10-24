@@ -31,8 +31,9 @@ namespace rdfInterface;
  *
  * @author zozlak
  * @extends \ArrayAccess<QuadInterface|QuadIteratorInterface|callable, QuadInterface>
+ * @extends \IteratorAggregate<int, QuadInterface>
  */
-interface DatasetInterface extends QuadIteratorInterface, \ArrayAccess, \Countable {
+interface DatasetInterface extends QuadIteratorInterface, \ArrayAccess, \Countable, \IteratorAggregate {
 
     public function __construct();
 
@@ -267,4 +268,24 @@ interface DatasetInterface extends QuadIteratorInterface, \ArrayAccess, \Countab
      * @return QuadInterface | null
      */
     public function current(): QuadInterface | null;
+    
+    /**
+     * Returns QuadIteratorInterface iterating over dataset's quads.
+     * 
+     * If $filter is provided, the iterator includes only quads matching the
+     * filter.
+     * 
+     * $filter can be specified as:
+     * 
+     * - An object implementing the \rdfInterface\QuadCompare interface
+     *   (e.g. a single Quad)
+     * - An object implementing the \rdfInterface\QuadIterator interface
+     *   (e.g. another Dataset)
+     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     *   All quads for which the callable returns true are copied.
+     *      * 
+     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @return QuadIteratorInterface
+     */
+    public function getIterator(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): QuadIteratorInterface;
 }
