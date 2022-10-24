@@ -34,7 +34,8 @@ interface SerializerInterface {
 
     public function __construct();
 
-    public function serialize(QuadIteratorInterface $graph, ?RdfNamespaceInterface $nmsp = null): string;
+    public function serialize(QuadIteratorInterface | QuadIteratorAggregateInterface $graph,
+                              ?RdfNamespaceInterface $nmsp = null): string;
 
     /**
      *
@@ -44,6 +45,8 @@ interface SerializerInterface {
      * @return void
      */
     public function serializeStream(
-        $output, QuadIteratorInterface $graph, RdfNamespaceInterface | null $nmsp = null
+        mixed $output,
+        QuadIteratorInterface | QuadIteratorAggregateInterface $graph,
+        RdfNamespaceInterface | null $nmsp = null
     ): void;
 }
