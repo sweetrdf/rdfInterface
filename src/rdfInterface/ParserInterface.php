@@ -30,7 +30,25 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface NamedNode extends Term, TermCompare {
+interface ParserInerface {
 
-    public function __construct(string $iri);
+    /**
+     * 
+     * @param DataFactoryInterface $dataFactory factory to be used to generate RDF terms.
+     */
+    public function __construct(DataFactoryInterface $dataFactory);
+
+    /**
+     * 
+     * @param string $input
+     * @return QuadIteratorInterface
+     */
+    public function parse(string $input): QuadIteratorInterface;
+
+    /**
+     *
+     * @param resource | \Psr\Http\Message\StreamInterface $input
+     * @return \rdfInterface\QuadIteratorInterface
+     */
+    public function parseStream($input): QuadIteratorInterface;
 }

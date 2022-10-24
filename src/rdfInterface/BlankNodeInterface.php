@@ -29,9 +29,8 @@ namespace rdfInterface;
 /**
  *
  * @author zozlak
- * @extends \Iterator<int, Term>
  */
-interface TermIterator extends \Iterator {
+interface BlankNodeInterface extends TermInterface, TermCompareInterface {
 
-    public function current(): Term | null;
+    public function __construct(?string $id = null);
 }

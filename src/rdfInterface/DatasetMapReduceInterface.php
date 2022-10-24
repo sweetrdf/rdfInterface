@@ -26,26 +26,29 @@
 
 namespace rdfInterface;
 
-use Stringable;
-
 /**
+ * Immutable edge processing methods
  *
  * @author zozlak
  */
-interface DataFactory {
+interface DatasetMapReduceInterface extends DatasetInterface {
 
-    public static function namedNode(string | Stringable $iri): NamedNode;
+    /**
+     * 
+     * @param callable $fn function applied to every quad with signature `fn(quad, dataset)`
+     * @param QuadCompareInterface|QuadIteratorInterface|callable $filter
+     * @return DatasetMapReduceInterface
+     */
+    public function map(callable $fn,
+                        QuadCompareInterface | QuadIteratorInterface | callable $filter = null): DatasetMapReduceInterface;
 
-    public static function blankNode(string | Stringable | null $iri = null): BlankNode;
-
-    public static function literal(int | float | string | bool | Stringable $value,
-                                   string | Stringable | null $lang = null,
-                                   string | Stringable | null $datatype = null): Literal;
-
-    public static function defaultGraph(): DefaultGraph;
-
-    public static function quad(Term $subject, NamedNode $predicate,
-                                Term $object,
-                                NamedNode | BlankNode | DefaultGraph | null $graph = null): Quad;
-
+    /**
+     * @param callable $fn aggregate function with signature `fn(accumulator, quad, dataset)`
+     *   applied on each quad and returns last callback result
+     * @param mixed $initialValue
+     * @param QuadCompareInterface|QuadIteratorInterface|callable $filter
+     * @return mixed
+     */
+    public function reduce(callable $fn, $initialValue = null,
+                           QuadCompareInterface | QuadIteratorInterface | callable $filter = null): mixed;
 }

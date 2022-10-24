@@ -32,33 +32,33 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface DatasetListQuadParts extends Dataset {
+interface DatasetListQuadPartsInterface extends DatasetInterface {
 
     /**
      * 
-     * @param QuadCompare|QuadIterator|callable|null $filter
-     * @return TermIterator
+     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @return TermIteratorInterface
      */
-    public function listSubjects(QuadCompare | QuadIterator | callable | null $filter = null): TermIterator;
+    public function listSubjects(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): TermIteratorInterface;
 
     /**
      * 
-     * @param QuadCompare|QuadIterator|callable|null $filter
-     * @return TermIterator
+     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @return TermIteratorInterface
      */
-    public function listPredicates(QuadCompare | QuadIterator | callable | null $filter = null): TermIterator;
+    public function listPredicates(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): TermIteratorInterface;
 
     /**
      * 
-     * @param QuadCompare|QuadIterator|callable|null $filter
-     * @return TermIterator
+     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @return TermIteratorInterface
      */
-    public function listObjects(QuadCompare | QuadIterator | callable | null $filter = null): TermIterator;
+    public function listObjects(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): TermIteratorInterface;
 
     /**
      * 
-     * @param QuadCompare|QuadIterator|callable|null $filter
-     * @return TermIterator
+     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @return TermIteratorInterface
      */
-    public function listGraphs(QuadCompare | QuadIterator | callable | null $filter = null): TermIterator;
+    public function listGraphs(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): TermIteratorInterface;
 }

@@ -27,14 +27,13 @@
 namespace rdfInterface;
 
 /**
+ * Description of TermCompare
  *
  * @author zozlak
  */
-interface DatasetCompare extends Dataset {
+interface TermCompareInterface {
 
-    public function every(QuadCompare | QuadIterator | callable $filter): bool;
+    public function equals(TermInterface $term): bool;
 
-    public function none(QuadCompare | QuadIterator | callable $filter): bool;
-
-    public function any(QuadCompare | QuadIterator | callable $filter): bool;
+    public function __toString(): string;
 }

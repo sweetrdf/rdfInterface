@@ -36,39 +36,39 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface Quad extends Term, QuadCompare {
+interface QuadInterface extends TermInterface, QuadCompareInterface {
 
     /**
      *
-     * @param Term $subject
-     * @param NamedNode $predicate
-     * @param Term $object
-     * @param NamedNode|BlankNode|DefaultGraph|null $graph
+     * @param TermInterface $subject
+     * @param NamedNodeInterface $predicate
+     * @param TermInterface $object
+     * @param NamedNodeInterface|BlankNodeInterface|DefaultGraphInterface|null $graph
      */
     public function __construct(
-        Term $subject, NamedNode $predicate, Term $object,
-        NamedNode | BlankNode | DefaultGraph | null $graph = null
+        TermInterface $subject, NamedNodeInterface $predicate, TermInterface $object,
+        NamedNodeInterface | BlankNodeInterface | DefaultGraphInterface | null $graph = null
     );
 
-    public function getSubject(): Term;
+    public function getSubject(): TermInterface;
 
-    public function getPredicate(): NamedNode;
+    public function getPredicate(): NamedNodeInterface;
 
-    public function getObject(): Term;
+    public function getObject(): TermInterface;
 
     /**
      * Null is not allowed to deal with the ambiguity between DefaultGraph and
      * null which mean the same (although it should be noted that all quads in
      * NamedNode/BlankNode graphs also belong to the DefaultGraph).
-     * @return NamedNode|BlankNode|DefaultGraph
+     * @return NamedNodeInterface|BlankNodeInterface|DefaultGraphInterface
      */
-    public function getGraph(): NamedNode | BlankNode | DefaultGraph;
+    public function getGraph(): NamedNodeInterface | BlankNodeInterface | DefaultGraphInterface;
 
-    public function withSubject(Term $subject): Quad;
+    public function withSubject(TermInterface $subject): QuadInterface;
 
-    public function withPredicate(NamedNode $predicate): Quad;
+    public function withPredicate(NamedNodeInterface $predicate): QuadInterface;
 
-    public function withObject(Term $object): Quad;
+    public function withObject(TermInterface $object): QuadInterface;
 
-    public function withGraph(NamedNode | BlankNode | DefaultGraph | null $graph): Quad;
+    public function withGraph(NamedNodeInterface | BlankNodeInterface | DefaultGraphInterface | null $graph): QuadInterface;
 }

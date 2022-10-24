@@ -30,7 +30,11 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface BlankNode extends Term, TermCompare {
+interface DatasetCompareInterface extends DatasetInterface {
 
-    public function __construct(?string $id = null);
+    public function every(QuadCompareInterface | QuadIteratorInterface | callable $filter): bool;
+
+    public function none(QuadCompareInterface | QuadIteratorInterface | callable $filter): bool;
+
+    public function any(QuadCompareInterface | QuadIteratorInterface | callable $filter): bool;
 }

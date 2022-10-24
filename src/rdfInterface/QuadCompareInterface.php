@@ -27,13 +27,25 @@
 namespace rdfInterface;
 
 /**
- * Description of TermCompare
- *
+ * Interface allowing to compare Quads.
+ * 
+ * Extracted as a separated interface because it's used extensively by the
+ * Dataset class methods. One could argue the TermCompare interface would also 
+ * do the job but for the Dataset it's worth to distinguish beetwen lack of 
+ * match and match which makes no sense like comparing with anything which is 
+ * not Quad. The QuadCompare interface introduces such a distinction.
+ * 
  * @author zozlak
  */
-interface TermCompare {
-
-    public function equals(Term $term): bool;
+interface QuadCompareInterface extends TermCompareInterface {
 
     public function __toString(): string;
+
+    public function getSubject(): TermInterface | TermCompareInterface | null;
+
+    public function getPredicate(): TermInterface | TermCompareInterface | null;
+
+    public function getObject(): TermInterface | TermCompareInterface | null;
+
+    public function getGraph(): TermInterface | TermCompareInterface | null;
 }

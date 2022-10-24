@@ -30,15 +30,15 @@ namespace rdfInterface;
  * Main, edge(quad) and Dataset-oriented Dataset API
  *
  * @author zozlak
- * @extends \ArrayAccess<Quad|QuadIterator|callable, Quad>
+ * @extends \ArrayAccess<QuadInterface|QuadIteratorInterface|callable, QuadInterface>
  */
-interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
+interface DatasetInterface extends QuadIteratorInterface, \ArrayAccess, \Countable {
 
     public function __construct();
 
     public function __toString(): string;
 
-    public function equals(Dataset $other): bool;
+    public function equals(DatasetInterface $other): bool;
 
     // Immutable set operations
 
@@ -58,11 +58,11 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * 
      * An in-place equivalent of a call using the $filter is the deleteExcept() method.
      * 
-     * @param QuadCompare|QuadIterator|callable|null $filter
-     * @return Dataset
+     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @return DatasetInterface
      * @see deleteExcept
      */
-    public function copy(QuadCompare | QuadIterator | callable | null $filter = null): Dataset;
+    public function copy(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): DatasetInterface;
 
     /**
      * Creates a copy of the dataset.
@@ -81,22 +81,22 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * 
      * An in-place equivalent of a call using the $filter is the delete() method.
      * 
-     * @param QuadCompare|QuadIterator|callable|null $filter
-     * @return Dataset
+     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @return DatasetInterface
      * @see delete()
      */
-    public function copyExcept(QuadCompare | QuadIterator | callable | null $filter): Dataset;
+    public function copyExcept(QuadCompareInterface | QuadIteratorInterface | callable | null $filter): DatasetInterface;
 
     /**
      * Returns a new dataset being a union of the current one and the $other one.
      * 
      * For in-place union use add().
      * 
-     * @param Quad|QuadIterator $other
-     * @return Dataset
+     * @param QuadInterface|QuadIteratorInterface $other
+     * @return DatasetInterface
      * @see add()
      */
-    public function union(Quad | QuadIterator $other): Dataset;
+    public function union(QuadInterface | QuadIteratorInterface $other): DatasetInterface;
 
     /**
      * Returns a dataset being a symmetric difference of the current dataset and
@@ -104,20 +104,20 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * 
      * There is no in-place equivalent.
      * 
-     * @param Quad|QuadIterator $other
-     * @return Dataset
+     * @param QuadInterface|QuadIteratorInterface $other
+     * @return DatasetInterface
      */
-    public function xor(Quad | QuadIterator $other): Dataset;
+    public function xor(QuadInterface | QuadIteratorInterface $other): DatasetInterface;
 
     // In-place set operations
 
     /**
      * Adds quad(s) to the dataset.
      *
-     * @param Quad|QuadIterator $quads
+     * @param QuadInterface|QuadIteratorInterface $quads
      * @return void
      */
-    public function add(Quad | QuadIterator $quads): void;
+    public function add(QuadInterface | QuadIteratorInterface $quads): void;
 
     /**
      * In-place removes quads from the dataset.
@@ -135,11 +135,11 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * 
      * An immputable equivalent is the copyExcept($filter) method.
      * 
-     * @param QuadCompare|QuadIterator|callable $filter
-     * @return Dataset a dataset containing removed quads.
+     * @param QuadCompareInterface|QuadIteratorInterface|callable $filter
+     * @return DatasetInterface a dataset containing removed quads.
      * @see copyExcept()
      */
-    public function delete(QuadCompare | QuadIterator | callable $filter): Dataset; // callable(Quad, Dataset)
+    public function delete(QuadCompareInterface | QuadIteratorInterface | callable $filter): DatasetInterface; // callable(Quad, DatasetInterface)
 
     /**
      * In-place removes quads from the dataset.
@@ -157,11 +157,11 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * 
      * An immputable equivalent is the copy($filter) method.
      * 
-     * @param QuadCompare|QuadIterator|callable $filter
-     * @return Dataset a dataset containing removed quads.
+     * @param QuadCompareInterface|QuadIteratorInterface|callable $filter
+     * @return DatasetInterface a dataset containing removed quads.
      * @see copy()
      */
-    public function deleteExcept(QuadCompare | QuadIterator | callable $filter): Dataset;
+    public function deleteExcept(QuadCompareInterface | QuadIteratorInterface | callable $filter): DatasetInterface;
     // In-place modification
 
     /**
@@ -171,11 +171,11 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * 
      * @param callable $fn with signature `fn(Quad, Dataset): ?Quad` to be run 
      *   an all quads
-     * @param QuadCompare|QuadIterator|callable $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|callable $filter
      * @return void
      */
     public function forEach(callable $fn,
-                            QuadCompare | QuadIterator | callable $filter = null): void;
+                            QuadCompareInterface | QuadIteratorInterface | callable $filter = null): void;
 
     // ArrayAccess (with narrower types)
 
@@ -191,7 +191,7 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      *   `true`.
      *   If more than one quad is matched \OutOfBoundsException must be thrown.
      * 
-     * @param QuadCompare|callable $offset
+     * @param QuadCompareInterface|callable $offset
      * @return bool
      * @throws \OutOfBoundsException
      * @throws \OutOfRangeException
@@ -207,15 +207,15 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      *   If more than one quad is matched \OutOfBoundsException must be thrown.
      * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
      *   signature. Matching quads are the ones for which the callable returns
-     *   `true`.
-     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     *   `true`. If more than one quad is matched \OutOfBoundsException must be 
+     *   thrown.
      * 
-     * @param QuadCompare|callable $offset
-     * @return Quad
+     * @param QuadCompareInterface|callable $offset
+     * @return QuadInterface
      * @throws \OutOfBoundsException
      * @throws \OutOfRangeException
      */
-    public function offsetGet($offset): Quad;
+    public function offsetGet(mixed $offset): QuadInterface;
 
     /**
      * Assigns a new value to the quad matching the $offset.
@@ -226,11 +226,11 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      *   If more than one quad is matched \OutOfBoundsException must be thrown.
      * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
      *   signature. Matching quads are the ones for which the callable returns
-     *   `true`.
-     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     *   `true`. If more than one quad is matched \OutOfBoundsException must be 
+     *   thrown.
      * 
-     * @param QuadCompare|callable $offset
-     * @param Quad $value
+     * @param QuadCompareInterface|callable $offset
+     * @param QuadInterface $value
      * @return void
      */
     public function offsetSet($offset, $value): void;
@@ -244,10 +244,10 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      *   If more than one quad is matched \OutOfBoundsException must be thrown.
      * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
      *   signature. Matching quads are the ones for which the callable returns
-     *   `true`.
-     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     *   `true`.If more than one quad is matched \OutOfBoundsException must be 
+     *   thrown.
      * 
-     * @param QuadCompare|callable $offset
+     * @param QuadCompareInterface|callable $offset
      * @return void
      */
     public function offsetUnset($offset): void;
@@ -264,7 +264,7 @@ interface Dataset extends QuadIterator, \ArrayAccess, \Countable {
      * If valid() returns false, this method must return null (it must not throw
      * an exception).
      * 
-     * @return Quad | null
+     * @return QuadInterface | null
      */
-    public function current(): Quad | null;
+    public function current(): QuadInterface | null;
 }

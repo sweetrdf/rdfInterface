@@ -34,7 +34,7 @@ use zozlak\RdfConstants as RDF;
  *
  * @author zozlak
  */
-interface Literal extends Term, TermCompare {
+interface LiteralInterface extends TermInterface, TermCompareInterface {
 
     public const CAST_LEXICAL_FORM = 1;
     public const CAST_DATATYPE     = 2;
@@ -136,10 +136,10 @@ interface Literal extends Term, TermCompare {
      * lang tag and datatype are preserved.
      * 
      * @param int|float|string|bool|Stringable $value
-     * @return Literal
+     * @return LiteralInterface
      * @see __construct()
      */
-    public function withValue(int | float | string | bool | Stringable $value): Literal;
+    public function withValue(int | float | string | bool | Stringable $value): LiteralInterface;
 
     /**
      * Returns a new literal being a copy of this one with a lang tag set to 
@@ -153,9 +153,9 @@ interface Literal extends Term, TermCompare {
      * https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal for details).
      * 
      * @param string|null $lang 
-     * @return Literal
+     * @return LiteralInterface
      */
-    public function withLang(?string $lang): Literal;
+    public function withLang(?string $lang): LiteralInterface;
 
     /**
      * Returns a new literal being a copy with this one with datatype set to
@@ -174,9 +174,9 @@ interface Literal extends Term, TermCompare {
      * empty one).
      * 
      * @param string $datatype
-     * @return Literal
+     * @return LiteralInterface
      * @see withLang()
      * @throws BadMethodCallException
      */
-    public function withDatatype(string $datatype): Literal;
+    public function withDatatype(string $datatype): LiteralInterface;
 }

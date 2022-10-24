@@ -27,11 +27,15 @@
 namespace rdfInterface;
 
 /**
+ * Description of RdfTerm
  *
  * @author zozlak
- * @extends \Iterator<int, Quad>
  */
-interface QuadIterator extends \Iterator {
+interface TermInterface {
 
-    public function current(): Quad | null;
+    public function __toString(): string;
+
+    public function getValue(): mixed;
+
+    public function equals(TermInterface $term): bool;
 }

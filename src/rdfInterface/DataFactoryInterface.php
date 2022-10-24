@@ -26,11 +26,26 @@
 
 namespace rdfInterface;
 
+use Stringable;
+
 /**
- * 
+ *
  * @author zozlak
  */
-interface DefaultGraph extends Term, TermCompare {
+interface DataFactoryInterface {
 
-    public function __construct();
+    public static function namedNode(string | Stringable $iri): NamedNodeInterface;
+
+    public static function blankNode(string | Stringable | null $iri = null): BlankNodeInterface;
+
+    public static function literal(int | float | string | bool | Stringable $value,
+                                   string | Stringable | null $lang = null,
+                                   string | Stringable | null $datatype = null): LiteralInterface;
+
+    public static function defaultGraph(): DefaultGraphInterface;
+
+    public static function quad(TermInterface $subject, NamedNodeInterface $predicate,
+                                TermInterface $object,
+                                NamedNodeInterface | BlankNodeInterface | DefaultGraphInterface | null $graph = null): QuadInterface;
+
 }

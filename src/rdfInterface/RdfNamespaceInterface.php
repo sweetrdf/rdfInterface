@@ -30,7 +30,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface RdfNamespace {
+interface RdfNamespaceInterface {
 
     /**
      * Registers a given URL prefix.
@@ -74,11 +74,11 @@ interface RdfNamespace {
      * Throws an error if the short name used in the shortened IRI is unknown or
      * when the $shortIri is not a shortened IRI.
      * @param string $shortIri
-     * @return NamedNode
+     * @return NamedNodeInterface
      * @throws \OutOfBoundsException
      * @throws \BadMethodCallException
      */
-    public function expand(string $shortIri): NamedNode;
+    public function expand(string $shortIri): NamedNodeInterface;
 
     /**
      * Shortens provided NamedNode IRI.
@@ -86,11 +86,11 @@ interface RdfNamespace {
      * If corresponding IRI prefix is not registered yet, the behavior depends on
      * the $create parameter value. If it's true, a new short name is registered
      * automatically. Otherwise an expception is thrown.
-     * @param NamedNode $Iri
+     * @param NamedNodeInterface $Iri
      * @param bool $create Should a new short name be registered for the IRI
      *   prefix if there is no matching one?
      * @return string
      * @throws \OutOfBoundsException
      */
-    public function shorten(NamedNode $Iri, bool $create): string;
+    public function shorten(NamedNodeInterface $Iri, bool $create): string;
 }
