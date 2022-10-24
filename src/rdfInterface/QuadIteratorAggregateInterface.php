@@ -42,15 +42,15 @@ interface QuadIteratorAggregateInterface extends \IteratorAggregate {
      * 
      * $filter can be specified as:
      * 
-     * - An object implementing the \rdfInterface\QuadCompare interface
+     * - An object implementing the \rdfInterface\QuadCompareInterface
      *   (e.g. a single Quad)
-     * - An object implementing the \rdfInterface\QuadIterator interface
+     * - An object implementing the \rdfInterface\QuadIteratorInterface
      *   (e.g. another Dataset)
-     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
      *   All quads for which the callable returns true are copied.
-     *      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return QuadIteratorInterface
      */
-    public function getIterator(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): QuadIteratorInterface;
+    public function getIterator(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): QuadIteratorInterface;
 }

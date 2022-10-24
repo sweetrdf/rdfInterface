@@ -49,11 +49,11 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * $filter can be specified as:
      * 
-     * - An object implementing the \rdfInterface\QuadCompare interface
+     * - An object implementing the \rdfInterface\QuadCompareInterface
      *   (e.g. a single Quad)
-     * - An object implementing the \rdfInterface\QuadIterator interface
+     * - An object implementing the \rdfInterface\QuadIteratorInterface
      *   (e.g. another Dataset)
-     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
+     * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
      *   All quads for which the callable returns true are copied.
      * 
      * An in-place equivalent of a call using the $filter is the deleteExcept() method.
@@ -72,12 +72,12 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * $filter can be specified as:
      * 
-     * - An object implementing the \rdfInterface\QuadCompare interface
+     * - An object implementing the \rdfInterface\QuadCompareInterface
      *   (e.g. a single Quad)
-     * - An object implementing the \rdfInterface\QuadIterator interface
+     * - An object implementing the \rdfInterface\QuadIteratorInterface
      *   (e.g. another Dataset)
-     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
-     *   All quads for which the callable returns false are copied.
+     * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
+     *   All quads for which the callable returns true are copied.
      * 
      * An in-place equivalent of a call using the $filter is the delete() method.
      * 
@@ -126,12 +126,12 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * $filter can be specified as:
      * 
-     * - An object implementing the \rdfInterface\QuadCompare interface
+     * - An object implementing the \rdfInterface\QuadCompareInterface
      *   (e.g. a single Quad)
-     * - An object implementing the \rdfInterface\QuadIterator interface
+     * - An object implementing the \rdfInterface\QuadIteratorInterface
      *   (e.g. another Dataset)
-     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
-     *   All quads for which the callable returns true are removed.
+     * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
+     *   All quads for which the callable returns true are copied.
      * 
      * An immputable equivalent is the copyExcept($filter) method.
      * 
@@ -148,12 +148,12 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * $filter can be specified as:
      * 
-     * - An object implementing the \rdfInterface\QuadCompare interface
+     * - An object implementing the \rdfInterface\QuadCompareInterface
      *   (e.g. a single Quad)
-     * - An object implementing the \rdfInterface\QuadIterator interface
+     * - An object implementing the \rdfInterface\QuadIteratorInterface
      *   (e.g. another Dataset)
-     * - A callable with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
-     *   All quads for which the callable returns false are removed.
+     * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
+     *   All quads for which the callable returns true are copied.
      * 
      * An immputable equivalent is the copy($filter) method.
      * 
