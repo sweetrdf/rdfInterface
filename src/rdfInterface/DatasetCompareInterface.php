@@ -32,9 +32,9 @@ namespace rdfInterface;
  */
 interface DatasetCompareInterface extends DatasetInterface {
 
-    public function every(QuadCompareInterface | QuadIteratorInterface | callable $filter): bool;
+    public function every(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): bool;
 
-    public function none(QuadCompareInterface | QuadIteratorInterface | callable $filter): bool;
+    public function none(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): bool;
 
-    public function any(QuadCompareInterface | QuadIteratorInterface | callable $filter): bool;
+    public function any(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): bool;
 }

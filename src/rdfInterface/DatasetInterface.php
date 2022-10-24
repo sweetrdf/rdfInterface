@@ -58,11 +58,11 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * An in-place equivalent of a call using the $filter is the deleteExcept() method.
      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return DatasetInterface
      * @see deleteExcept
      */
-    public function copy(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): DatasetInterface;
+    public function copy(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): DatasetInterface;
 
     /**
      * Creates a copy of the dataset.
@@ -81,22 +81,22 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * An in-place equivalent of a call using the $filter is the delete() method.
      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return DatasetInterface
      * @see delete()
      */
-    public function copyExcept(QuadCompareInterface | QuadIteratorInterface | callable | null $filter): DatasetInterface;
+    public function copyExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter): DatasetInterface;
 
     /**
      * Returns a new dataset being a union of the current one and the $other one.
      * 
      * For in-place union use add().
      * 
-     * @param QuadInterface|QuadIteratorInterface $other
+     * @param QuadInterface|QuadIteratorInterface|QuadIteratorAggregateInterface $other
      * @return DatasetInterface
      * @see add()
      */
-    public function union(QuadInterface | QuadIteratorInterface $other): DatasetInterface;
+    public function union(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $other): DatasetInterface;
 
     /**
      * Returns a dataset being a symmetric difference of the current dataset and
@@ -104,20 +104,20 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * There is no in-place equivalent.
      * 
-     * @param QuadInterface|QuadIteratorInterface $other
+     * @param QuadInterface|QuadIteratorInterface|QuadIteratorAggregateInterface $other
      * @return DatasetInterface
      */
-    public function xor(QuadInterface | QuadIteratorInterface $other): DatasetInterface;
+    public function xor(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $other): DatasetInterface;
 
     // In-place set operations
 
     /**
      * Adds quad(s) to the dataset.
      *
-     * @param QuadInterface|QuadIteratorInterface $quads
+     * @param QuadInterface|QuadIteratorInterface|QuadIteratorAggregateInterface $quads
      * @return void
      */
-    public function add(QuadInterface | QuadIteratorInterface $quads): void;
+    public function add(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $quads): void;
 
     /**
      * In-place removes quads from the dataset.
@@ -135,11 +135,11 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * An immputable equivalent is the copyExcept($filter) method.
      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|callable $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
      * @return DatasetInterface a dataset containing removed quads.
      * @see copyExcept()
      */
-    public function delete(QuadCompareInterface | QuadIteratorInterface | callable $filter): DatasetInterface; // callable(Quad, DatasetInterface)
+    public function delete(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetInterface; // callable(Quad, DatasetInterface)
 
     /**
      * In-place removes quads from the dataset.
@@ -157,11 +157,11 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * An immputable equivalent is the copy($filter) method.
      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|callable $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
      * @return DatasetInterface a dataset containing removed quads.
      * @see copy()
      */
-    public function deleteExcept(QuadCompareInterface | QuadIteratorInterface | callable $filter): DatasetInterface;
+    public function deleteExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetInterface;
     // In-place modification
 
     /**
@@ -171,11 +171,11 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * @param callable $fn with signature `fn(Quad, Dataset): ?Quad` to be run 
      *   an all quads
-     * @param QuadCompareInterface|QuadIteratorInterface|callable $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
      * @return void
      */
     public function forEach(callable $fn,
-                            QuadCompareInterface | QuadIteratorInterface | callable $filter = null): void;
+                            QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter = null): void;
 
     // ArrayAccess (with narrower types)
 

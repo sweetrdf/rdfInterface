@@ -36,29 +36,29 @@ interface DatasetListQuadPartsInterface extends DatasetInterface {
 
     /**
      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return TermIteratorInterface
      */
-    public function listSubjects(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): TermIteratorInterface;
+    public function listSubjects(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
 
     /**
      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return TermIteratorInterface
      */
-    public function listPredicates(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): TermIteratorInterface;
+    public function listPredicates(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
 
     /**
      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return TermIteratorInterface
      */
-    public function listObjects(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): TermIteratorInterface;
+    public function listObjects(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
 
     /**
      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|callable|null $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return TermIteratorInterface
      */
-    public function listGraphs(QuadCompareInterface | QuadIteratorInterface | callable | null $filter = null): TermIteratorInterface;
+    public function listGraphs(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
 }
