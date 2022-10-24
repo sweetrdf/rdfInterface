@@ -195,7 +195,6 @@ interface DatasetInterface extends QuadIteratorInterface, \ArrayAccess, \Countab
      * @param QuadCompareInterface|callable $offset
      * @return bool
      * @throws \OutOfBoundsException
-     * @throws \OutOfRangeException
      */
     public function offsetExists($offset): bool;
 
@@ -210,11 +209,16 @@ interface DatasetInterface extends QuadIteratorInterface, \ArrayAccess, \Countab
      *   signature. Matching quads are the ones for which the callable returns
      *   `true`. If more than one quad is matched \OutOfBoundsException must be 
      *   thrown.
+     * - 0. Returns any quad (or throws \OutOfBoundsException it a dataset is
+     *   empty).
+     *   As quads within a dataset don't have order, it makes no sense to access 
+     *   them using integer offsets. Still it's nice to have a simple syntax
+     *   for returning any quad. This is particularly useful for unpacking 
+     *   a quad from a dataset which should contain only a single quad.
      * 
-     * @param QuadCompareInterface|callable $offset
+     * @param QuadCompareInterface|callable|int<0, 0> $offset
      * @return QuadInterface
      * @throws \OutOfBoundsException
-     * @throws \OutOfRangeException
      */
     public function offsetGet(mixed $offset): QuadInterface;
 
@@ -250,6 +254,7 @@ interface DatasetInterface extends QuadIteratorInterface, \ArrayAccess, \Countab
      * 
      * @param QuadCompareInterface|callable $offset
      * @return void
+     * @throws \OutOfBoundsException
      */
     public function offsetUnset($offset): void;
 
