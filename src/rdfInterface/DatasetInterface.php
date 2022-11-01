@@ -190,12 +190,15 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      *   signature. Matching quads are the ones for which the callable returns
      *   `true`.
      *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     * - 0. This is a shorthand syntax for checking if the dataset is empty.
+     *   The main use case is enabling the `$dataset[0] ?? $defaultQuad` syntax
+     *   for "unpacking" a dataset containing one or zero quads.
      * 
-     * @param QuadCompareInterface|callable $offset
+     * @param QuadCompareInterface|callable|int<0, 0> $offset
      * @return bool
      * @throws \OutOfBoundsException
      */
-    public function offsetExists($offset): bool;
+    public function offsetExists(mixed $offset): bool;
 
     /**
      * Returns a quad matching the $offset.
