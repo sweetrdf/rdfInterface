@@ -193,6 +193,7 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * - 0. This is a shorthand syntax for checking if the dataset is empty.
      *   The main use case is enabling the `$dataset[0] ?? $defaultQuad` syntax
      *   for "unpacking" a dataset containing one or zero quads.
+     *   Passing any other integer value must throw an \OutOfBoundsException
      * 
      * @param QuadCompareInterface|callable|int<0, 0> $offset
      * @return bool
@@ -213,10 +214,11 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      *   thrown.
      * - 0. Returns any quad (or throws \OutOfBoundsException it a dataset is
      *   empty).
+     *   The main use case is enabling the `$dataset[0] ?? $defaultQuad` syntax
+     *   for "unpacking" a dataset containing one or zero quads.
      *   As quads within a dataset don't have order, it makes no sense to access 
-     *   them using integer offsets. Still it's nice to have a simple syntax
-     *   for returning any quad. This is particularly useful for unpacking 
-     *   a quad from a dataset which should contain only a single quad.
+     *   them using other integer offsets and an attempt of doing so must
+     *   throw an \OutOfBoundsException.
      * 
      * @param QuadCompareInterface|callable|int<0, 0> $offset
      * @return QuadInterface
