@@ -31,13 +31,13 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface ResourceInterface {
+interface NodeInterface {
 
-    public function getUri(): ?NamedNodeInterface;
+    public function getTerm(): TermInterface;
 
-    public function withUri(NamedNodeInterface $uri): ResourceInterface;
+    public function withTerm(TermInterface $term): NodeInterface;
 
     public function getDataset(): DatasetInterface;
 
-    public function withDataset(DatasetInterface $dataset): ResourceInterface;
+    public function withDataset(DatasetInterface $dataset): NodeInterface;
 }
