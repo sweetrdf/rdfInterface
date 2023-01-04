@@ -37,7 +37,7 @@ interface DatasetNodeInterface {
 
     public function getNode(): TermInterface;
 
-    public function withDataset(DatasetInterface $dataset): NodeInterface;
+    public function withDataset(DatasetInterface $dataset): DatasetNodeInterface;
 
-    public function withNode(TermInterface $term): NodeInterface;
+    public function withNode(TermInterface $term): DatasetNodeInterface;
 }
