@@ -29,9 +29,12 @@ namespace rdfInterface;
 /**
  * A very minimalistic interface for dealing with a dataset in a node-oriented way.
  *
+ * The iterator returned by the getIterator() (inherited from the QuadIteratorAggregateInterface)
+ * should iterate only over quads having a given node as a subject.
+ * 
  * @author zozlak
  */
-interface DatasetNodeInterface {
+interface DatasetNodeInterface extends QuadIteratorAggregateInterface {
 
     public function getDataset(): DatasetInterface;
 
