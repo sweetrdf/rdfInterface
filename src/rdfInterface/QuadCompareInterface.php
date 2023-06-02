@@ -37,9 +37,7 @@ namespace rdfInterface;
  * 
  * @author zozlak
  */
-interface QuadCompareInterface extends TermCompareInterface {
-
-    public function __toString(): string;
+interface QuadCompareInterface extends TermCompareInterface, \Stringable {
 
     public function getSubject(): TermInterface | TermCompareInterface | null;
 
