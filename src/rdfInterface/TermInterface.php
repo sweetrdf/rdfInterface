@@ -31,9 +31,7 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface TermInterface extends \Stringable {
+interface TermInterface extends TermCompareInterface {
 
     public function getValue(): mixed;
-
-    public function equals(TermInterface $term): bool;
 }
