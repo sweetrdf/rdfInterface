@@ -79,11 +79,11 @@ interface LiteralInterface extends TermInterface, TermCompareInterface {
      * @param string|null $datatype Literal's datatype. If it's null, the datatype 
      *   must be assigned according to the $lang and $value parameter values.
      *   The detailed procedure is described above.
-     */
     public function __construct(
         int | float | string | bool | Stringable $value, ?string $lang = null,
         ?string $datatype = RDF::XSD_STRING
     );
+     */
 
     /**
      * Returns literal's value.

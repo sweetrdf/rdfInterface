@@ -38,17 +38,17 @@ namespace rdfInterface;
  */
 interface QuadInterface extends TermInterface, QuadCompareInterface {
 
-    /**
+    /*
      *
      * @param TermInterface $subject
      * @param NamedNodeInterface $predicate
      * @param TermInterface $object
      * @param NamedNodeInterface|BlankNodeInterface|DefaultGraphInterface|null $graph
-     */
     public function __construct(
         TermInterface $subject, NamedNodeInterface $predicate, TermInterface $object,
         NamedNodeInterface | BlankNodeInterface | DefaultGraphInterface | null $graph = null
     );
+     */
 
     public function getSubject(): TermInterface;
 

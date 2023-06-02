@@ -27,20 +27,27 @@
 namespace rdfInterface;
 
 /**
- * A very minimalistic interface for dealing with a dataset in a node-oriented way.
+ * Node-oriented graph API interface.
+ * 
+ * Basically a union of the rdfInterface\QuadInterface and the rdfInterface\DatasetInterface.
  *
- * The iterator returned by the getIterator() (inherited from the QuadIteratorAggregateInterface)
- * should iterate only over quads having a given node as a subject.
+ * All methods inherited from the rdfInterface\DatasetInterface should work only
+ * on the triples having a given node as a subject.
  * 
  * @author zozlak
+ * @extends \ArrayAccess<QuadInterface|QuadIteratorInterface|callable|int<0, 0>, QuadInterface>
  */
-interface DatasetNodeInterface extends QuadIteratorAggregateInterface {
+interface DatasetNodeInterface extends QuadInterface, DatasetInterface {
+
+    /**
+     * 
+     * @param DatasetInterface $dataset
+     * @param TermInterface $node the node has to be a subject in one of the $dataset triples.
+     *   If it is not, \BadMethodCallException should be thrown
+     * @throws \BadMethodCallException
+     */
+    static public function fromDataset(DatasetInterface $dataset,
+                                       TermInterface $node): self;
 
     public function getDataset(): DatasetInterface;
-
-    public function getNode(): TermInterface;
-
-    public function withDataset(DatasetInterface $dataset): DatasetNodeInterface;
-
-    public function withNode(TermInterface $term): DatasetNodeInterface;
 }

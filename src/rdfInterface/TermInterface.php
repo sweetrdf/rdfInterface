@@ -31,11 +31,11 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-interface TermInterface {
-
-    public function __toString(): string;
+interface TermInterface extends \Stringable {
 
     public function getValue(): mixed;
 
     public function equals(TermInterface $term): bool;
+
+    public function withValue(mixed $value): self;
 }

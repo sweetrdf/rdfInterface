@@ -32,11 +32,9 @@ namespace rdfInterface;
  * @author zozlak
  * @extends \ArrayAccess<QuadInterface|QuadIteratorInterface|callable|int<0, 0>, QuadInterface>
  */
-interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess, \Countable {
+interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess, \Countable, \Stringable {
 
     public function __construct();
-
-    public function __toString(): string;
 
     public function equals(DatasetInterface $other): bool;
 
@@ -162,6 +160,7 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * @see copy()
      */
     public function deleteExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetInterface;
+
     // In-place modification
 
     /**
@@ -261,5 +260,4 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * @throws \OutOfBoundsException
      */
     public function offsetUnset($offset): void;
-
 }
