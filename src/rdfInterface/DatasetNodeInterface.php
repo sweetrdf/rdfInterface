@@ -37,17 +37,15 @@ namespace rdfInterface;
  * @author zozlak
  * @extends \ArrayAccess<QuadInterface|QuadIteratorInterface|callable|int<0, 0>, QuadInterface>
  */
-interface DatasetNodeInterface extends QuadInterface, DatasetInterface {
+interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     /**
-     * 
-     * @param DatasetInterface $dataset
-     * @param TermInterface $node the node has to be a subject in one of the $dataset triples.
-     *   If it is not, \BadMethodCallException should be thrown
-     * @throws \BadMethodCallException
+     * The $node doesn't have to exist in the $dataset.
      */
     static public function fromDataset(DatasetInterface $dataset,
                                        TermInterface $node): self;
 
     public function getDataset(): DatasetInterface;
+
+    public function getNode(): TermInterface;
 }
