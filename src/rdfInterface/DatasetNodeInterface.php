@@ -50,6 +50,10 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     public function getNode(): TermInterface;
 
+    public function withDataset(): DatasetNodeInterface;
+
+    public function withNode(): DatasetNodeInterface;
+
     public function equals(DatasetInterface | TermCompareInterface | DatasetNodeInterface $termOrDataset): bool;
 
     public function copy(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): DatasetNodeInterface;
