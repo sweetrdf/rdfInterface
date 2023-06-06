@@ -41,9 +41,11 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     /**
      * The $node doesn't have to exist in the $dataset.
+     * 
+     * If $dataset is not provided, an empty dataset should be used.
      */
-    static public function fromDataset(DatasetInterface $dataset,
-                                       TermInterface $node): self;
+    public static function factory(TermInterface $node,
+                                   DatasetInterface | null $dataset = null): DatasetNodeInterface;
 
     public function getDataset(): DatasetInterface;
 
