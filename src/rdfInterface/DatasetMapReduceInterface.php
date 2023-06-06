@@ -36,19 +36,19 @@ interface DatasetMapReduceInterface extends DatasetInterface {
     /**
      * 
      * @param callable $fn function applied to every quad with signature `fn(quad, dataset)`
-     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return DatasetMapReduceInterface
      */
     public function map(callable $fn,
-                        QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter = null): DatasetMapReduceInterface;
+                        QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): DatasetMapReduceInterface;
 
     /**
      * @param callable $fn aggregate function with signature `fn(accumulator, quad, dataset)`
      *   applied on each quad and returns last callback result
      * @param mixed $initialValue
-     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return mixed
      */
     public function reduce(callable $fn, $initialValue = null,
-                           QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter = null): mixed;
+                           QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): mixed;
 }

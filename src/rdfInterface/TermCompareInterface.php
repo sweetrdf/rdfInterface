@@ -33,5 +33,5 @@ namespace rdfInterface;
  */
 interface TermCompareInterface extends \Stringable {
 
-    public function equals(TermInterface $term): bool;
+    public function equals(TermCompareInterface $term): bool;
 }

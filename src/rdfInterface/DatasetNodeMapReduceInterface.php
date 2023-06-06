@@ -31,5 +31,7 @@ namespace rdfInterface;
  * @author zozlak
  */
 interface DatasetNodeMapReduceInterface extends DatasetNodeInterface, DatasetMapReduceInterface {
-    
+
+    public function map(callable $fn,
+                        QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): DatasetNodeMapReduceInterface;
 }
