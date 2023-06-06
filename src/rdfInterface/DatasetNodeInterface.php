@@ -35,7 +35,6 @@ namespace rdfInterface;
  * on the triples having a given node as a subject.
  * 
  * @author zozlak
- * @extends \ArrayAccess<QuadInterface|QuadIteratorInterface|callable|int<0, 0>, QuadInterface>
  */
 interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
@@ -50,4 +49,18 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
     public function getDataset(): DatasetInterface;
 
     public function getNode(): TermInterface;
+
+    public function equals(DatasetInterface | TermInterface | DatasetNodeInterface $termOrDataset): bool;
+
+    public function copy(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): DatasetNodeInterface;
+
+    public function copyExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter): DatasetNodeInterface;
+
+    public function delete(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetNodeInterface;
+
+    public function deleteExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetNodeInterface;
+
+    public function union(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $other): DatasetNodeInterface;
+
+    public function xor(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $other): DatasetNodeInterface;
 }
