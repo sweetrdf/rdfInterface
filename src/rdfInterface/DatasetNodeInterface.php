@@ -50,9 +50,9 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     public function getNode(): TermInterface;
 
-    public function withDataset(): DatasetNodeInterface;
+    public function withDataset(DatasetInterface $dataset): DatasetNodeInterface;
 
-    public function withNode(): DatasetNodeInterface;
+    public function withNode(TermInterface $node): DatasetNodeInterface;
 
     public function equals(DatasetInterface | TermCompareInterface | DatasetNodeInterface $termOrDataset): bool;
 
