@@ -31,8 +31,10 @@ namespace rdfInterface;
  * 
  * Basically a union of the rdfInterface\QuadInterface and the rdfInterface\DatasetInterface.
  *
- * All methods inherited from the rdfInterface\DatasetInterface should work only
- * on the triples having a given node as a subject.
+ * All methods inherited from the rdfInterface\DatasetInterface and returning 
+ * the rdfInterface\DatasetNodeInterface should:
+ * - process only triples having the DatasetNodeInterface's node as a subject
+ * - preserve all other triples
  * 
  * @author zozlak
  */
@@ -46,6 +48,13 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
     public static function factory(TermInterface $node,
                                    DatasetInterface | null $dataset = null): DatasetNodeInterface;
 
+    /**
+     * The actual dataset (and not its copy) should be returned.
+     * This means if triples are in-place added/removed from the returned object,
+     * these changes are shared with the DatasetNodeInterface object.
+     * 
+     * @return DatasetInterface
+     */
     public function getDataset(): DatasetInterface;
 
     public function getNode(): TermInterface;
@@ -60,9 +69,9 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     public function copyExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetNodeInterface;
 
-    public function delete(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetNodeInterface;
+    public function delete(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetInterface;
 
-    public function deleteExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetNodeInterface;
+    public function deleteExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetInterface;
 
     public function union(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $other): DatasetNodeInterface;
 
