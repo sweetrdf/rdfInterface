@@ -69,10 +69,6 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     public function copyExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetNodeInterface;
 
-    public function delete(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetInterface;
-
-    public function deleteExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetInterface;
-
     /**
      * Only triples with subject matching the DatasetNodeInterface's node are added.
      * 
@@ -91,4 +87,15 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * @return DatasetNodeInterface
      */
     public function xor(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $other): DatasetNodeInterface;
+
+    /**
+     * Triples with subject other than DatasetNodeInterface's node should be
+     * returned untouched.
+     * 
+     * @param callable $fn
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return DatasetNodeInterface
+     */
+    public function map(callable $fn,
+                        QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): DatasetNodeInterface;
 }
