@@ -240,6 +240,7 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * @param QuadCompareInterface|callable $offset
      * @param QuadInterface $value
      * @return void
+     * @throws \OutOfBoundsException
      */
     public function offsetSet($offset, $value): void;
 
