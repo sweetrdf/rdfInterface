@@ -47,8 +47,8 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * 
      * It depends on the implementation if the $dataset object 
      */
-    static public static function factory(TermInterface $node,
-                                          DatasetInterface | null $dataset = null): DatasetNodeInterface;
+    static public function factory(TermInterface $node,
+                                   DatasetInterface | null $dataset = null): DatasetNodeInterface;
 
     /**
      * The actual dataset (and not its copy) should be returned.
