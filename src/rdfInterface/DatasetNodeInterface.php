@@ -45,10 +45,10 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * 
      * If $dataset is not provided, an empty dataset should be used.
      * 
-     * The $dataset object may get
+     * It depends on the implementation if the $dataset object 
      */
-    public static function factory(TermInterface $node,
-                                   DatasetInterface | null $dataset = null): DatasetNodeInterface;
+    static public static function factory(TermInterface $node,
+                                          DatasetInterface | null $dataset = null): DatasetNodeInterface;
 
     /**
      * The actual dataset (and not its copy) should be returned.
