@@ -47,15 +47,20 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      *   \BadMethodCallException should be thrown (null is accepted in the signature
      *   only to match the rdfInterface\Dataset::factory() signature). $node
      *   does not have to exist in the $dataset.
-     * @param DatasetInterface|null $dataset If not provided, an empty dataset
-     *   should be initialized. It is up to the implementation to decide if
-     *   the $dataset object is used directly or if its quads are copied
-     *   to a new DatasetInterface object instance.
+     * @param QuadIteratorAggregateInterface | QuadIteratorInterface | null $quads
+     *   Quads to be stored in the dataset. Quads are kept internally no matter
+     *   if their subject matches the $node. Note that
+     *   - DatasetInterface can be passed as well as it implements 
+     *     the QuadIteratorAggregateInterface.
+     *   - Changes to the object passed as $quads will not modify the content
+     *     of the created DatasetNodeInterface object. If you want this behaviour,
+     *     uset the withDataset() method instead.
      * @return DatasetNodeInterface
      * @throws \BadMethodCallException
+     * @see DatasetNodeInterface::withDataset()
      */
     static public function factory(TermInterface | null $node = null,
-                                   DatasetInterface | null $dataset = null): DatasetNodeInterface;
+                                   QuadIteratorAggregateInterface | QuadIteratorInterface | null $quads = null): DatasetNodeInterface;
 
     /**
      * The actual dataset (and not its copy) should be returned.
@@ -70,9 +75,10 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     /**
      * 
-     * @param DatasetInterface $dataset New dataset. It is up to the implementation
-     *   if the $dataset is used directly or if its quads are copied to a new
-     *   DatasetInterface object instance.
+     * @param DatasetInterface $dataset Replaces the underlaying dataset with
+     *   a given one. The $dataset object should be used directly so any
+     *   in-place modification performed on it are reflected in 
+     *   the DatasetNodeInterface object and vice versa.
      * @return DatasetNodeInterface
      */
     public function withDataset(DatasetInterface $dataset): DatasetNodeInterface;
