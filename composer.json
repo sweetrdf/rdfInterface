@@ -15,7 +15,7 @@
     "require": {
         "php": ">=8.0",
         "zozlak/rdf-constants": "*",
-        "psr/http-message": "^1.0"
+        "psr/http-message": "^1 | ^2"
     },
     "autoload": {
         "psr-4": {
