@@ -32,11 +32,9 @@ namespace rdfInterface;
  * @author zozlak
  * @extends \ArrayAccess<QuadInterface|QuadIteratorInterface|callable|int<0, 0>, QuadInterface>
  */
-interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess, \Countable {
+interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess, \Countable, \Stringable {
 
-    public function __construct();
-
-    public function __toString(): string;
+    static public function factory(): DatasetInterface;
 
     public function equals(DatasetInterface $other): bool;
 
@@ -81,11 +79,11 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * An in-place equivalent of a call using the $filter is the delete() method.
      * 
-     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
      * @return DatasetInterface
      * @see delete()
      */
-    public function copyExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter): DatasetInterface;
+    public function copyExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetInterface;
 
     /**
      * Returns a new dataset being a union of the current one and the $other one.
@@ -162,6 +160,7 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * @see copy()
      */
     public function deleteExcept(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): DatasetInterface;
+
     // In-place modification
 
     /**
@@ -171,11 +170,11 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * @param callable $fn with signature `fn(Quad, Dataset): ?Quad` to be run 
      *   an all quads
-     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return void
      */
     public function forEach(callable $fn,
-                            QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter = null): void;
+                            QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): void;
 
     // ArrayAccess (with narrower types)
 
@@ -241,6 +240,7 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * @param QuadCompareInterface|callable $offset
      * @param QuadInterface $value
      * @return void
+     * @throws \OutOfBoundsException
      */
     public function offsetSet($offset, $value): void;
 
@@ -262,4 +262,78 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      */
     public function offsetUnset($offset): void;
 
+    /**
+     * Checks if all quads in the dataset match a given filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
+     * @return bool
+     */
+    public function every(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): bool;
+
+    /**
+     * Checks if no quad in the dataset matches a given filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
+     * @return bool
+     */
+    public function none(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): bool;
+
+    /**
+     * Checks if any quad in the dataset matches a given filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable $filter
+     * @return bool
+     */
+    public function any(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): bool;
+
+    /**
+     * 
+     * @param callable $fn function applied to every quad with signature `fn(quad, dataset)`
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return DatasetInterface
+     */
+    public function map(callable $fn,
+                        QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): DatasetInterface;
+
+    /**
+     * @param callable $fn aggregate function with signature `fn(accumulator, quad, dataset)`
+     *   applied on each quad and returns last callback result
+     * @param mixed $initialValue
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return mixed
+     */
+    public function reduce(callable $fn, $initialValue = null,
+                           QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): mixed;
+
+    /**
+     * Fetches an iterator over unique set of dataset quad subjects.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermIteratorInterface
+     */
+    public function listSubjects(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
+
+    /**
+     * Fetches an iterator over unique set of dataset quad predicates.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermIteratorInterface
+     */
+    public function listPredicates(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
+
+    /**
+     * Fetches an iterator over unique set of dataset quad objects.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermIteratorInterface
+     */
+    public function listObjects(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
+
+    /**
+     * Fetches an iterator over unique set of dataset quad graphs.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermIteratorInterface
+     */
+    public function listGraphs(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
 }
