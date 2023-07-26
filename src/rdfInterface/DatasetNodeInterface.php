@@ -41,13 +41,20 @@ namespace rdfInterface;
 interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     /**
-     * The $node doesn't have to exist in the $dataset.
+     * Creates a DatasetNodeInterface object.
      * 
-     * If $dataset is not provided, an empty dataset should be used.
-     * 
-     * It depends on the implementation if the $dataset object 
+     * @param TermInterface|null $node Node has to be provided. If it is null,
+     *   \BadMethodCallException should be thrown (null is accepted in the signature
+     *   only to match the rdfInterface\Dataset::factory() signature). $node
+     *   does not have to exist in the $dataset.
+     * @param DatasetInterface|null $dataset If not provided, an empty dataset
+     *   should be initialized. It is up to the implementation to decide if
+     *   the $dataset object is used directly or if its quads are copied
+     *   to a new DatasetInterface object instance.
+     * @return DatasetNodeInterface
+     * @throws \BadMethodCallException
      */
-    static public function factory(TermInterface $node,
+    static public function factory(TermInterface | null $node = null,
                                    DatasetInterface | null $dataset = null): DatasetNodeInterface;
 
     /**
