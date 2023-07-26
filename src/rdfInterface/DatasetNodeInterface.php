@@ -68,6 +68,13 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     public function getNode(): TermInterface;
 
+    /**
+     * 
+     * @param DatasetInterface $dataset New dataset. It is up to the implementation
+     *   if the $dataset is used directly or if its quads are copied to a new
+     *   DatasetInterface object instance.
+     * @return DatasetNodeInterface
+     */
     public function withDataset(DatasetInterface $dataset): DatasetNodeInterface;
 
     public function withNode(TermInterface $node): DatasetNodeInterface;
