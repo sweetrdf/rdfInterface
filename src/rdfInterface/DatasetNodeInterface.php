@@ -147,7 +147,7 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * Quads with subject other than DatasetNodeInterface's node should be
      * returned untouched.
      * 
-     * @param callable $fn
+     * @param callable $fn function applied to every quad with signature `fn(quad, datasetNode)`
      * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return DatasetNodeInterface
      */
