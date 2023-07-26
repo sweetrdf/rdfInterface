@@ -34,7 +34,7 @@ namespace rdfInterface;
  */
 interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess, \Countable, \Stringable {
 
-    public function __construct();
+    public function factory(): DatasetInterface;
 
     public function equals(DatasetInterface $other): bool;
 
