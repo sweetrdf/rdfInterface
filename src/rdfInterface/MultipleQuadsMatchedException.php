@@ -33,6 +33,6 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-class MultipleQuadsMatchedException extends \Exception {
+class MultipleQuadsMatchedException extends \RuntimeException {
     
 }
