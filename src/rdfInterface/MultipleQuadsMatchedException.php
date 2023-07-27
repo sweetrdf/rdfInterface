@@ -33,6 +33,6 @@ namespace rdfInterface;
  *
  * @author zozlak
  */
-class MultipleQuadsMatchedException extends \UnexpectedValueException {
+class MultipleQuadsMatchedException extends \Exception {
     
 }
