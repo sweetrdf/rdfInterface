@@ -92,10 +92,10 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * 
      * Does not check if the quad subject matches the DatasetNodeInterface's object node.
      *
-     * @param QuadInterface|QuadIteratorInterface|QuadIteratorAggregateInterface $quads
+     * @param QuadInterface|\Traversable<\rdfInterface\QuadInterface>|array<\rdfInterface\QuadInterface> $quads
      * @return void
      */
-    public function add(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $quads): void;
+    public function add(QuadInterface | \Traversable | array $quads): void;
 
     /**
      * Assigns a new value to the quad matching the $offset.

@@ -112,10 +112,10 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
     /**
      * Adds quad(s) to the dataset.
      *
-     * @param QuadInterface|QuadIteratorInterface|QuadIteratorAggregateInterface $quads
+     * @param QuadInterface|\Traversable<\rdfInterface\QuadInterface>|array<\rdfInterface\QuadInterface> $quads
      * @return void
      */
-    public function add(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $quads): void;
+    public function add(QuadInterface | \Traversable | array $quads): void;
 
     /**
      * In-place removes quads from the dataset.
@@ -236,8 +236,9 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      *   signature. Matching quads are the ones for which the callable returns
      *   `true`. If more than one quad is matched \OutOfBoundsException must be 
      *   thrown.
+     * - null which just adds the $value quad to the dataset
      * 
-     * @param QuadCompareInterface|callable $offset
+     * @param QuadCompareInterface|callable|null $offset
      * @param QuadInterface $value
      * @return void
      * @throws \OutOfBoundsException
