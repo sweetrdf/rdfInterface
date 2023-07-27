@@ -181,22 +181,26 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
     /**
      * Checks if a given offset exists.
      * 
-     * Offset can be specified as:
+     * The offset can be specified as:
      * 
      * - An object implementing the \rdfInterface\QuadCompare interface.
-     *   If more than one quad is matched \OutOfBoundsException must be thrown.
      * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
      *   signature. Matching quads are the ones for which the callable returns
      *   `true`.
-     *   If more than one quad is matched \OutOfBoundsException must be thrown.
-     * - 0. This is a shorthand syntax for checking if the dataset is empty.
-     *   The main use case is enabling the `$dataset[0] ?? $defaultQuad` syntax
-     *   for "unpacking" a dataset containing one or zero quads.
-     *   Passing any other integer value must throw an \OutOfBoundsException
+     *   If more than one quad is matched \UnexpectedValueException must be thrown.
+     * - `0`. This is a shorthand syntax for checking if the dataset is empty.
+     * 
+     * If the $offset is specified differently, \UnexpectedValueException is thrown.
+     * 
+     * If exactly one quad is matched, `true` is returned.
+     * If no quad is matched, `false` is returned.
+     * If the $offset matches more than one quad, 
+     * \rdfInterface\MultipleQuadsMatchedException is thrown.
      * 
      * @param QuadCompareInterface|callable|int<0, 0> $offset
      * @return bool
-     * @throws \OutOfBoundsException
+     * @throws \UnexpectedValueException
+     * @throws MultipleQuadsMatchedException
      */
     public function offsetExists(mixed $offset): bool;
 
@@ -206,22 +210,28 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * The $offset can be specified as:
      * 
      * - An object implementing the \rdfInterface\QuadCompare interface.
-     *   If more than one quad is matched \OutOfBoundsException must be thrown.
      * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
      *   signature. Matching quads are the ones for which the callable returns
-     *   `true`. If more than one quad is matched \OutOfBoundsException must be 
-     *   thrown.
-     * - 0. Returns any quad (or throws \OutOfBoundsException it a dataset is
-     *   empty).
+     *   `true`.
+     * - `0` Returns any single quad.
      *   The main use case is enabling the `$dataset[0] ?? $defaultQuad` syntax
      *   for "unpacking" a dataset containing one or zero quads.
      *   As quads within a dataset don't have order, it makes no sense to access 
      *   them using other integer offsets and an attempt of doing so must
-     *   throw an \OutOfBoundsException.
+     *   throw an \UnexpectedValueException.
+     * 
+     * If the $offset is specified differently, \UnexpectedValueException is trown.
+     * 
+     * If the $offset is `0` and the dataset is not empty, any quad is returned.
+     * If exactly one quad is matched, it is returned.
+     * If the $offset matches more than one quad, 
+     * \rdfInterface\MultipleQuadsMatchedException is thrown.
+     * If the $offset matches no quad, \UnexpectedValueException is thrown.
      * 
      * @param QuadCompareInterface|callable|int<0, 0> $offset
      * @return QuadInterface
-     * @throws \OutOfBoundsException
+     * @throws \UnexpectedValueException
+     * @throws MultipleQuadsMatchedException
      */
     public function offsetGet(mixed $offset): QuadInterface;
 
@@ -230,18 +240,27 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * Offset can be specified as:
      * 
+     * - `null` which is just a shorthand to `add($value)`
      * - An object implementing the \rdfInterface\QuadCompare interface.
-     *   If more than one quad is matched \OutOfBoundsException must be thrown.
+     *   If more than one quad is matched \UnexpectedValueException must be thrown.
      * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
      *   signature. Matching quads are the ones for which the callable returns
-     *   `true`. If more than one quad is matched \OutOfBoundsException must be 
+     *   `true`. If more than one quad is matched \UnexpectedValueException must be 
      *   thrown.
-     * - null which just adds the $value quad to the dataset
+     * 
+     * If the $offset is specified differently, \UnexpectedValueException is trown.
+     * 
+     * If the $offset is `null`, a new quad is added to the dataset.
+     * If exactly one quad is matched by the $offset, it is updated.
+     * If the $offset matches more than one quad, 
+     * \rdfInterface\MultipleQuadsMatchedException is thrown.
+     * If the $offset matches no quad, \UnexpectedValueException is thrown.
      * 
      * @param QuadCompareInterface|callable|null $offset
      * @param QuadInterface $value
      * @return void
-     * @throws \OutOfBoundsException
+     * @throws \UnexpectedValueException
+     * @throws MultipleQuadsMatchedException
      */
     public function offsetSet($offset, $value): void;
 
@@ -251,15 +270,21 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * Offset can be specified as:
      * 
      * - An object implementing the \rdfInterface\QuadCompare interface.
-     *   If more than one quad is matched \OutOfBoundsException must be thrown.
      * - A callable with the `fn(\rdfInterface\Quad, \rdfInterface\Dataset): bool`
      *   signature. Matching quads are the ones for which the callable returns
-     *   `true`.If more than one quad is matched \OutOfBoundsException must be 
-     *   thrown.
+     *   `true`.
+     * 
+     * If the $offset is specified differently, \UnexpectedValueException is trown.
+     * 
+     * If the $offset matches more than one quad, 
+     * \rdfInterface\MultipleQuadsMatchedException is thrown.
+     * If exactly one quad is matched, it is removed.
+     * If no quad is matched, nothing happens.
      * 
      * @param QuadCompareInterface|callable $offset
      * @return void
-     * @throws \OutOfBoundsException
+     * @throws \UnexpectedValueException
+     * @throws MultipleQuadsMatchedException
      */
     public function offsetUnset($offset): void;
 
