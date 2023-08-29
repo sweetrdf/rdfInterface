@@ -26,12 +26,14 @@
 
 namespace rdfInterface;
 
+use Iterator;
+
 /**
  *
  * @author zozlak
  * @extends \Iterator<int, TermInterface>
  */
-interface TermIteratorInterface extends \Iterator {
+interface TermIteratorInterface extends Iterator {
 
     public function current(): TermInterface | null;
 
