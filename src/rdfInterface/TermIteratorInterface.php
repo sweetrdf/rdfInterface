@@ -26,6 +26,8 @@
 
 namespace rdfInterface;
 
+use Generator;
+
 /**
  *
  * @author zozlak
@@ -39,7 +41,7 @@ interface TermIteratorInterface extends \Iterator {
 
     /**
      * 
-     * @return array<string>
+     * @return Generator<string>
      */
-    public function getValues(): array;
+    public function getValues(): Generator;
 }
