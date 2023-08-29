@@ -27,6 +27,7 @@
 namespace rdfInterface;
 
 use Iterator;
+use IteratorAggregate;
 
 /**
  *
