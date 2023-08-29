@@ -26,8 +26,6 @@
 
 namespace rdfInterface;
 
-use Generator;
-
 /**
  *
  * @author zozlak
@@ -41,7 +39,22 @@ interface TermIteratorInterface extends \Iterator {
 
     /**
      * 
-     * @return Generator<string>
+     * @param array<TermInterface>|Iterator<TermInterface>|IteratorAggregate<TermInterface>|TermInterface $terms
+     * @return self
      */
-    public function getValues(): Generator;
+    public function skip(array | Iterator | IteratorAggregate | TermInterface $terms): self;
+
+    /**
+     * 
+     * @param array<TermInterface>|Iterator<TermInterface>|IteratorAggregate<TermInterface>|TermInterface $terms
+     * @return self
+     */
+    public function intersect(array | Iterator | IteratorAggregate | TermInterface $terms): self;
+
+    /**
+     * Extracts values of all terms and returns them as an array.
+     * 
+     * @return array<string>
+     */
+    public function getValues(): array;
 }
