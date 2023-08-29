@@ -126,10 +126,7 @@ Let's go trough most common tasks.
   use termTemplates\QuadTemplate as QT;
   use termTemplates\LiteralTemplate as LT;
   $template = new QT($subject, $predicate, new LT(lang: $language));
-  $value = ($dataset->copy($template)[0] ?? null)?->getObject()->getValue() ?? $default;
-  // or using the DatasetExtractors helper class:
-  use termTemplates\DatasetExtractors as DE;
-  $value = DE::getObjectValue($dataset, $template) ?? $default;
+  $value = $dataset->listObjects($template)->getValues()[0] ?? $default;
   ```
 * Checking if there is any triple of a given `$subject` having given `$predicate` literal value tagged with a language (any).\
   EasyRdf
