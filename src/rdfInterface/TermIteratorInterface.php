@@ -34,4 +34,12 @@ namespace rdfInterface;
 interface TermIteratorInterface extends \Iterator {
 
     public function current(): TermInterface | null;
+
+    public function contains(TermCompareInterface $term): bool;
+
+    /**
+     * 
+     * @return array<string>
+     */
+    public function getValues(): array;
 }
