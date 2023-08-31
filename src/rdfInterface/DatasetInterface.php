@@ -362,4 +362,68 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * @return TermIteratorInterface
      */
     public function listGraphs(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
+
+    /**
+     * Fetches subject of a first quad matching a given filter or null if no quad matches the filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermInterface | null
+     */
+    public function getSubject(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermInterface | null;
+
+    /**
+     * Fetches subject of a first quad matching a given filter or null if no quad matches the filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermInterface | null
+     */
+    public function getPredicate(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermInterface | null;
+
+    /**
+     * Fetches object of a first quad matching a given filter or null if no quad matches the filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermInterface | null
+     */
+    public function getObject(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermInterface | null;
+
+    /**
+     * Fetches graph of a first quad matching a given filter or null if no quad matches the filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermInterface | null
+     */
+    public function getGraph(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermInterface | null;
+
+    /**
+     * Returns result of calling the getValue() method on a subject of a first quad matching a given filter or null if no quad matches the filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermInterface | null
+     */
+    public function getSubjectValue(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): string | null;
+
+    /**
+     * Returns result of calling the getValue() method on a subject of a first quad matching a given filter or null if no quad matches the filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermInterface | null
+     */
+    public function getPredicateValue(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): string | null;
+
+    /**
+     * Returns result of calling the getValue() method on a subject of a first quad matching a given filter or null if no quad matches the filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermInterface | null
+     */
+    public function getObjectValue(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): string | null;
+
+    /**
+     * Returns result of calling the getValue() method on a subject of a first quad matching a given filter or null if no quad matches the filter.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return TermInterface | null
+     */
+    public function getGraphValue(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): string | null;
 }
