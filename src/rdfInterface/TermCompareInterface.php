@@ -33,5 +33,17 @@ namespace rdfInterface;
  */
 interface TermCompareInterface extends \Stringable {
 
-    public function equals(TermCompareInterface $term): bool;
+    public function equals(TermInterface $term): bool;
+    
+    /**
+     * Should return:
+     * 
+     * - an URI for named nodes and blank nodes
+     * - a value in lexical form for literals
+     * 
+     * For all other kind of terms the return value depends on the implementation
+     * 
+     * @return string
+     */
+    public function __toString(): string;
 }
