@@ -23,7 +23,6 @@
         }
     },
     "require-dev": {
-        "phpstan/phpstan": "*",
-        "squizlabs/php_codesniffer": "*"
+        "phpstan/phpstan": "*"
     }
 }
