@@ -26,6 +26,8 @@
 
 namespace rdfInterface;
 
+use Traversable;
+
 /**
  * Node-oriented graph API interface.
  * 
@@ -91,12 +93,16 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * Adds quad(s) to the dataset.
      * 
      * Does not check if the quad subject matches the DatasetNodeInterface's object node.
+     * 
+     * Allows passing QuadCompareInterface objects with subject set to null. In such a case
+     * the dataset's node is used as a subject. If any other quad component is missing,
+     * an error must be thrown.
      *
-     * @param QuadInterface|\Traversable<\rdfInterface\QuadInterface>|array<\rdfInterface\QuadInterface> $quads
+     * @param QuadCompareInterface|Traversable<QuadCompareInterface>|array<QuadCompareInterface> $quads
      * @return void
      */
-    public function add(QuadInterface | \Traversable | array $quads): void;
-
+    public function add(QuadCompareInterface | Traversable | array $quads): void;
+    
     /**
      * Assigns a new value to the quad matching the $offset.
      * 
