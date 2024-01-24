@@ -96,9 +96,10 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * 
      * Allows passing QuadCompareInterface objects with subject set to null. In such a case
      * the dataset's node is used as a subject. If any other quad component is missing,
-     * an error must be thrown.
+     * the \InvalidArgumentException must be thrown.
      *
      * @param QuadCompareInterface|Traversable<QuadCompareInterface>|array<QuadCompareInterface> $quads
+     * @throws \InvalidArgumentException
      * @return void
      */
     public function add(QuadCompareInterface | Traversable | array $quads): void;
