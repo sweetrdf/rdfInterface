@@ -114,4 +114,16 @@ interface DataFactoryInterface {
                                 NamedNodeInterface $predicate,
                                 TermInterface $object,
                                 NamedNodeInterface | BlankNodeInterface | DefaultGraphInterface | null $graph = null): QuadInterface;
+    
+    /**
+     * Creates a new RDF quadNoSubject.
+     * 
+     * @param NamedNodeInterface $predicate
+     * @param TermInterface $object
+     * @param NamedNodeInterface|BlankNodeInterface|DefaultGraphInterface|null $graph
+     */
+    public static function quadNoSubject(
+                                NamedNodeInterface $predicate,
+                                TermInterface $object,
+                                NamedNodeInterface | BlankNodeInterface | DefaultGraphInterface | null $graph = null): QuadNoSubjectInterface;
 }
