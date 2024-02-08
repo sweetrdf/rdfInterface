@@ -51,10 +51,11 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
     public function getNode(): TermInterface;
 
     /**
-     * Replaces the underlaying dataset with a given one.
+     * Returns a new dataset node sharing the node with the current one but
+     * using a given dataset.
      * 
-     * Must keep the reference to the $dataset so that changes made to it outside
-     * of the DatasetNodeInterface object are reflected in the DatasetNodeInterface
+     * Tthe reference to the $dataset is kept so that changes made to it outside
+     * of the DatasetNodeInterface object are reflected in the new dataset node
      * object.
      * 
      * @param DatasetInterface $dataset 
@@ -63,9 +64,8 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
     public function withDataset(DatasetInterface $dataset): DatasetNodeInterface;
 
     /**
-     * Replaces the DatasetNodeInterface object's term (node).
-     * 
-     * Must not modify quads storem by the DatasetNodeInterface object.
+     * Returns a new dataset node which shares the underlaying dataset with
+     * the current one but has another node.
      * 
      * @param TermInterface $node
      * @return DatasetNodeInterface
