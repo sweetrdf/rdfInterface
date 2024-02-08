@@ -45,12 +45,12 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * If $filter is provided, the copy contains only quads matching the $filter.
      * 
-     * $filter can be specified as:
+     * The $filter can be specified as:
      * 
      * - An object implementing the \rdfInterface\QuadCompareInterface
      *   (e.g. a single Quad)
      * - An object implementing the \rdfInterface\QuadIteratorInterface
-     *   (e.g. another Dataset)
+     *   or the \rdfInterface\QuadIteratorAggregateInterface (e.g. another Dataset)
      * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
      *   All quads for which the callable returns true are copied.
      * 
@@ -66,14 +66,14 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * Creates a copy of the dataset.
      * 
      * If $filter is provided, the copy contains only quads not matching the 
-     * $filter.
+     * The $filter.
      * 
-     * $filter can be specified as:
+     * The $filter can be specified as:
      * 
      * - An object implementing the \rdfInterface\QuadCompareInterface
-     *   (e.g. a single Quad)
+     *   (e.g. a single quad)
      * - An object implementing the \rdfInterface\QuadIteratorInterface
-     *   (e.g. another Dataset)
+     *   or the \rdfInterface\QuadIteratorAggregateInterface (e.g. another dataset)
      * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
      *   All quads for which the callable returns true are copied.
      * 
@@ -88,7 +88,7 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
     /**
      * Returns a new dataset being a union of the current one and the $other one.
      * 
-     * For in-place union use add().
+     * For a in-place union use add().
      * 
      * @param QuadInterface|QuadIteratorInterface|QuadIteratorAggregateInterface $other
      * @return DatasetInterface
@@ -97,7 +97,7 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
     public function union(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $other): DatasetInterface;
 
     /**
-     * Returns a dataset being a symmetric difference of the current dataset and
+     * Returns a new dataset being a symmetric difference of the current dataset and
      * the $other one.
      * 
      * There is no in-place equivalent.
@@ -106,6 +106,35 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * @return DatasetInterface
      */
     public function xor(QuadInterface | QuadIteratorInterface | QuadIteratorAggregateInterface $other): DatasetInterface;
+
+    /**
+     * Returns a new dataset from quads processed with a given
+     * callback function.
+     * 
+     * @param callable $fn function applied to every quad with signature `fn(QuadInterface, DatasetInterface)`
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return DatasetInterface
+     */
+    public function map(callable $fn,
+                        QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): DatasetInterface;
+
+    /**
+     * Performs a reduce operation on the dataset quads.
+     * 
+     * The reduce operation consist of calling a given callback function on all
+     * matching quads. The first call is made with the $initialValue passed as
+     * the callback's $prevValue. Following calls pass previous callback's call
+     * return value as the next callback's call $prevValue. The return value of
+     * the last callback function call is the return value of the reduce() method.
+     * 
+     * @param callable $fn aggregate function with signature 
+     *   `fn(mixed $prevValue, QuadInterface, DatasetInterface)`
+     * @param mixed $initialValue
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return mixed
+     */
+    public function reduce(callable $fn, $initialValue = null,
+                           QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): mixed;
 
     // In-place set operations
 
@@ -122,12 +151,12 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * All quads matching the $filter parameter are removed.
      * 
-     * $filter can be specified as:
+     * The $filter can be specified as:
      * 
      * - An object implementing the \rdfInterface\QuadCompareInterface
-     *   (e.g. a single Quad)
+     *   (e.g. a single quad)
      * - An object implementing the \rdfInterface\QuadIteratorInterface
-     *   (e.g. another Dataset)
+     *   or the \rdfInterface\QuadIteratorAggregateInterface (e.g. another dataset)
      * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
      *   All quads for which the callable returns true are copied.
      * 
@@ -144,12 +173,12 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * 
      * All quads but ones matching the $filter parameter are removed.
      * 
-     * $filter can be specified as:
+     * The $filter can be specified as:
      * 
      * - An object implementing the \rdfInterface\QuadCompareInterface
-     *   (e.g. a single Quad)
+     *   (e.g. a single quad)
      * - An object implementing the \rdfInterface\QuadIteratorInterface
-     *   (e.g. another Dataset)
+     *   or the \rdfInterface\QuadIteratorAggregateInterface (e.g. another dataset)
      * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
      *   All quads for which the callable returns true are copied.
      * 
@@ -164,12 +193,24 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
     // In-place modification
 
     /**
-     * Iterates trough all quads replacing them with a callback result.
+     * In-place modifies all dataset quads using a given callback.
+     * 
+     * All quads matching the $filter parameter are modified.
+     * 
+     * The $filter can be specified as:
+     * 
+     * - `null` which matches all quads.
+     * - An object implementing the \rdfInterface\QuadCompareInterface
+     *   (e.g. a single quad)
+     * - An object implementing the \rdfInterface\QuadIteratorInterface
+     *   or the \rdfInterface\QuadIteratorAggregateInterface (e.g. another dataset)
+     * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
+     *   All quads for which the callable returns true are copied.
      * 
      * If the callback returns null, the quad should be removed from the dataset.
      * 
-     * @param callable $fn with signature `fn(Quad, Dataset): ?Quad` to be run 
-     *   an all quads
+     * @param callable $fn a callback with signature `fn(\rdfInterface\Quad, \rdfInterface\Dataset): \rdfInterface\Quad|null`
+     *    modyfying a single quad
      * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return void
      */
@@ -193,7 +234,9 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * If the $offset is specified differently, \UnexpectedValueException is thrown.
      * 
      * If exactly one quad is matched, `true` is returned.
+     * 
      * If no quad is matched, `false` is returned.
+     * 
      * If the $offset matches more than one quad, 
      * \rdfInterface\MultipleQuadsMatchedException is thrown.
      * 
@@ -220,13 +263,16 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      *   them using other integer offsets and an attempt of doing so must
      *   throw an \UnexpectedValueException.
      * 
-     * If the $offset is specified differently, \UnexpectedValueException is trown.
+     * If the $offset is specified differently, \UnexpectedValueException is thrown.
      * 
      * If the $offset is `0` and the dataset is not empty, any quad is returned.
+     * 
      * If exactly one quad is matched, it is returned.
+     * 
      * If the $offset matches more than one quad, 
      * \rdfInterface\MultipleQuadsMatchedException is thrown.
-     * If the $offset matches no quad, \UnexpectedValueException is thrown.
+     * 
+     * If the $offset matches no quads, \UnexpectedValueException is thrown.
      * 
      * @param QuadCompareInterface|callable|int<0, 0> $offset
      * @return QuadInterface
@@ -248,12 +294,15 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      *   `true`. If more than one quad is matched \UnexpectedValueException must be 
      *   thrown.
      * 
-     * If the $offset is specified differently, \UnexpectedValueException is trown.
+     * If the $offset is specified differently, \UnexpectedValueException is thrown.
      * 
      * If the $offset is `null`, a new quad is added to the dataset.
+     * 
      * If exactly one quad is matched by the $offset, it is updated.
+     * 
      * If the $offset matches more than one quad, 
      * \rdfInterface\MultipleQuadsMatchedException is thrown.
+     * 
      * If the $offset matches no quad, \UnexpectedValueException is thrown.
      * 
      * @param QuadCompareInterface|callable|null $offset
@@ -274,11 +323,13 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      *   signature. Matching quads are the ones for which the callable returns
      *   `true`.
      * 
-     * If the $offset is specified differently, \UnexpectedValueException is trown.
+     * If the $offset is specified differently, \UnexpectedValueException is thrown.
      * 
      * If the $offset matches more than one quad, 
      * \rdfInterface\MultipleQuadsMatchedException is thrown.
+     * 
      * If exactly one quad is matched, it is removed.
+     * 
      * If no quad is matched, nothing happens.
      * 
      * @param QuadCompareInterface|callable $offset
@@ -287,6 +338,8 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      * @throws MultipleQuadsMatchedException
      */
     public function offsetUnset($offset): void;
+
+    // bool checks
 
     /**
      * Checks if all quads in the dataset match a given filter.
@@ -312,27 +365,11 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
      */
     public function any(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable $filter): bool;
 
+    // various getters
+    
     /**
-     * 
-     * @param callable $fn function applied to every quad with signature `fn(quad, dataset)`
-     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
-     * @return DatasetInterface
-     */
-    public function map(callable $fn,
-                        QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): DatasetInterface;
-
-    /**
-     * @param callable $fn aggregate function with signature `fn(accumulator, quad, dataset)`
-     *   applied on each quad and returns last callback result
-     * @param mixed $initialValue
-     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
-     * @return mixed
-     */
-    public function reduce(callable $fn, $initialValue = null,
-                           QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): mixed;
-
-    /**
-     * Fetches an iterator over unique set of dataset quad subjects.
+     * Fetches an iterator over unique set of dataset quad subjects optionally 
+     * matching a given filter.
      * 
      * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return TermIteratorInterface
@@ -340,7 +377,8 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
     public function listSubjects(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
 
     /**
-     * Fetches an iterator over unique set of dataset quad predicates.
+     * Fetches an iterator over unique set of dataset quad predicates optionally 
+     * matching a given filter.
      * 
      * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return TermIteratorInterface
@@ -348,7 +386,8 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
     public function listPredicates(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
 
     /**
-     * Fetches an iterator over unique set of dataset quad objects.
+     * Fetches an iterator over unique set of dataset quad objects optionally 
+     * matching a given filter.
      * 
      * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return TermIteratorInterface
@@ -356,7 +395,8 @@ interface DatasetInterface extends QuadIteratorAggregateInterface, \ArrayAccess,
     public function listObjects(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermIteratorInterface;
 
     /**
-     * Fetches an iterator over unique set of dataset quad graphs.
+     * Fetches an iterator over unique set of dataset quad graphs optionally 
+     * matching a given filter.
      * 
      * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
      * @return TermIteratorInterface
