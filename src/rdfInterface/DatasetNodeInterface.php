@@ -43,6 +43,27 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * @return mixed
      */
     public function getValue(): mixed;
+
+    // QuadIteratorAggregateInterface
+    
+    /**
+     * Returns an iterator over datase node's quads having subject matching
+     * dataset node's node and optionally matching a given filter.
+     * 
+     * The $filter can be specified as:
+     * 
+     * - `null` matches all quads.
+     * - An object implementing the \rdfInterface\QuadCompareInterface
+     *   (e.g. a single quad)
+     * - An object implementing the \rdfInterface\QuadIteratorInterface
+     *   or the \rdfInterface\QuadIteratorAggregateInterface (e.g. another dataset or dataset node)
+     * - A callable with signature `fn(\rdfInterface\QuadInterface, \rdfInterface\DatasetInterface): bool`
+     *   All quads for which the callable returns true are copied.
+     * 
+     * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @return QuadIteratorInterface
+     */
+    public function getIterator(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): QuadIteratorInterface;
     
     // Methods added by the DatasetNodeInterface
 
@@ -185,7 +206,7 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * both quads matching and not matching dataset node's node) and quads
      * from the $other mathing the dataset node's node.
      * 
-     * For a in-place union use add().
+     * For an in-place union use add().
      * 
      * @param QuadInterface|QuadIteratorInterface|QuadIteratorAggregateInterface $other
      * @return DatasetNodeInterface
