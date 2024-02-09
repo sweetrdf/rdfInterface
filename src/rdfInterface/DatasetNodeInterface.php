@@ -202,11 +202,12 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * @param callable $fn function applied to every quad with signature 
      *   `fn(\rdfInterface\QuadInterfca, \rdfInterface\DatasetNodeInterface)`
      * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
+     * @param bool $includeOther should quads with subject other than dataset node's node be copied
      * @return DatasetNodeInterface
      */
     public function map(callable $fn,
                         QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null,
-                        bool $includeDataset = true): DatasetNodeInterface;
+                        bool $includeOther = true): DatasetNodeInterface;
 
     /**
      * Performs a reduce operation on the dataset node quads
