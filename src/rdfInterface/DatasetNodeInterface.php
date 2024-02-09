@@ -38,11 +38,11 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
     // TermInterface
     
     /**
-     * Returns dataset node's node
+     * Returns dataset node node's value
      * 
      * @return mixed
      */
-    public function getValue(): TermInterface;
+    public function getValue(): mixed;
     
     // Methods added by the DatasetNodeInterface
 
@@ -64,7 +64,7 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
      * Returns a new dataset node sharing the node with the current one but
      * using a given dataset.
      * 
-     * Tthe reference to the $dataset is kept so that changes made to it outside
+     * The reference to the $dataset is kept so that changes made to it outside
      * of the DatasetNodeInterface object are reflected in the new dataset node
      * object.
      * 
