@@ -350,7 +350,7 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
 
     /**
      * Checks if a given offset exists. The check is performed only among quads
-     * which subject matches dataset node's node.
+     * which subject matching dataset node's node.
      * 
      * The offset can be specified as:
      * 
@@ -379,7 +379,7 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
     public function offsetExists(mixed $offset): bool;
 
     /**
-     * Returns a quad matching the $offset and havin a subject matching dataset 
+     * Returns a quad matching the $offset and having a subject matching dataset 
      * node's node.
      * 
      * The $offset can be specified as:
@@ -417,6 +417,8 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
     /**
      * Assigns a new value to the quad matching the $offset and having subject
      * matching dataset node's node.
+     * 
+     * The new quad may have a different subject.
      * 
      * Offset can be specified as:
      * 
