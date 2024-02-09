@@ -34,6 +34,16 @@ use Traversable;
  * @author zozlak
  */
 interface DatasetNodeInterface extends TermInterface, DatasetInterface {
+    
+    // TermInterface
+    
+    /**
+     * Returns dataset node's node
+     * 
+     * @return mixed
+     */
+    public function getValue(): TermInterface;
+    
     // Methods added by the DatasetNodeInterface
 
     /**
@@ -46,7 +56,7 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
     public function getDataset(): DatasetInterface;
 
     /**
-     * Returns the node assosiated with a given DatasetNodeInterface object
+     * Returns the node associated with a given DatasetNodeInterface object
      */
     public function getNode(): TermInterface;
 
