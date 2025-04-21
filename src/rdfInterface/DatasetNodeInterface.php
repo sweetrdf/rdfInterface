@@ -544,13 +544,12 @@ interface DatasetNodeInterface extends TermInterface, DatasetInterface {
     public function getSubject(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermInterface | null;
 
     /**
-     * Fetches subject of a first quad having subject matching dataset
+     * Fetches predicate of a first quad having predicate matching dataset
      * node's node and a given filter or null otherwise.
      * 
      * @param QuadCompareInterface|QuadIteratorInterface|QuadIteratorAggregateInterface|callable|null $filter
-     * @return TermInterface | null
      */
-    public function getPredicate(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): TermInterface | null;
+    public function getPredicate(QuadCompareInterface | QuadIteratorInterface | QuadIteratorAggregateInterface | callable | null $filter = null): NamedNodeInterface | null;
 
     /**
      * Fetches object of a first quad  having subject matching dataset
