@@ -41,14 +41,20 @@ interface ParserInterface {
     /**
      * 
      * @param string $input
+     * @param string $baseUri allows to specify the base URI of the parsed document
+     *   so a parser can correctly determine which blank nodes belong to the same 
+     *   document
      * @return QuadIteratorInterface
      */
-    public function parse(string $input): QuadIteratorInterface;
+    public function parse(string $input, string $baseUri = ''): QuadIteratorInterface;
 
     /**
      *
      * @param resource | \Psr\Http\Message\StreamInterface $input
+     * @param string $baseUri allows to specify the base URI of the parsed document
+     *   so a parser can correctly determine which blank nodes belong to the same 
+     *   document
      * @return \rdfInterface\QuadIteratorInterface
      */
-    public function parseStream($input): QuadIteratorInterface;
+    public function parseStream($input, string $baseUri = ''): QuadIteratorInterface;
 }
