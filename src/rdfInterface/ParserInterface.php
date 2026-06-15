@@ -62,7 +62,27 @@ interface ParserInterface {
      * @param string $baseUri allows to specify the base URI of the parsed document
      *   so a parser can correctly determine which blank nodes belong to the same 
      *   document (see also the `BLANK_NODES_PRESERVE` constant)
-     * @return \rdfInterface\QuadIteratorInterface
+     * @return QuadIteratorInterface
      */
     public function parseStream($input, string $baseUri = ''): QuadIteratorInterface;
+    
+    /**
+     * 
+     * @param string $input
+     * @param string $baseUri allows to specify the base URI of the parsed document
+     *   so a parser can correctly determine which blank nodes belong to the same 
+     *   document (see also the `BLANK_NODES_PRESERVE` constant)
+     * @return DatasetIteratorInterface
+     */
+    public function parseMessages(string $input, string $baseUri = ''): DatasetIteratorInterface;
+    
+    /**
+     *
+     * @param resource | \Psr\Http\Message\StreamInterface $input
+     * @param string $baseUri allows to specify the base URI of the parsed document
+     *   so a parser can correctly determine which blank nodes belong to the same 
+     *   document (see also the `BLANK_NODES_PRESERVE` constant)
+     * @return DatasetIteratorInterface
+     */
+    public function praseMessagesStream($input, string $baseUri = ''): DatasetIteratorInterace;
 }
