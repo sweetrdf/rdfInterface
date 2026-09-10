@@ -84,5 +84,5 @@ interface ParserInterface {
      *   document (see also the `BLANK_NODES_PRESERVE` constant)
      * @return DatasetIteratorInterface
      */
-    public function parseMessagesStream($input, string $baseUri = ''): DatasetIteratorInterace;
+    public function parseMessagesStream($input, string $baseUri = ''): DatasetIteratorInterface;
 }
